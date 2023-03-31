@@ -26,7 +26,7 @@
         string shortId = HelperMethods.ShortenTestId(Model.Test.TestId);
         string category = HelperMethods.GetTestCategory(shortId);
         string testClass = shortId.Substring(category.Length + 1);
-        return $"https://bitbucket.org/oauch/oauch-website/src/master/src/OAuch/OAuch.Tests/Tests/{ category }/{ testClass }.cs";
+        return $"https://github.com/DistriNet/OAuch/blob/main/src/OAuch/OAuch.Tests/Tests/{category}/{testClass}.cs";
     }
 }
 <div class="row">
@@ -38,7 +38,7 @@
             <h5><strong>Testing strategy</strong></h5>
             <p>@Html.Raw(Model.Test.TestingStrategy)</p>
         }
-        <p><a href="@GetGitUrl()" target="_blank">View source code on BitBucket</a></p>
+        <p><a href="@GetGitUrl()" target="_blank">View source code on GitHub</a></p>
         @if (Model.Requirements.Count > 0) {
             <h5><strong>Documents</strong></h5>
             <p>This test is part of the following document(s):</p>
