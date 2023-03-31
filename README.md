@@ -8,6 +8,7 @@ requirements put forth by the original OAuth 2.0 specification, as well as other
 the security assumptions and requirements. These documents include the OAuth threat model, the Security 
 Best Current Practices, and others. In addition to OAuth, OAuch also supports OpenID Connect providers.
 
+This repository contains a version of OAuch that runs in single-user mode.
 To build and run the source code in this repository, please follow the following steps:
 
 (1) Clone or download the repository
@@ -35,3 +36,6 @@ To build and run the source code in this repository, please follow the following
 (5) Run the project. A web browser window will open and will redirect to https://oauch.io/. If you have
     not made the changes from step (4), you will need to change this address to https://localhost/.
     You are now ready to use OAuch on your local computer!
+
+
+Alternatively, you can try OAuch on https://oauch.io/
