@@ -15,6 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="oauch.db" />
+    <None Remove="oauch.db-shm" />
+    <None Remove="oauch.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
