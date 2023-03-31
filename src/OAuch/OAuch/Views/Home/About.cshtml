@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewData["Title"] = "About";
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h1>About OAuch...</h1>
+    </div>
+    <div class="col-lg-10 col-xl-6 offset-lg-1 offset-xl-2">
+        <p>
+            The OAuth 2.0 protocol is a popular and widely adopted authorization protocol. It has been proven secure in a comprehensive formal security analysis,
+            yet new vulnerabilities continue to appear in popular OAuth implementations. OAuch tries to improve the security of the OAuth 
+            landscape by measuring how well individual authorization servers implement the security specifications defined in the OAuth standards, and by
+            providing detailed and targeted feedback to the operators to improve the compliance of their service.
+            OAuch tests and analyzes authorization servers according to the guidelines of the OAuth 2.0 standards and security best practices.
+        </p>
+        <p>
+            OAuch is developed by <a href="https://distrinet.cs.kuleuven.be/" target="_blank">the Distrinet Research Group</a> in the context of a research project
+            on API security. It is available for free and the source code can be found
+            <a href="https://bitbucket.org/oauch/oauch-website/" target="_blank">on BitBucket</a>. Contact the OAuch team at <a href="mailto:info@oauch.io">info@oauch.io</a>.
+        </p>
+    </div>
+    <div class="d-none d-xl-block col-xl-2">
+        <img src="/img/logo_large.png" @*class="img-responsive"*@ style="width: 256px; height: 256px;" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6 offset-xl-2 col-lg-8 offset-lg-2">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h5>OAuch: Exploring Security Compliance in the OAuth 2.0 Ecosystem</h5>
+                <p>
+                    Authors: Pieter Philippaerts, Davy Preuveneers, Wouter Joosen<br/>
+                    Published in the proceedings of the 25th International Symposium on Research in Attacks, Intrusions and Defenses (RAID'22), October 26--28, 2022, Limassol, Cyprus
+                    <strong>[<a href="#" class="cw u" data-toggle="modal" data-target="#exampleModal">BibTeX</a>]</strong> &mdash; Winner of the Best Practical Paper Award
+                </p>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title cb" id="exampleModalLabel">BibTeX</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body cb fw">
+<pre>@@inproceedings{philippaerts2022oauch,
+    author = {Philippaerts, Pieter and Preuveneers, Davy and Joosen, Wouter},
+    title = {OAuch: Exploring Security Compliance in the OAuth 2.0 Ecosystem},
+    year = {2022},
+    isbn = {9781450397049},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3545948.3545955},
+    doi = {10.1145/3545948.3545955},
+    booktitle = {25th International Symposium on Research in Attacks, Intrusions and Defenses},
+    pages = {460–481},
+    numpages = {22},
+    location = {Limassol, Cyprus},
+    series = {RAID 2022}
+}</pre>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal -->
+            </div>
+            <div class="icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <a href="https://doi.org/10.1145/3545948.3545955" target="_blank" class="small-box-footer">
+            Read the paper <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<p>&nbsp;</p>
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <p>
+            <strong>LOGO</strong><br />
+            The OAuch logo is based on the OAuth logo created by Chris Messina. The logo is released under
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/">the Creative Commons Attribution ShareAlike 3.0 license</a>.
+        </p>
+    </div>
+</div>

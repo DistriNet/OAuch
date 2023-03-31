@@ -1,0 +1,126 @@
+﻿.smallicon {
+    font-size: 0.5rem !important;
+}
+.wrapper .content-wrapper {
+    padding: 20px 50px;
+}
+.nav-header {
+    font-weight: bold;
+    font-size: 1rem !important;
+    color: white !important;
+}
+.display-5 {
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.display-6 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.display-7 {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.display-8 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.fadeAway {
+    opacity: 0.35;
+}
+.infotitle {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+.bg-lightgray {
+    background-color: #f4f6f9 !important;
+}
+.card-header > .leftcardtools {
+    float: left;
+    margin-left: -1rem;
+    width: 2.5rem;
+}
+.ulwcheck li {
+    margin-bottom: 1rem;
+}
+.ulwcheck li .bootstrap-switch {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+.topRightIcon {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: darkgoldenrod;
+}
+
+.btn-fb {
+    color: #ffffff;
+    background-color: #415DAE;
+    border-color: #ffc107;
+    box-shadow: none;
+}
+.btn-fb:hover {
+    color: #ffffff;
+    background-color: #233F90;
+    border-color: #d39e00;
+}
+
+.btn-gg {
+    color: #ffffff;
+    background-color: #DF4932;
+    border-color: #ffc107;
+    box-shadow: none;
+}
+.btn-gg:hover {
+    color: #ffffff;
+    background-color: #C12B14;
+    border-color: #d39e00;
+}
+
+.btn-ms {
+    color: #ffffff;
+    background-color: #008542;
+    border-color: #ffc107;
+    box-shadow: none;
+}
+.btn-ms:hover {
+    color: #ffffff;
+    background-color: #006724;
+    border-color: #d39e00;
+}
+
+.btn-tw {
+    color: #ffffff;
+    background-color: #1EA8E3;
+    border-color: #ffc107;
+    box-shadow: none;
+}
+.btn-tw:hover {
+    color: #ffffff;
+    background-color: #008AC5;
+    border-color: #d39e00;
+}
+.img-responsive {
+    max-width: 100%;
+    height: auto;
+    display:block;
+}
+.cw {
+    color: white;
+}
+.cb {
+    color: black;
+}
+.u {
+    text-decoration: underline;
+}
+.fw {
+    font-family: monospace;
+}

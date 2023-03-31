@@ -1,0 +1,36 @@
+﻿@model OAuch.ViewModels.TestsViewModel
+@using OAuch.ViewModels;
+@using OAuch.Helpers; 
+@{
+    ViewData["Title"] = "Test Case Overview";
+
+    IEnumerable<IGrouping<string, TestInfoViewModel>> GetTests () {
+        return Model.Tests.Select(t => new TestInfoViewModel(t)).GroupBy(c => c.CategoryDescription).OrderBy(k => k.Key, TestInfoViewModel.TestCategoryComparer);
+
+
+    }
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h1 class="display-4">Test Case Overview</h1>
+        <p>
+            OAuch's main goal is to analyze the compliance of an authorization server with the OAuth standards to uncover unmitigated threats and point out
+            security improvements. OAuch tests an authorization server using a large set of test cases to check an authorization server's compliance with the security
+            specifications defined in the original OAuth 2.0 standard, as well as other documents that refine the security assumptions and requirements.
+            These documents include the OAuth threat model, the Security Best Current Practices, and others. In addition to OAuth, OAuch also supports
+            OpenID Connect providers.</p>
+        <p>
+            This page lists all the test cases that are implemented in OAuch. Note that not all test cases are run for every test run. OAuch automatically
+            detects the supported features of the authorization server, and only executes the relevant test cases. The test cases are grouped into categories
+            that refer to the OAuth infrastructure they apply to. Test cases with the same name but in different categories, are distinct (but similar) test cases.
+        </p>
+            @foreach (var testSet in GetTests()) {
+                <p><strong>@testSet.Key</strong> <em>(@testSet.Count() tests)</em></p>
+                <ul>
+                @foreach (var test in testSet) {
+                    <li><a href="/Tests/Info/@test.ShortId">@test.Test.Title</a> (@test.TestName)</li>
+                }
+                </ul>
+            }
+    </div>
+</div>

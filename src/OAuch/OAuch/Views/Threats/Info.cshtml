@@ -1,0 +1,46 @@
+﻿@model OAuch.ViewModels.ThreatViewModel
+@using OAuch.Shared.Enumerations
+@using OAuch.Helpers 
+@{
+    ViewData["Title"] = "Threat info";
+
+    string GetSection(string location) {
+        int idx = location.IndexOf(' ');
+        if (idx > 0) {
+            return location.Substring(0, idx).TrimEnd('.');
+        }
+        return location.TrimEnd('.');
+    }
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h6><small><strong class="text-monospace">@HelperMethods.ShortenTestId(Model.Threat.Id, true)</strong></small></h6>
+        <h2>@Model.Threat.Title</h2>
+        <p>@Model.Threat.Description</p>
+        @if (!string.IsNullOrEmpty(Model.Instance.ExtraDescription)) {
+            <p>@Model.Instance.ExtraDescription</p>
+        }
+        @{
+            var sect = GetSection(Model.Threat.LocationInDocument);
+        }
+        <p><a href="@Model.Threat.Document.Url#section-@sect" target="_blank">@Model.Threat.Document.Name</a> (@Model.Threat.Document.Id, section @sect)</p>
+        @if (Model.Instance.MitigatedBy.Count > 0) {
+            <h5><strong>Mitigations</strong></h5>
+            @if(Model.Instance.MitigatedBy.Count > 1) {
+                <p>This threat is considered fully mitigated if all the test cases from one of the following test sets succeed.</p>
+            } else {
+                <p>This threat is considered fully mitigated if all the test cases from the following test set succeed.</p>
+            }
+            <ul>
+                @for (int i = 0; i < Model.Instance.MitigatedBy.Count; i++) {
+                    var mit = Model.Instance.MitigatedBy[i];
+                    <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
+                    foreach (var cm in mit) {
+                        <li><a href="/Tests/Info/@cm.TestId">@HelperMethods.ShortenTestId(cm.TestId)</a></li>
+                    }
+                }
+            </ul>
+        }
+        <p>Back to <a href="/Threats">the threat overview</a></p>
+    </div>
+</div>

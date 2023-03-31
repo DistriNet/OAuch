@@ -1,0 +1,530 @@
+﻿@model ResultsViewModel
+@using OAuch.Compliance
+@using OAuch.Shared.Enumerations
+@using OAuch.Compliance.Results
+@using OAuch.Helpers
+@{
+    ViewData["Title"] = "Site results";
+
+    string WeightToString(RequirementLevels w) {
+        if (w == RequirementLevels.Must) {
+            return "mandatory";
+        } else if (w == RequirementLevels.Should) {
+            return "recommended";
+        } else { // RequirementLevels.May
+            return "optional";
+        }
+    }
+    string TestResultClass(bool? isCompliant) {
+        if (isCompliant == null)
+            return "opt";
+        if (isCompliant == true)
+            return "ok";
+        return "nok";
+    }
+    string Capitalize(string str) {
+        if (str.Length > 1)
+            return char.ToUpper(str[0]) + str.Substring(1);
+        return str.ToUpper();
+    }
+    string FormatOutcomeForThreat(ThreatReport report) {
+        if (report.Outcome == null || report.Outcome == TestOutcomes.Failed)
+            return "UNDETERMINED";
+        switch (report.Outcome) {
+            case TestOutcomes.Skipped:
+                return "NOT RELEVANT";
+            case TestOutcomes.SpecificationFullyImplemented:
+                return "MITIGATED";
+            case TestOutcomes.SpecificationPartiallyImplemented:
+                return "PART. MITIGATED";
+            case TestOutcomes.SpecificationNotImplemented:
+            default:
+                return "NOT MITIGATED";
+        }
+    }
+    string FormatOutcomeForCounterMeasure(TestOutcomes? outcome) {
+        if (outcome == null)
+            return "pending";
+        switch (outcome) {
+            case TestOutcomes.Skipped:
+                return "skipped";
+            case TestOutcomes.Failed:
+                return "failed";
+            case TestOutcomes.SpecificationFullyImplemented:
+                return "supported";
+            case TestOutcomes.SpecificationPartiallyImplemented:
+                return "partially supported";
+            case TestOutcomes.SpecificationNotImplemented:
+            default:
+                return "not supported";
+        }
+    }
+    TestOutcomes? GetTestOutcome(string testId) {
+        var testResult = Model.Result.AllResults.FirstOrDefault(t => t.TestId == testId);
+        if (testResult == null)
+            return null;
+        return testResult.Outcome;
+    }
+    string OutcomeClass(TestOutcomes? outcome, bool background) {
+        string ret;
+        if (outcome == null || outcome == TestOutcomes.Skipped || outcome == TestOutcomes.Failed) {
+            ret = "-gray";
+        } else {
+            switch (outcome) {
+                case TestOutcomes.SpecificationFullyImplemented:
+                    ret = "-green";
+                    break;
+                case TestOutcomes.SpecificationPartiallyImplemented:
+                    ret = "-warning";
+                    break;
+                case TestOutcomes.SpecificationNotImplemented:
+                default:
+                    ret = "-red";
+                    break;
+            }
+        }
+        if (background)
+            return "bg" + ret;
+        else
+            return "text" + ret;
+    }
+    string ToHumanReadableString(TimeSpan t) {
+        if (t.TotalSeconds <= 1) {
+            return $@"{t:s\.ff} seconds";
+        }
+        if (t.TotalMinutes <= 1) {
+            return $@"{t:%s} seconds";
+        }
+        if (t.TotalHours <= 1) {
+            return $@"{t:%m} minutes";
+        }
+        if (t.TotalDays <= 1) {
+            return $@"{t:%h} hours";
+        }
+
+        return $@"{t:%d} days";
+    }
+    string FlToS(float data) {
+        var r = data.ToString("P1");
+        if (r == "NaN")
+            return "N/A";
+        return r;
+    }
+    string FormatImprovements(MitigationImprovement report) {
+        if (report.FullyMitigatesCount > 0 && report.PartiallyMitigatesCount > 0)
+            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s) and partially mitigate {report.PartiallyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
+        else if (report.FullyMitigatesCount > 0)
+            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
+        return $"Implementing this countermeasure could partially mitigate {report.PartiallyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
+    }
+}
+@*<div class="modal fade" id="ratingInfo" tabindex="-1" role="dialog" aria-labelledby="ratingInfoLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        The site rating is a value that can be (from best to worst) <strong>A+</strong>, <strong>A</strong>, <strong>B</strong>, or <strong>C</strong>.
+                        If the site rating could not be determined, the rating will be <strong>?</strong>.
+                    </p>
+                    <p>
+                        Every test has a classification, based on the whether the OAuth specification mandates the behavior,
+                        recommends the behavior, or suggests the behavior.
+                    </p>
+                    <p>
+                        If the site has failed one or more mandatory tests, the final rating is <strong>C</strong>. If no mandatory test failed, but at least one recommended
+                        test failed, the final rating is <strong>B</strong>. Likewise, if no mandatory or recommended test failed, but at least one optional test failed, the final
+                        rating is <strong>A</strong>. If all tests succeeded, the site receives the best rating <strong>A+</strong>.
+                    </p>
+                    <p>
+                        Note that the classification of the site is not necessarily linked to its security level. It only indicates how well
+                        the implementation follows the OAuth standard.
+                    </p>
+                    <p>
+                        If you have selected to exclude one or more tests, the rating of your site may be modified to reflect this. Any A(+) or B
+                        rating will be downgraded to A- and B- respectively.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="display-4">Site results</h1>
+
+        <div class="row">
+            <div class="col-8">
+                @if (Model.Result.PendingTests > 0) {
+                    <p>
+                        There are @Model.Result.PendingTests pending test(s) that have not been (fully) executed yet. Hence, the results presented here are incomplete.
+                        @if (Model.Result.ResumeWhen != null && Model.Result.ResumeWhen.Value > DateTime.Now) {
+                            <text>Please resume the test run in @ToHumanReadableString(Model.Result.ResumeWhen.Value - DateTime.Now) to finalize the remaining test case(s).</text>
+                        } else {
+                            <text>To complete the results, please @Html.ActionLink("resume the test run", "Resume", new { id = Model.ResultId }).</text>
+                        }
+                    </p>
+                }
+                @if (Model.Result.FailedTests > 0) {
+                    <p>One or more test cases have crashed while testing the site. The results presented here may be incomplete. Please see the log file for details.</p>
+                }
+                <p>
+                    The site was successfully tested on @Model.StartedAt.ToString("MMMM d, yyyy") at @Model.StartedAt.ToString("HH:mm"). The details of this test run can be found below.
+                    To test the site again, <a href="@Url.Action("RunTest", "Dashboard", new { id = Model.SiteId })">click here to start a new test run</a>.
+                </p>
+            </div>
+            @*<div class="col-4" style="text-align:center;">
+                    <a href="#" data-toggle="modal" data-target="#ratingInfo">
+                        <div class="rating rating-@Model.Label.ToClass()">@Model.Label.ToLabelString()</div>
+                        What's this?
+                    </a>
+                </div>*@
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary card-outline card-outline-tabs">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-three-overview-tab" data-toggle="pill" href="#custom-tabs-three-overview" role="tab" aria-controls="custom-tabs-three-overview" aria-selected="true">Results</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-failed-tab" data-toggle="pill" href="#custom-tabs-three-failed" role="tab" aria-controls="custom-tabs-three-failed" aria-selected="true">Failed tests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-all-tab" data-toggle="pill" href="#custom-tabs-three-all" role="tab" aria-controls="custom-tabs-three-all" aria-selected="false">All tests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-threats-tab" data-toggle="pill" href="#custom-tabs-three-threats" role="tab" aria-controls="custom-tabs-three-threats" aria-selected="false">Threats</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-log-tab" onclick="showLog();" data-toggle="pill" href="#custom-tabs-three-log" role="tab" aria-controls="custom-tabs-three-log" aria-selected="false">Full log</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-report-tab" data-toggle="pill" href="#custom-tabs-three-report" role="tab" aria-controls="custom-tabs-three-report" aria-selected="false">Reporting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-history-tab" data-toggle="pill" href="#custom-tabs-three-history" role="tab" aria-controls="custom-tabs-three-history" aria-selected="false">History</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="custom-tabs-three-tabContent">
+                            <div class="tab-pane fade active show" id="custom-tabs-three-overview" role="tabpanel" aria-labelledby="custom-tabs-three-overview-tab">
+                                <ul>
+                                    <li style="list-style:none; margin-left: -26px;"><strong>Threats</strong></li>
+                                    <li>Mitigated threats: <strong>@Model.Result.FullyMitigatedThreats</strong></li>
+                                    <li>Partially mitigated threats: <strong>@Model.Result.PartiallyMitigatedThreats</strong></li>
+                                    <li>Unmitigated threats: <strong>@Model.Result.UnmitigatedThreats</strong></li>
+                                </ul>
+                                <ul>
+                                    <li style="list-style:none; margin-left: -26px;"><strong>Deprecated features</strong></li>
+                                    <li>Deprecated features detected: <strong>@Model.Result.OverallCompliance.DeprecatedFeatures.Count(f => f.IsCompliant == false)</strong></li>
+                                </ul>
+                                <ul>
+                                    <li style="list-style:none; margin-left: -26px;"><strong>Countermeasures</strong></li>
+                                    <li>Mandatory test cases failed: <strong>@Model.Result.OverallCompliance.MustScore.FailedTests</strong> (@Model.Result.OverallCompliance.MustScore.FailureRate.ToString("P1"))</li>
+                                    <li>Recommended test cases failed: <strong>@Model.Result.OverallCompliance.ShouldScore.FailedTests</strong> (@Model.Result.OverallCompliance.ShouldScore.FailureRate.ToString("P1"))</li>
+                                    <li>Optional test cases failed: <strong>@Model.Result.OverallCompliance.MayScore.FailedTests</strong> (@Model.Result.OverallCompliance.MayScore.FailureRate.ToString("P1"))</li>
+                                    <li>Overall test cases failed: <strong>@Model.Result.OverallCompliance.OverallScore.FailedTests</strong> (@Model.Result.OverallCompliance.OverallScore.FailureRate.ToString("P1"))</li>
+                                </ul>
+                                <p>
+                                    In total, @Model.Result.ExecutedTests.TotalTests tests were run from the following documents:
+                                </p>
+                                <ul>
+                                    @foreach (var dc in Model.Result.DocumentCompliance) {
+                                        if (dc.IsDocumentSupported) {
+                                            <li><strong>@dc.Document.Id</strong> with an overall failure rate of @FlToS(dc.OverallScore.FailureRate) (@FlToS(dc.MustScore.FailureRate) - @FlToS(dc.ShouldScore.FailureRate) - @FlToS(dc.MayScore.FailureRate))</li>
+                                        } else {
+                                            <li><strong>@dc.Document.Id</strong> is not supported</li>
+                                        }
+                                    }
+                                </ul>
+                                @{ var sc = Model.Result.StandardsCompliance; }
+                                <p>The failure rate when only considering official standards documents was @sc.OverallScore.FailureRate.ToString("P1") (@FlToS(sc.MustScore.FailureRate) - @FlToS(sc.ShouldScore.FailureRate) - @FlToS(sc.MayScore.FailureRate))</p>
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-failed" role="tabpanel" aria-labelledby="custom-tabs-three-failed-tab">
+                                @*@{
+                                        var categoriesFailed = Model.TestResults.Where(c => c.Weight != TestWeight.None && c.Succeeded == false).Select(c => c.Category).Distinct();
+                                    }
+                                    @if (categoriesFailed.Count() == 0) {
+                                        <p><em>There are no failed tests!</em></p>
+                                    } else {
+                                        foreach (var cat in categoriesFailed) {
+                                            <strong>@cat.Name</strong>
+                                            <ul>
+                                                @foreach (var tr in Model.TestResults.Where(c => c.Succeeded == false && c.Category == cat && c.Weight != TestWeight.None).OrderByDescending(c => c.Weight)) {
+                                                    <li>
+                                                        @tr.Title: <span class="@TestResultClass(tr)">@(tr.Succeeded == true ? tr.ResultDescription.SuccessString : tr.ResultDescription.FailedString)</span> [<strong>@WeightToString(tr.Weight)</strong>, <a href="@Url.Action("Info", "Tests", new { id = tr.Id })">more info</a>]<br />
+                                                        <em>@tr.ResultDescription.FailedDescription</em>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    }*@
+                                @if (Model.Result.OverallCompliance.HasDeprecatedFeaturesEnabled == true) {
+                                    <strong>Deprecated Features</strong>
+                                    <p>The following tests determined that some deprecated features are still enabled.</p>
+                                    <ul>
+                                        @foreach (var df in Model.Result.OverallCompliance.DeprecatedFeatures) {
+                                            if (df.IsCompliant == false) {
+                                                if (df.TestResult != null && ComplianceDatabase.Tests.TryGetValue(df.TestResult.TestId, out var test)) {
+                                                    <li>
+                                                        @test.Title: <span class="@TestResultClass(df.IsCompliant)">@test.ResultFormatter.Format(df.TestResult.Outcome)</span> [<strong>@WeightToString(df.RequirementLevel)</strong>, <a href="@Url.Action("Info", "Tests", new { id = test.TestId })">more info</a>, <a href="@Url.Action("Resume", "Dashboard", new { id = Model.ResultId, retry = test.TestId })">retry test</a>]<br />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                }
+
+                                @if (Model.Result.OverallCompliance.OverallScore.FailedTests > 0) {
+                                    <strong>Countermeasures</strong>
+                                    <p>The following tests determined that some countermeasures are not implemented.</p>
+                                    <ul>
+                                        @foreach (var df in Model.Result.OverallCompliance.Countermeasures.OrderBy(c => c.RequirementLevel).ThenByDescending(c => Model.Result.ImprovementReport[c.TestResult?.TestId].Score)) {
+                                            if (df.IsCompliant == false) {
+                                                if (df.TestResult != null && ComplianceDatabase.Tests.TryGetValue(df.TestResult.TestId, out var test)) {
+                                                    <li>
+                                                        @test.Title: <span class="@TestResultClass(df.IsCompliant)">@test.ResultFormatter.Format(df.TestResult.Outcome)</span> [<strong>@WeightToString(df.RequirementLevel)</strong>, <a href="@Url.Action("Info", "Tests", new { id = test.TestId })">more info</a>, <a href="@Url.Action("Resume", "Dashboard", new { id = Model.ResultId, retry = test.TestId })">retry test</a>]<br />
+                                                        <em>@FormatImprovements(Model.Result.ImprovementReport[df.TestResult?.TestId])</em>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                    <p>The failed tests are ordered by requirement level and importance score.</p>
+                                }
+
+                                @if (Model.Result.OverallCompliance.HasDeprecatedFeaturesEnabled != true && Model.Result.OverallCompliance.OverallScore.FailedTests == 0) {
+                                    <p><em>No tests have failed!</em></p>
+                                }
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-all" role="tabpanel" aria-labelledby="custom-tabs-three-all-tab">
+                                @*<p><em>Note: some tests may be ommitted because they are not relevant, or because they depend on other (failed) tests.</em></p>
+                                    @{
+                                        var allCategories = Model.TestResults.Select(c => c.Category).Distinct();
+                                    }
+                                    @foreach (var cat in allCategories) {
+                                        <strong>@cat.Name</strong>
+                                        <ul>
+                                            @foreach (var tr in Model.TestResults.Where(c => c.Category == cat).OrderBy(c => c.StartedAt)) {
+                                                <li>@tr.Title: <span class="@TestResultClass(tr)">@(tr.Succeeded == true ? tr.ResultDescription.SuccessString : tr.ResultDescription.FailedString)</span> [<strong>@WeightToString(tr.Weight)</strong>, <a href="@Url.Action("Info", "Tests", new { id = tr.Id })">more info</a>]</li>
+                                            }
+                                        </ul>
+                                    }*@
+                                <strong>Deprecated Features</strong>
+                                <p>The following deprecated features were tested.</p>
+                                <ul>
+                                    @foreach (var df in Model.Result.OverallCompliance.DeprecatedFeatures) {
+                                        if (df.TestResult != null && ComplianceDatabase.Tests.TryGetValue(df.TestResult.TestId, out var test)) {
+                                            <li>
+                                                @test.Title: <span class="@TestResultClass(df.IsCompliant)">@test.ResultFormatter.Format(df.TestResult.Outcome)</span> [<strong>@WeightToString(df.RequirementLevel)</strong>, <a href="@Url.Action("Info", "Tests", new { id = test.TestId })">more info</a>, <a href="@Url.Action("Resume", "Dashboard", new { id = Model.ResultId, retry = test.TestId })">retry test</a>]<br />
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                                <strong>Countermeasures</strong>
+                                <p>The following countermeasures were tested.</p>
+                                <ul>
+                                    @foreach (var df in Model.Result.OverallCompliance.Countermeasures.OrderBy(c => c.RequirementLevel)) {
+                                        if (df.TestResult != null && ComplianceDatabase.Tests.TryGetValue(df.TestResult.TestId, out var test)) {
+                                            <li>
+                                                @test.Title: <span class="@TestResultClass(df.IsCompliant)">@test.ResultFormatter.Format(df.TestResult.Outcome)</span> [<strong>@WeightToString(df.RequirementLevel)</strong>, <a href="@Url.Action("Info", "Tests", new { id = test.TestId })">more info</a>, <a href="@Url.Action("Resume", "Dashboard", new { id = Model.ResultId, retry = test.TestId })">retry test</a>]<br />
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-threats" role="tabpanel" aria-labelledby="custom-tabs-three-threats-tab">
+                                @foreach (var threatReport in Model.Result.ThreatReports) {
+                                    <div class="card collapsed-card">
+                                        <div class="card-header bg-lightgray">
+                                            <h5>
+                                                Threat <strong>`@threatReport.Threat.Title'</strong>
+                                                <button type="button" class="btn btn-tool" data-card-widget="collapse">[<i class="fas fa-plus"></i>]</button>
+                                            </h5>
+                                            <p>@threatReport.Threat.Description</p>
+                                        </div>
+                                        <div class="card-body" style="display: none;">
+                                            @if (threatReport.Outcome == TestOutcomes.Skipped) {
+                                                <p>OAuch has determined that this threat is not relevant in the tested setup.</p>
+                                            } else {
+                                                foreach (var ireport in threatReport.InstanceReports) {
+                                                    if (!ireport.IsRelevant.HasValue || ireport.IsRelevant.Value) {
+                                                        if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
+                                                            var mit = ireport.ThreatInstance.MitigatedBy[0];
+                                                            <p>
+                                                                @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                                                    @ireport.ThreatInstance.ExtraDescription
+                                                                }
+                                                                This threat can be mitigated if all of the following countermeasures are fully implemented:
+                                                            </p>
+                                                            <ul>
+                                                                @foreach (var cm in mit) {
+                                                                    var to = GetTestOutcome(cm.TestId);
+                                                                    <li>@HelperMethods.ShortenTestId(cm.TestId) [<span class="@OutcomeClass(to, false)">@FormatOutcomeForCounterMeasure(to)</span>] - @Html.ActionLink("more info", "Info", "Tests", new { id = cm.TestId })</li>
+                                                                }
+                                                            </ul>
+                                                            <p>&nbsp;</p>
+                                                        } else {
+                                                            <p>
+                                                                @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                                                    @ireport.ThreatInstance.ExtraDescription
+                                                                }
+                                                                This threat can be mitigated if any of the following sets of countermeasures are fully implemented:
+                                                            </p>
+                                                            <ul>
+                                                                @for (int i = 0; i < ireport.ThreatInstance.MitigatedBy.Count; i++) {
+                                                                    var mit = ireport.ThreatInstance.MitigatedBy[i];
+                                                                    <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
+                                                                    foreach (var cm in mit) {
+                                                                        var to = GetTestOutcome(cm.TestId);
+                                                                        <li>@HelperMethods.ShortenTestId(cm.TestId) [<span class="@OutcomeClass(to, false)">@FormatOutcomeForCounterMeasure(to)</span>] - @Html.ActionLink("more info", "Info", "Tests", new { id = cm.TestId })</li>
+                                                                    }
+                                                                }
+                                                            </ul>
+                                                            <p>&nbsp;</p>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                        <div class="ribbon-wrapper ribbon-lg">
+                                            <div class="ribbon @OutcomeClass(threatReport.Outcome, true)">@FormatOutcomeForThreat(threatReport)</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="tab-pane fade" data-target="@Url.Action("Log", "Dashboard", new { id = Model.ResultId })" id="custom-tabs-three-log" role="tabpanel" aria-labelledby="custom-tabs-three-log-tab">
+                                <p><em>Loading log file... please wait</em></p>
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-report" role="tabpanel" aria-labelledby="custom-tabs-three-report-tab">
+                                <p>
+                                    Click on the button below to generate a report in a new tab/window. The report is optimized to be printed. If you would like the report in electronic form,
+                                    you can use the browser to &lsquo;print&rsquo; the report to a PDF file (this is supported in most browsers).
+                                </p>
+                                <p>The report contains a summary of the results, and a detailed description of the failed test cases.</p>
+                                @using (Html.BeginForm("Generate", "Report", new { id = Model.ResultId }, FormMethod.Get, null, new { target = "_blank" })) {
+                                    <p>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeSettings" name="includeSettings" checked="checked">
+                                                <label class="form-check-label" for="includeSettings">
+                                                    &nbsp;&nbsp;Include test settings
+                                                </label>
+                                            </div>
+                                    </p>
+                                    <p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeLog" name="includeLog" checked="checked">
+                                            <label class="form-check-label" for="includeLog">
+                                                &nbsp;&nbsp;Include detailed log
+                                            </label>
+                                        </div>
+                                    </p>
+                                    <p class="text-center"><input type="submit" value="Generate Report" class="btn-primary" style="padding: 5px 15px;" /></p>
+                                }
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-report" role="tabpanel" aria-labelledby="custom-tabs-three-report-tab">
+                                <p>
+                                    Click on the button below to generate a report in a new tab/window. The report is optimized to be printed. If you would like the report in electronic form,
+                                    you can use the browser to &lsquo;print&rsquo; the report to a PDF file (this is supported in most browsers).
+                                </p>
+                                <p>The report contains a summary of the results, and a detailed description of the failed test cases.</p>
+                                @using (Html.BeginForm("Index", "Reporting", new { id = Model.ResultId }, FormMethod.Post, null, new { target = "_blank" })) {
+                                    <p class="text-center"><input type="submit" value="Generate Report" class="btn-primary" style="padding: 5px 15px;" /></p>
+                                }
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-three-history" role="tabpanel" aria-labelledby="custom-tabs-three-history-tab">
+                                <p>
+                                    This site has been tested on the dates listed below. Click a date to view the report.
+                                </p>
+                                <ul>
+                                    @foreach (var he in Model.History) {
+                                        <li>@Html.ActionLink(he.When.ToString("MMMM d, yyyy") + " at " + he.When.ToString("HH:mm:ss"), "Results", "Dashboard", new { id = Model.SiteId, rid = he.HistoryId })</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .rating {
+            width: 128px;
+            height: 128px;
+            font-family: Arial, Arial, Helvetica, sans-serif, sans-serif;
+            text-align: center;
+            margin: 15px auto;
+            font-size: 80px;
+            font-weight: bold;
+            color: #fff;
+            border-width: 4px;
+            border-style: solid;
+            border-radius: 15px;
+        }
+
+        .rating-a {
+            background: #7BD749;
+            border-color: #60C22B;
+        }
+
+        .rating-b {
+            background: #FFD02D;
+            border-color: #E7B60E;
+        }
+
+        .rating-c {
+            background: #FF533C;
+            border-color: #E7331A;
+        }
+
+        .rating-unkn {
+            background: #C0C0C0;
+            border-color: #A0A0A0;
+        }
+
+        .ok {
+            color: darkgreen;
+            font-weight: bold;
+        }
+
+        .nok {
+            color: darkred;
+            font-weight: bold;
+        }
+
+        .opt {
+            color: black;
+            font-weight: bold;
+        }
+
+        .st, .inf {
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+    <link href="/plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">
+}
+@section Scripts {
+    <script src="/plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+    <script>
+        loadedLog = false;
+        function showLog() {
+            if (!loadedLog) {
+                tab = $("#custom-tabs-three-log");
+                tab.load(tab.attr('data-target'));
+                loadedLog = true;
+            }
+
+        }
+    </script>
+}

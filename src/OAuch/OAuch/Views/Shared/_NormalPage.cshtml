@@ -1,0 +1,214 @@
+﻿@using OAuch.Database.Entities
+@using OAuch.ViewModels
+@using OAuch.Helpers 
+@{
+    string title;
+    if (ViewData["Title"] == null)
+        title = "OAuch";
+    else
+        title = ViewData["Title"].ToString() + " - OAuch";
+
+    bool isAuthenticated = this.User?.Identity?.IsAuthenticated ?? false;
+    var menuInfo = this.Model as IMenuInformation;
+    bool hasSidebar = isAuthenticated && menuInfo != null;
+
+    string additionalStyles;
+    if (hasSidebar) {
+        additionalStyles = "fixed";
+    } else {
+        additionalStyles = "layout-top-nav";
+    }
+    additionalStyles = " " + additionalStyles;
+
+    //(string? Result, string? Class) GetBadgeLayout(OAuthSite site) {
+    //    var latest = site.LatestResult;
+    //    if (latest != null && latest.Rating.Overall.Label != ResultLabels.Unknown) {
+    //        return (latest.Rating.Overall.Label.ToLabelString(), latest.Rating.Overall.Label.ToClassType());
+    //    }
+    //    return (null, null);
+    //}
+    string GetActiveClass(Site? currentSite, PageType currentPageType) {
+        if (menuInfo == null)
+            return "";
+        if (currentSite?.SiteId == menuInfo.ActiveSite?.SiteId && currentPageType == menuInfo.PageType)
+            return " active";
+        return "";
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/adminlte.min.css">
+    <link rel="stylesheet" href="/css/site.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    @RenderSection("Styles", required: false)
+</head>
+<body class="hold-transition@(additionalStyles)">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        @{
+            var navbar = "navbar-white navbar-light";
+            if (hasSidebar) {
+                navbar = "navbar-lightblue navbar-dark";
+            }
+        }
+        <nav class="main-header navbar navbar-expand @navbar">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                @if (hasSidebar) {
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                    </li>
+                }
+                @if (isAuthenticated) {
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="/Dashboard" class="nav-link">Dashboard</a>
+                    </li>
+                } else {
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                }
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Tests" class="nav-link">Test Cases</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Threats" class="nav-link">Threats</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Home/Faq" class="nav-link">FAQ</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Home/About" class="nav-link">About OAuch</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        @if (hasSidebar && menuInfo != null) {
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <span class="brand-link">
+                    <span class="brand-text font-weight-light">OAuth 2.0 Sites</span>
+                </span>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            @if (menuInfo?.ActiveSite != null) {
+                                <li class="nav-header">@menuInfo.ActiveSite.Name <small class="form-text text-muted" style="display: initial;">(active site)</small></li>
+                                @*<li class="nav-item">
+                                    <a href="@Url.Action("Overview", "Dashboard", new { id = menuInfo.ActiveSite.SiteId })" class="nav-link@(GetActiveClass(menuInfo.ActiveSite, PageType.Overview))">
+                                        <i class="nav-icon fas fa-info-circle"></i>
+                                        <p>Overview</p>
+                                    </a>
+                                </li>*@
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Settings", "Dashboard", new { id = menuInfo.ActiveSite.SiteId })" class="nav-link@(GetActiveClass(menuInfo.ActiveSite, PageType.Settings))">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>Site Settings</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Results", "Dashboard", new { id = menuInfo.ActiveSite.SiteId })" class="nav-link@(GetActiveClass(menuInfo.ActiveSite, PageType.Results))">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Results
+                                            @*@{
+                            var layout = GetBadgeLayout(menuInfo.ActiveSite);
+                        }
+                        @if (layout.Result != null) {
+                            <span class="badge @layout.Class right">@layout.Result</span>
+                        }*@
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="nav-header">Site tools</li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("AddSite", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.AddSite))">
+                                    <i class="nav-icon fas fa-plus-circle"></i>
+                                    <p>
+                                        Add new site
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Certificates", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Certificates))">
+                                    <i class="nav-icon fas fa-file-signature"></i>
+                                    <p>Client certificates</p>
+                                </a>
+                            </li>
+                            @if (menuInfo?.Sites?.Count > 0) {
+                                <li class="nav-header">All available sites (@menuInfo.Sites.Count)</li>
+                                @foreach (var site in menuInfo.Sites) {
+                                    <li class="nav-item">
+                                        @if (site == menuInfo.ActiveSite) {
+                                            <a href="@Url.Action("Results", "Dashboard", new { id = site.SiteId })" class="nav-link" style="color: yellow;">
+                                                <i class="nav-icon fas fa-hand-point-right"></i>
+                                                <p>@site.Name</p>
+                                            </a>
+                                        } else {
+                                            <a href="@Url.Action("Results", "Dashboard", new { id = site.SiteId })" class="nav-link">
+                                                <i class="nav-icon fas fa-circle" style="font-size: 0.3rem;"></i>
+                                                <p>@site.Name</p>
+                                            </a>
+                                        }
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+                <!-- /.sidebar -->
+            </aside>
+        }
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> @SiteInfo.BuildVersion
+            </div>
+            <strong>@SiteInfo.Copyright <a href="/Home/About">The DistriNet Research Group</a>.</strong> All rights reserved.</a>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/adminlte.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

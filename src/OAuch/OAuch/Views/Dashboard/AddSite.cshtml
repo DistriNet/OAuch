@@ -1,0 +1,35 @@
+﻿@model OAuch.ViewModels.AddSiteViewModel
+@{
+    ViewData["Title"] = "Add a new site";
+}
+<h1 class="display-4">Add a new site</h1>
+<p>
+    Please enter a name for the site you wish to add. Only alphanumeric characters and
+    some special characters ('.', '_', ' ') are allowed in the name of the site.
+</p>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+@using (Html.BeginForm()) {
+    <div class="row">
+        <div class="col-12 col-sm-10 col-md-9 col-lg-7 col-xl-4">
+            <div class="form-group">
+                @Html.LabelFor(c => c.Name)
+                @Html.TextBoxFor(c => c.Name, new { @class = "form-control", placeholder = "(site name)" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(c => c.MetadataUrl)
+                @Html.TextBoxFor(c => c.MetadataUrl, new { @class = "form-control", placeholder = "https://your.authorizationserver.com" })
+                <small id="issueUrlHelp" class="form-text text-muted">
+                    This optional parameter can be used to automatically search
+                    for OAuth metadata on the server and fill in a number of parameters automatically. If you are not sure what the
+                    metadata url is, try filling in the url of the authorization server.
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 col-sm-5 col-md-4 col-lg-3 col-xl-2">
+            <button type="submit" class="btn btn-block btn-primary">Add site</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,309 @@
+﻿@{
+    ViewData["Title"] = "FAQ";
+}
+    <div class="row">
+        <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+            <h1>Frequently Asked Questions</h1>
+            <p>
+                This page contains a number of frequently asked questions. If your question isn't listed here, feel free to <a href="mailto:info@oauch.io">contact us</a>.
+            </p>
+            <p>
+                <strong>How OAuch Works</strong>
+            </p>
+            <div id="accordion">
+                <div class="card card-primary card-outline">
+                    <div class="card-header" id="headingWhatIs">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseWhatIs" aria-expanded="false" aria-controls="collapseWhatIs">
+                                What is OAuch?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseWhatIs" class="collapse" aria-labelledby="headingWhatIs" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                OAuch is an open-source security best practices and threats analyzer for OAuth 2.0 authorization server implementations. Its main goal is
+                                to analyze an authorization server's compliance with the OAuth standards to uncover unmitigated threats and point out security improvements.
+                                OAuch tests an authorization server using a large set of test cases to check an authorization server's compliance with the security specifications defined 
+                                in the original OAuth 2.0 standard, as well as other documents that refine the security assumptions and requirements. 
+                                In addition to OAuth, OAuch also supports OpenID Connect providers. 
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header" id="headingDocuments">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseDocuments" aria-expanded="false" aria-controls="collapseDocuments">
+                                Which standards documents are supported by OAuch?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseDocuments" class="collapse" aria-labelledby="headingDocuments" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                OAuth 2.0 is a framework with multiple extensions that have been standardized over the years to support new use cases or to improve the security. 
+                                The test cases in OAuch are based on the security specifications as written down in these OAuth-related standards documents. The following documents are supported:
+                            </p>
+                            <ul>
+                                <li>The OAuth 2.0 Authorization Framework (RFC6749)</li>
+                                <li>The OAuth 2.0 Authorization Framework: Bearer Token Usage (RFC6750)</li>
+                                <li>OAuth 2.0 Token Revocation (RFC7009)</li>
+                                <li>JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants (RFC7523)</li>
+                                <li>Proof Key for Code Exchange by OAuth Public Clients (RFC7636)</li>
+                                <li>OAuth 2.0 Device Authorization Grant (RFC8628)</li>
+                                <li>OAuth 2.0 Security Best Current Practice (draft 16)</li>
+                                <li>OpenID Connect Core 1.0 incorporating errata set 1</li>
+                                <li>OAuth 2.0 Form Post Response Mode</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header" id="headingTestCase">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTestCase" aria-expanded="false" aria-controls="collapseTestCase">
+                                What is a test case?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTestCase" class="collapse" aria-labelledby="headingTestCase" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                A test case is a technical implementation of a minimal check to validate the authorization server's implementation of a security specification defined in the OAuth standards.
+                                A test case can thus be seen as a yes-no question that provides information about the compliance of the implementation to a single security specification. This implies a 
+                                one-to-one correspondence between security specifications and test cases.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header" id="headingReqLevel">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseReqLevel" aria-expanded="false" aria-controls="collapseReqLevel">
+                                What is a test case requirement level?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseReqLevel" class="collapse" aria-labelledby="headingReqLevel" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                The security specifications in the standard can be identified by the accompanying keyword <em>must</em>, <em>should</em> or <em>may</em>. This keyword indicates the requirement level.
+                                <em>Must</em> indicates an absolute requirement to implement the specification, <em>should</em> implies a strong preference to implement it, and <em>may</em> merely offers it as a 
+                                suggestion.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header" id="headingConverted">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseConverted" aria-expanded="false" aria-controls="collapseConverted">
+                                Which security specifications are converted into test cases?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseConverted" class="collapse" aria-labelledby="headingConverted" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                Not all security specifications are relevant for OAuch. Only specifications that govern the behavior of the authorization server are selected. Specifications that focus on
+                                the OAuth client or other actors in the OAuth protocol are out of scope and are excluded.
+                                Some specifications are not directly related to the OAuth protocol and cannot be tested. An example is the suggestion that authorization servers encrypt stored credentials.
+                                Other specifications may be too disruptive to test (e.g., testing the presence of denial of service protection). These specifications are also out of scope and excluded.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    <strong>Threats in OAuch</strong>
+                </p>
+
+                <div class="card card-warning card-outline">
+                    <div class="card-header" id="headingThreats">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThreats" aria-expanded="false" aria-controls="collapseThreats">
+                                Where do the threats in OAuch come from?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThreats" class="collapse" aria-labelledby="headingThreats" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                The OAuth working group has published a comprehensive threat model shortly after publishing the original OAuth 2.0 standard. This threat model is further refined in
+                                the latest Security Best Current Practices document to include additional threats that have been observed in real-world usage of OAuth.
+                                This threat model has been adopted in OAuch and is used to offer precise feedback to the user. OAuch uses test cases to detect which countermeasures are implemented
+                                by the authorization server. It then uses the information from the threat model to determine which threats are mitigated.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-warning card-outline">
+                    <div class="card-header" id="headingThreatEval">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThreatEval" aria-expanded="false" aria-controls="collapseThreatEval">
+                                How are threats evaluated in OAuch?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThreatEval" class="collapse" aria-labelledby="headingThreatEval" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                For every threat, OAuch takes the list of mitigations that are proposed by the threat model and compares it with the mitigations that have been detected. If the threat
+                                is properly mitigated, it is marked as fully mitigated. When no relevant countermeasures are active, the threat is unmitigated. Threats can also be partially mitigated
+                                if some countermeasures are present, but not all. When multiple sets of countermeasures can mitigate a threat, it is sufficient that only one set is fully implemented.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-warning card-outline">
+                    <div class="card-header" id="headingThreatsChecked">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThreatsChecked" aria-expanded="false" aria-controls="collapseThreatsChecked">
+                                Which threats are checked by OAuch?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThreatsChecked" class="collapse" aria-labelledby="headingThreatsChecked" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                Threats that are only applicable to OAuth clients are not in scope and are discarded. Threats that are related to DDoS attacks are too disruptive to test and are discarded
+                                as well.
+                                Each threat has a list of countermeasures to mitigate the threat. Countermeasures that are not relevant to authorization servers are removed.
+                                The countermeasures in the threat model correspond directly to the security requirements in the OAuth specifications. Each security requirement has a matching test case. 
+                                For each countermeasure, the corresponding test cases are associated with the threat.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-warning card-outline">
+                    <div class="card-header" id="headingRLUsedThreats">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseRLUsedThreats" aria-expanded="false" aria-controls="collapseRLUsedThreats">
+                                Are test case requirement levels used when evaluating threats?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseRLUsedThreats" class="collapse" aria-labelledby="headingRLUsedThreats" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                The threat model lists for every threat all applicable countermeasures, but does not refer to the requirement levels that are mentioned in the security specifications. 
+                                Hence, it does not show any preference for one countermeasure over another. OAuch adopts this approach and does not take the requirement level of a countermeasure into
+                                account when determining whether a threat is (partially) mitigated. However, the requirement levels of the failed test cases are reported to the user.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    <strong>The OAuch Testing Process</strong>
+                </p>
+
+                <div class="card card-danger card-outline">
+                    <div class="card-header" id="headingSetup">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSetup" aria-expanded="false" aria-controls="collapseSetup">
+                                How do I set up a site in OAuch?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseSetup" class="collapse" aria-labelledby="headingSetup" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                OAuch works like an ordinary OAuth client. When testing an authorization server, the regular client registration procedure must be followed. The authorization server
+                                generates a <em>client id</em> and optionally a <em>client secret</em>. It tells the user which OAuth endpoint URIs to use for authorization and token requests, and 
+                                generally asks the user to register a callback URI (depending on which flows are used). The user then creates a new test profile in OAuch and enters the settings
+                                they received from the authorizaion server.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-danger card-outline">
+                    <div class="card-header" id="headingAutomated">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseAutomated" aria-expanded="false" aria-controls="collapseAutomated">
+                                Is the OAuch testing process automated?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseAutomated" class="collapse" aria-labelledby="headingAutomated" data-parent="#accordion">
+                        <div class="card-body">
+                            <p>
+                                The OAuch testing process is not fully automated. It requires user interaction in two cases: when the user has to authenticate and authorize access, or when the
+                                authorization server shows an error message to the user. During a test run, OAuch sends on average 39 authorization requests to the authorization server, depending
+                                on the site's configuration. However, cookies are generally used to remember signed-in users and most authorization servers automatically authorize a request if 
+                                the user has granted access to the client before.
+                                Because OAuch violates the OAuth protocol in many test cases, the authorization server may show an error to the user instead of redirecting the browser back to
+                                the callback URI. Although this behavior is by design (and often a good sign), it stalls the test progress. OAuch continues to wait for a callback from the 
+                                authorization server but this callback will never happen. To solve this stalemate, the user clicks the <em>stalled test</em> button whenever the authorization server
+                                shows an error. This signals OAuch that the callback will not happen, and forces it to move to the next step in the testing process.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-danger card-outline">
+                    <div class="card-header" id="headingReportedResults">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseReportedResults" aria-expanded="false" aria-controls="collapseReportedResults">
+                                Which results are reported to the user?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseReportedResults" class="collapse" aria-labelledby="headingReportedResults" data-parent="#accordion">
+                        <div class="card-body">
+                            OAuch calculates several statistics after each test run. The most important output is the number of unmitigated threats. These threats represent weak points in the
+                            implementation, which can be exploited under the right circumstances. The number of partially mitigated threats and deprecated features is the second most important 
+                            output. Partially mitigated threats may or may not be exploitable; OAuch does not report to what degree these threats have been mitigated, only that there is at least
+                            one partial mitigation active. Deprecated features should be avoided if possible, as they are often deprecated on the grounds of being insecure.
+                            In addition to these three important indicators, OAuch also computes the failure rates of the test cases. This metric is calculated by dividing the number of failed
+                            tests by the total number of tests that are executed, and converting the result to a percentage. This percentage indicates to what degree an IdP correctly implements 
+                            the OAuth standard. An overall failure rate is reported, as well as the individual failure rates of the three requirement levels (<em>must</em>, <em>should</em>, 
+                            <em>may</em>). The calculation only takes into account the tests that were executed and able to verify whether a security requirement holds. If a test fails for some 
+                            unanticipated reason (e.g., a temporary network problem) or if a test is skipped because it is not relevant for the authorization server, it is excluded from the calculation.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-danger card-outline">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                OAuch reports unmitigated threats for my site. Am I vulnerable?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            OAuch tests the compliance of an authorization server with the security requirements that are defined in the OAuth standards. However, OAuth is not a vulnerability scanner.
+                            While unmitigated threats are certainly to be avoided, some threats might be mitigated by countermeasures that OAuch does not test (e.g., client side countermeasures).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-danger card-outline">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                OAuch reports no unmitigated or partially migitated threats for my site. Is my site secure?
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            OAuch has determined that the authorization server implements all security specifications according to the OAuth standards. However, compliance with the requirements does not
+                            automatically imply security of the implementation. Not all types of threats or security reqquirements can be tested by OAuch.
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

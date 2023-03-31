@@ -1,0 +1,12 @@
+﻿{
+  "profiles": {
+    "OAuch": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://oauch.io:443",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

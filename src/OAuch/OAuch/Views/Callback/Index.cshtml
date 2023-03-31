@@ -1,0 +1,87 @@
+﻿@model CallbackViewModel
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Callback page - OAuch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        body {
+            background: #F4F6F9;
+        }
+
+        .content {
+            padding: 20px 50px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            line-height: 1.2;
+            font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        }
+
+        p {
+            font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #loader {
+            margin-left: 100px;
+            width: 192px;
+            height: 192px;
+            border-radius: 50%;
+            border: 1px solid black;
+            animation: spin 4s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Callback page</h1>
+        <p>Processing the callback from your OAuth provider. Please wait...</p>
+        <div id="loader">
+            <img src="~/img/logot.svg" width="192" height="192" />
+        </div>
+    </div>
+    <script>
+        if (window.opener) {
+            var alreadySent = false;
+            window.addEventListener("message", function (ev) {
+                if (alreadySent)
+                    return;
+                if (ev.data.action === "requestCallbackData") {
+                    // ev.source is the opener
+                    alreadySent = true;
+                    ev.source.postMessage({ action: "callbackData", href: window.location.href, form: "@Html.Raw(Model.FormParameters)" }, "*");
+                }
+            });
+            var x = Math.floor(128 + Math.random() * 128);
+            var y = Math.floor(128 + Math.random() * 128);
+            var z = Math.floor(128 + Math.random() * 128);
+            document.getElementById("loader").style.backgroundColor = "rgb(" + x + "," + y + "," + z + ")";
+        } else {
+            // we don't have an opener anymore; this could be because the OAuth implementation
+            // closed our parent for security reasons
+            var hr = encodeURIComponent(window.location.href);
+            window.location.href = "/Callback/Orphaned?href=" + hr + "&form=@Html.Raw(Model.FormParameters)";
+        }
+    </script>
+</body>
+</html>

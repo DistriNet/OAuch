@@ -1,0 +1,256 @@
+﻿@model OAuch.ViewModels.RunningViewModel
+@{
+    ViewData["Title"] = "Running test";
+}
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="display-4">Test progress </h1>
+        <p id="popupBlocked" style="display: none;">
+            Uhoh, it seems your browser is blocking pop-ups. Please disable the pop-up blocker for this website, and refresh this page.
+        </p>
+        <div class="row">
+            <div class="col-5">
+                <div class="progress">
+                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
+                <p>&nbsp;</p>
+                <button class="btn btn-warning" onclick="onCancel();" id="stalledButton">Stalled test</button>
+                <p id="stalledInfo">Click the 'stalled test' button if the test is stalled (i.e. if the pop-up window shows an error page and the testing process seems to be stuck).</p>
+                <p id="notstalledInfo">The 'stalled test' button is disabled because the current test cannot be canceled. Please be patient, as some tests may take up to a few minutes to complete.</p>
+                <p>&nbsp;</p>
+                <p>If you wish to cancel the entire test run, you can click the button below.</p>
+                <button class="btn btn-danger" onclick="onAbort();" id="abortButton">Abort all tests</button>
+            </div>
+            <div class="offset-1 col-6">
+                <div class="row">
+                    <div class="col">
+                        Now running test: <strong><span id="testId"></span></strong><br />
+                        Working... <div class="spinner-border" style="width: 1rem; height: 1rem;"></div>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+                <div class="row">
+                    <div class="col">
+                        <strong>Latest log output</strong>
+                        <ul id="log">
+                            <li>Waiting for pop-up to open</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>&nbsp;</p>
+                <div class="row">
+                    <div class="col">
+                        <strong>Detected features</strong>
+                        <div>
+                            <div class="feat" id="code"><i id="code-i" class="fas fa-question"></i> Authorization Code Flow</div>
+                            <div class="feat" id="code_id_token"><i id="code_id_token-i" class="fas fa-question"></i> Hybrid Flow (code id_token)</div>
+                            <div class="feat" id="code_token"><i id="code_token-i" class="fas fa-question"></i> Hybrid Flow (code token)</div>
+                            <div class="feat" id="code_id_token_token"><i id="code_id_token_token-i" class="fas fa-question"></i> Hybrid Flow (code id_token token)</div>                            
+                            <div class="feat" id="token"><i id="token-i" class="fas fa-question"></i> Implicit Flow (token)</div>
+                            <div class="feat" id="id_token"><i id="id_token-i" class="fas fa-question"></i> Implicit Flow (id_token)</div>
+                            <div class="feat" id="id_token_token"><i id="id_token_token-i" class="fas fa-question"></i> Implicit Flow (id_token token)</div>
+                            <div class="feat" id="client_credentials"><i id="client_credentials-i" class="fas fa-question"></i> Client Credentials Flow</div>
+                            <div class="feat" id="urn_ietf_params_oauth_grant-type_device_code"><i id="urn_ietf_params_oauth_grant-type_device_code-i" class="fas fa-question"></i> Device Flow</div>
+                            <div class="feat" id="password"><i id="password-i" class="fas fa-question"></i> Password Flow</div>
+                            <div class="feat" id="at"><i id="at-i" class="fas fa-question"></i> Access Tokens</div>
+                            <div class="feat" id="rt"><i id="rt-i" class="fas fa-question"></i> Refresh Tokens</div>
+                            <div class="feat" id="jwt"><i id="jwt-i" class="fas fa-question"></i> JWT Tokens</div>
+                            <div class="feat" id="id"><i id="id-i" class="fas fa-question"></i> ID Tokens</div>
+                            <div class="feat" id="uri"><i id="uri-i" class="fas fa-question"></i> Test URI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .ok {
+            color: darkgreen;
+            font-weight: bold;
+        }
+
+        .nok {
+            color: darkred;
+            font-weight: bold;
+        }
+
+        .st, .inf {
+            color: black;
+            font-weight: bold;
+        }
+
+        .feat {
+            background-color: lightgray;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 4px;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            border-color: darkgray;
+            border-style: solid;
+            border-width: 1px;
+            display: inline-block;
+        }
+
+            .feat > i {
+                margin-right: 5px;
+            }
+
+            .feat.ok {
+                background-color: lightgreen;
+                border-color: darkgreen;
+            }
+
+            .feat.nok {
+                background-color: lightcoral;
+                border-color: darkred;
+            }
+    </style>
+}
+@section Scripts {
+    <script src="/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+    "use strict";
+    var testId = "@Model.TestId.ToString()";
+    var connection;
+    var popupWindow;
+    var popupTimeout;
+    var stalledTimeout = null;
+
+    enableStalled(false);
+    popupWindow = window.open("@Url.Action("Initial", "Callback")", "_blank");
+    popupTimeout = setTimeout(onTimeout, 3000);
+
+    function onTimeout() {
+        writeLog("Pop-up window not ready after 3 seconds");
+        $("#popupBlocked").show();
+    }
+    function writeLog(text) {
+        var children = $("#log").children();
+        if (children.length >= 5) {
+            children.last().remove();
+        }
+        children.first().toggleClass("fadeAway", true);
+        $("#log").prepend('<li>' + text + '</li>');
+    }
+    function closePopup() {
+        popupWindow.close();
+    }
+    function onPopupReady() {
+        clearTimeout(popupTimeout);
+        writeLog("Pop-up window ready, connecting to OAuch command server");
+
+        window.addEventListener("message", function (ev) {
+            if (ev.data.action === "callbackData") {
+                onCallback(ev.data.href, ev.data.form);
+            }
+        });
+        setInterval(function () {
+            popupWindow.postMessage({ action: "requestCallbackData" }, "*");
+        }, 1000);
+
+        connection = new signalR.HubConnectionBuilder().withUrl("/testrunhub").build();
+        connection.on("RedirectPopup", function (url) {
+            popupWindow.location.replace(url);
+        });
+        connection.on("OnError", function (message) {
+            writeLog(message);
+            closePopup();
+        });
+        connection.on("OnFinished", function (message) {
+            writeLog(message);
+            closePopup();
+            window.location.replace("/Dashboard/Results/@Model.SiteId");
+        });
+        connection.on("OnMessage", function (message) {
+            writeLog(message);
+        });
+        connection.on("OnProgress", function (newValue) {
+            $("#progressBar").css("width", "" + newValue + "%");
+        });
+        connection.on("OnNewTestStarted", function (newValue) {
+            $("#testId").text(newValue);
+        });
+        connection.on("OnEnableCancel", function (message) {
+            enableStalled(true);
+        });
+        connection.on("OnFeatureDetected", function (featureName, available) {
+            var feature = $("#" + featureName);
+            var featureIcon = $("#" + featureName + "-i");
+            if (featureIcon.hasClass("fa-check"))
+                return; // if the feature is present, ignore future updates
+            featureIcon.removeClass("fa-question");
+            featureIcon.removeClass("fa-times"); // some features can send multiple detection events
+            feature.removeClass("nok");          // some features can send multiple detection events
+
+            if (available == true) {
+                feature.addClass("ok");
+                featureIcon.addClass("fa-check");
+            } else {
+                feature.addClass("nok");
+                featureIcon.addClass("fa-times");
+            }
+        });
+
+        connection.start().then(function () {
+            writeLog("Connected to OAuch command server");
+            connection.invoke("OnReady", testId).catch(function (err) {
+                writeLog("An error occurred while sending a message to the OAuch command server (OR).");
+                return console.error(err.toString());
+            });
+        }).catch(function (err) {
+            writeLog("Unable to connect to OAuch command server; tests aborted.");
+            return console.error(err.toString());
+        });
+    }
+    function onCallback(href, form) {
+        enableStalled(false);
+        connection.invoke("OnCallback", testId, href, form).catch(function (err) {
+            writeLog("An error occurred while sending a message to the OAuch command server (CB).");
+            return console.error(err.toString());
+        });
+    }
+    function onCancel() {
+        enableStalled(false);
+        connection.invoke("OnCancel", testId).catch(function (err) {
+            writeLog("An error occurred while sending a message to the OAuch command server (CL).");
+            return console.error(err.toString());
+        });
+    }
+    function onAbort() {
+        connection.invoke("OnAbort", testId).catch(function (err) {
+            writeLog("An error occurred while sending a message to the OAuch command server (CL).");
+            return console.error(err.toString());
+        });
+    }
+    function enableStalled(enabled) {
+        if (enabled) {
+            @* wait a second before actually enabling the button, because in many cases
+                the button already gets disabled within one second. This causes the button
+                to constantly get enabled and disabled. *@
+            stalledTimeout = setTimeout(internalEnableStalled, 1000);
+        } else {
+            if (stalledTimeout != null) {
+                clearTimeout(stalledTimeout);
+                stalledTimeout = null;
+            }
+            $('#stalledButton').prop('disabled', true);
+            $('#stalledButton').removeClass("btn-warning");
+            $('#stalledButton').addClass("btn-secondary");
+            $('#stalledInfo').hide();
+            $('#notstalledInfo').show();
+        }
+    }
+    function internalEnableStalled() {
+        $('#stalledButton').prop('disabled', false);
+        $('#stalledButton').removeClass("btn-secondary");
+        $('#stalledButton').addClass("btn-warning");
+        $('#stalledInfo').show();
+        $('#notstalledInfo').hide();
+        stalledTimeout = null;
+    }
+    </script>
+}

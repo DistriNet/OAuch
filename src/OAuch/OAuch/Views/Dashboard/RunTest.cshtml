@@ -1,0 +1,40 @@
+﻿@model OAuch.ViewModels.RunTestViewModel
+@{
+    ViewData["Title"] = "Run test";
+}
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+
+        <h1 class="display-4">Run test</h1>
+        <p>We will now run the test suite on your OAuth provider. </p>
+        <p>
+            During the testing process, a second (pop-up) window/tab will open. This window is used to interact with your OAuth provider.
+            When the tests are running, switch to this window and enter your OAuth credentials when asked (e.g. when testing the implicit
+            grant or the authorization code grant, you will typically need to log in as a user and offer consent). Depending on whether
+            your OAuth provider keeps you logged in and/or automatically reissues consent, you may be asked to log in multiple times.
+        </p>
+        <p>
+            Sometimes you see an error in that other window. This does not indicate that a test has failed (in fact - it is sometimes
+            expected that the OAuth provider returns an error when attacking its infrastructure). However, it typically does mean that
+            the testing process is stalled, because the test framework is waiting for a reply from the server, which it won't receive.
+            In this case, click the <i>Stalled test</i> button (which will appear on this page) to continue with the other tests.
+        </p>
+        <p>
+            To run the test set, click on one of the two buttons below. The quick test set does not run test cases that only have an
+            informational weight in the selected test profile. For example, a test case that checks whether the server implements some
+            requirement from the FAPI profile will not be run if the FAPI profile is not selected. The full test set runs all tests,
+            independent of their weight in the selected test profile. A number of (informational) tests will, however, have no impact
+            on the resulting score even if they fail. Note that in this profile tests can still be skipped. This happens if the test
+            cannot be run (for example, a test of the implicit flow cannot be run if the implicit flow is not enabled on the server).
+        </p>
+
+        <button style="margin-left: 10px;" class="btn btn-success" onclick="onRun();" id="startButton">Run test set</button></p>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        function onRun() {
+                window.location.href = "@Url.Action("Running", "Dashboard", new { id = Model.SiteId })";
+        }
+    </script>
+}

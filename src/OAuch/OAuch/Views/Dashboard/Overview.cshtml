@@ -1,0 +1,104 @@
+﻿@model OAuch.ViewModels.OverviewViewModel
+@using OAuch.Helpers
+@using Microsoft.AspNetCore.Html
+@using OAuch.Database.Entities
+@using OAuch.ViewModels
+@{
+    ViewData["Title"] = "Site overview";
+
+    //var latest = Model.LatestResult;
+    var layoutClass = "";
+    var layoutResult = "";
+
+    //if (latest != null && latest.Rating.Overall.Label != ResultLabels.Unknown) {
+    //    layoutClass = latest.Rating.Overall.Label.ToClassType();
+    //    layoutResult = latest.Rating.Overall.Label.ToLabelString();
+    //}
+
+    var incompleteText = Html.Raw("<small class=\"text-danger\">(incomplete settings)</small>");
+    var disabledText = Html.Raw("<small class=\"text-danger\">(disabled)</small>");
+    var okText = Html.Raw("<span class=\"text-success\">✓</span>");
+    var missingText = Html.Raw("<span class=\"text-danger\">✗</span>");
+    var emptyText = Html.Raw("");
+
+    IHtmlContent ToSymbol(SettingsStatus status) {
+        if (status == SettingsStatus.Ok)
+            return okText;
+        else if (status == SettingsStatus.Incomplete || status == SettingsStatus.Disabled)
+            return missingText;
+        return emptyText;
+    }
+    IHtmlContent ToText(SettingsStatus status) {
+        if (status == SettingsStatus.Incomplete)
+            return incompleteText;
+        else if (status == SettingsStatus.Disabled)
+            return disabledText;
+        return emptyText;
+    }
+}
+
+<h1 class="display-4">Site overview</h1>
+<h3><small class="text-muted">“@Model.SiteName”</small></h3>
+<p>This is the overview for your site.</p>
+
+<p><strong>Settings overview</strong></p>
+<p>OAuch can test a number of different grant types. Make sure you enter the correct settings for every grant type you wish to test.</p>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-8 col-xl-6">
+        <table class="table table-bordered settings-table">
+            <tbody>
+                <tr>
+                    <td class="tleft">@ToSymbol(Model.AuthorizationUri)</td>
+                    <td>Authorization endpoint</td>
+                </tr>
+                <tr>
+                    <td class="tleft">@ToSymbol(Model.TokenUri)</td>
+                    <td>Token endpoint</td>
+                </tr>
+                <tr>
+                    <td class="tleft">@ToSymbol(Model.ClientId)</td>
+                    <td>Client ID</td>
+                </tr>
+                <tr>
+                    <td class="tleft">@ToSymbol(Model.ClientSecret)</td>
+                    <td>Client secret</td>
+                </tr>
+                <tr>
+                    <td class="tleft">@ToSymbol(Model.TestUri)</td>
+                    <td>Test URI</td>
+                </tr>
+                <tr>
+                    <td class="tleft">@Model.SelectedDocuments</td>
+                    <td>Selected documents</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="@Url.Action("Settings", "Dashboard", new { id = Model.ActiveSite?.SiteId })" style="margin-left: 2rem;">Change settings</a>
+    </div>
+</div>
+<p>&nbsp;</p>
+@*<p><strong>Latest results</strong></p>
+    @if (Model.LatestResult != null) {
+    <p>
+        This site has been tested on @Model.LatestResult.Value.ToString("MMMM d, yyyy").
+        <a href="@Url.Action("Results", new { id = Model.SiteId })">View complete details.</a>
+    </p>
+    } else {
+        <p>This site has not been tested yet.</p>
+    }*@
+<p>This site has not been tested yet. <a href="@Url.Action("RunTest", "Dashboard", new { id = Model.SiteId })">Run a new test</a></p>
+
+@section Styles {
+    <style>
+        .tleft {
+            text-align: center;
+            width: 50px;
+            font-weight: bold;
+            background-color: #fff;
+        }
+
+        .settings-table {
+            margin-left: 20px;
+        }
+    </style>
+}

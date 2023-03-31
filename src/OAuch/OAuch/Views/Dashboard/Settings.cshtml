@@ -1,0 +1,444 @@
+﻿@model OAuch.ViewModels.SettingsViewModel
+@using Microsoft.AspNetCore.Html
+@using OAuch.Helpers
+@using OAuch.Shared.Enumerations
+@using OAuch.Protocols.OAuth2
+@using OAuch.Compliance
+@{
+    ViewData["Title"] = "Change site settings";
+
+    IHtmlContent CreateDocumentOption(OAuthDocument doc) {
+        var isDocumentSelected = Model.Settings.SelectedStandards?.Any(d => d == doc.Id) ?? false;
+        string dataContent = $"<div class='od'><strong>{ doc.Id }</strong><br/><em>{ doc.Name }</em></div>";
+        return new HtmlString($"<option value=\"{ doc.Id }\" title=\"{ doc.Id }\" data-content=\"{ dataContent }\"{ (isDocumentSelected ? " selected" : "") }></option>");
+    }
+    IHtmlContent CreateFlowOption(string flow) {
+        var isDocumentSelected = Model.Settings.ExcludedFlows?.Any(d => d == flow) ?? false;
+        string dataContent = $"<div class='od'><strong>{ flow }</strong><br/><em>{ OAuthHelper.GetFlowName(flow) }</em></div>";
+        return new HtmlString($"<option value=\"{ flow }\" title=\"{ flow }\" data-content=\"{ dataContent }\"{ (isDocumentSelected ? " selected" : "") }></option>");
+    }
+    string ToString(DocumentCategories cat) {
+        switch (cat) {
+            case DocumentCategories.OAuth2:
+                return "OAuth 2.0";
+            case DocumentCategories.OpenIDConnect:
+                return "OpenID Connect";
+            case DocumentCategories.Draft:
+                return "Draft Specifications";
+            default:
+                return "Other";
+        }
+    }
+}
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="display-4">Site settings</h1>
+        <p>
+            Please enter the settings of the OAuth 2.0 / OpenID Connect service you wish to test. If you do not know the value of some of the parameters, feel free to leave them open.
+            OAuch will do its best to test your site with the parameters that <em>are</em> given. The more parameters you can supply, the more tests will be performed.
+        </p>
+        @using (Html.BeginForm(FormMethod.Post, new { onsubmit = @"return validate();" })) {
+            <div class="row" style="margin-bottom: 1rem;">
+                <div class="col-4 col-sm-3">
+                    <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link" id="label-site" data-toggle="pill" href="#tab-site" role="tab" aria-controls="tab-site" aria-selected="false">Site Settings</a>
+                        <a class="nav-link active" id="label-basic" data-toggle="pill" href="#tab-basic" role="tab" aria-controls="tab-basic" aria-selected="false">Basic Settings</a>
+                        <a class="nav-link" id="label-client" data-toggle="pill" href="#tab-client" role="tab" aria-controls="tab-client" aria-selected="false">Client Settings</a>
+                        <a class="nav-link" id="label-overrides" data-toggle="pill" href="#tab-overrides" role="tab" aria-controls="tab-overrides" aria-selected="false">Grant-specific Overrides</a>
+                        <a class="nav-link" id="label-api" data-toggle="pill" href="#tab-api" role="tab" aria-controls="tab-api" aria-selected="true">API Settings</a>
+                        <a class="nav-link" id="label-oidc" data-toggle="pill" href="#tab-oidc" role="tab" aria-controls="tab-oidc" aria-selected="true">OpenID Connect</a>
+                        <a class="nav-link" id="label-advanced" data-toggle="pill" href="#tab-advanced" role="tab" aria-controls="tab-advanced" aria-selected="true">Advanced Settings</a>
+                        <a class="nav-link" id="label-docs" data-toggle="pill" href="#tab-docs" role="tab" aria-controls="tab-docs" aria-selected="false">Documents</a>
+                        <a class="nav-link text-danger" id="label-danger" data-toggle="pill" href="#tab-danger" role="tab" aria-controls="tab-danger" aria-selected="false">Danger Zone</a>
+                    </div>
+                </div>
+                <div class="col-8 col-sm-9">
+                    <div class="tab-content" id="vert-tabs-tabContent">
+                        <div class="tab-pane fade" id="tab-site" role="tabpanel" aria-labelledby="label-site">
+                            <div class="form-group">
+                                <label for="SiteName">Site name</label>
+                                @Html.TextBoxFor(c => c.SiteName, new { @class = "form-control" })
+                                <small class="form-text text-muted">The name of the site must be between 1 and 20 characters. It can only contain letters, numbers, underscores, hyphens, dots and spaces.</small>
+                                @if (!string.IsNullOrWhiteSpace(Model.Settings.MetadataUri)) {
+                                    <p style="margin-top: 10px;">The settings for this website are based on the metadata retrieved from <code>@Model.Settings.MetadataUri</code></p>
+                                }
+                            </div>
+                            <div id="excludedFlows" class="form-group">
+                                <label>Excluded flows</label>
+                                <p style="margin-bottom: 0;">The selected flows will be excluded from the test run:</p>
+                                <select id="Settings_ExcludedFlows" name="Settings.ExcludedFlows" class="selectpicker show-tick" data-width="100%" multiple="multiple">
+                                    @foreach (var c in OAuthHelper.AllFlows) {
+                                        <text>@CreateFlowOption(c)</text>
+                                    }
+                                </select>
+                                <small id="ScopeHelp" class="form-text text-muted">
+                                    By default, OAuch automatically determines which authorization grants are supported by the server. If you wish to exclude specific grants
+                                    from being used, you can exclude them here. This is useful to manually optimize the testing process, but is not strictly necessary.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="tab-pane text-left fade active show" id="tab-basic" role="tabpanel" aria-labelledby="label-basic">
+                            <div class="form-group">
+                                <label for="AuthorizationUri">Authorization URI</label>
+                                @Html.TextBoxFor(c => c.Settings.AuthorizationUri, new { @class = "form-control", aria_describedby = "AuthorizationUriHelp" })
+                                <small id="AuthorizationUriHelp" class="form-text text-muted">This is the authorization URI that is used for the implicit and authorization code grants.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="CallbackUrl">Callback URI</label>
+                                @Html.TextBoxFor(c => c.Settings.CallbackUri, new { @class = "form-control", aria_describedby = "CallbackUrlHelp" })
+                                <small id="CallbackUrlHelp" class="form-text text-muted">
+                                    This is the callback url for the implicit and authorization code grants.
+                                    The default URI is <code>@OAuchHelper.CallbackUri</code>. If you wish, you can specify a custom callback url. This can be any
+                                    url, including urls on different domains. In order for different domains to work, you will need to modify your local HOSTS file
+                                    to override the IP address of the custom domain to make it point to the IP address of OAuch.io.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="TokenUri">Token URI</label>
+                                @Html.TextBoxFor(c => c.Settings.TokenUri, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="DeviceAuthorizationUri">Device Authorization URI</label>
+                                @Html.TextBoxFor(c => c.Settings.DeviceAuthorizationUri, new { @class = "form-control", aria_describedby = "DeviceAuthorizationUriHelp" })
+                                <small id="DeviceAuthorizationUriHelp" class="form-text text-muted">This is the authorization URI that is used for the device authorization grant.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="RevocationUri">Revocation URI</label>
+                                @Html.TextBoxFor(c => c.Settings.RevocationUri, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-client" role="tabpanel" aria-labelledby="label-client">
+                            <div class="form-group">
+                                <label for="ClientId">Client ID</label>
+                                @Html.TextBoxFor(c => c.Settings.DefaultClient.ClientId, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientSecret">Client Secret</label>
+                                @Html.TextBoxFor(c => c.Settings.DefaultClient.ClientSecret, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientCertificate">Client certificate</label>
+                                @Html.DropDownListFor(c => c.Settings.CertificateId, Model.Certificates, "(none)", new { @class = "form-control", aria_describedby = "ClientCertificateHelp" })
+                                <small id="ClientCertificateHelp" class="form-text text-muted">
+                                    You must upload client certificates first, before you can select them from this list. To upload a
+                                    client certificate, click on <em>Client Certificates</em> in the left navigation bar.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="Scope">Scope</label>
+                                @Html.TextBoxFor(c => c.Settings.DefaultClient.Scope, new { @class = "form-control", aria_describedby = "ScopeHelp" })
+                                <small id="ScopeHelp" class="form-text text-muted">The scope that should be requested to access the resource. Leave empty to omit the scope in the token request.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientId">Alternative Client ID</label>
+                                @Html.TextBoxFor(c => c.Settings.AlternativeClient.ClientId, new { @class = "form-control" })
+                                <small id="ClientIdAlternative" class="form-text text-muted">If a second valid client ID and secret are specified, OAuch can perform additional tests related to token mix-ups. These parameters are optional.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientSecret">Alternative Client Secret</label>
+                                @Html.TextBoxFor(c => c.Settings.AlternativeClient.ClientSecret, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="Scope">Alternative Scope</label>
+                                @Html.TextBoxFor(c => c.Settings.AlternativeClient.Scope, new { @class = "form-control", aria_describedby = "ScopeHelp" })
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-overrides" role="tabpanel" aria-labelledby="label-overrides">
+                            <p>Some of the settings in the previous tab pages can be overridden for specific grant types. If you leave these settings empty, the default settings from the other tabs will be used.</p>
+                            <div class="accordion" id="overridesAccordion">
+                                @if (Model.Settings.Overrides != null) {
+                                    for (int i = 0; i < Model.Settings.Overrides.Count; i++) {
+                                        <div class="card">
+                                            <div class="card-header" id="heading@(i)">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse@(i)" aria-expanded="true" aria-controls="collapse@(i)">
+                                                        @OAuthHelper.GetFlowName(Model.Settings.Overrides[i].FlowType)
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapse@(i)" class="collapse" aria-labelledby="heading@(i)" data-parent="#overridesAccordion">
+                                                <div class="card-body">
+                                                    @Html.HiddenFor(c => c.Settings.Overrides[i].FlowType)
+                                                    <div class="form-group">
+                                                        <label>Client Id</label>
+                                                        @Html.TextBoxFor(c => c.Settings.Overrides[i].OverrideSettings.ClientId, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Client Secret</label>
+                                                        @Html.TextBoxFor(c => c.Settings.Overrides[i].OverrideSettings.ClientSecret, new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Scope</label>
+                                                        @Html.TextBoxFor(c => c.Settings.Overrides[i].OverrideSettings.Scope, new { @class = "form-control" })
+                                                    </div>
+                                                    @if (Model.Settings.Overrides[i].FlowType == OAuthHelper.PASSWORD_FLOW_TYPE) {
+                                                        <p>
+                                                            If you wish to use the password grant, please fill in the username and password of the user you wish to impersonate.
+                                                        </p>
+                                                        <div class="form-group">
+                                                            <label>Username</label>
+                                                            @Html.TextBoxFor(c => c.Settings.Username, new { @class = "form-control" })
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Password</label>
+                                                            @Html.TextBoxFor(c => c.Settings.Password, new { @class = "form-control" })
+                                                        </div>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-api" role="tabpanel" aria-labelledby="label-api">
+                            <p>
+                                Enter the details of an API method that can be used to test the validity of an access token. The test API method is preferably
+                                a simple method that quickly returns a limited amount of data. Note that this should be a non-public API
+                                (i.e. a call should fail without proper authorization). The method will be called with a bearer token that
+                                has been received through one of the OAuth grants.
+                            </p>
+                            <p>
+                                By default, OAuch will add an <code>Authorization</code> header to the request and add the access token to
+                                this header (as a <em>bearer</em> token). If the API server requires a different way of presenting the access
+                                token, you can manually add the access token by modifying the URL, adding an HTTP header, or adding it to the the POST data.
+                                Simply include one of the special values listed below in the desired location. These values will be replaced by OAuch before sending the
+                                request to the server. Do note that if you use one of these values, OAuch will not automatically add the
+                                <code>Authorization</code> header anymore (but you can still add it manually).
+                            </p>
+                            <ul>
+                                <li><code>@ApiRequest.ACCESS_TOKEN_DELIM_RAW</code> This value is replaced by the value of the access token</li>
+                                <li><code>@ApiRequest.ACCESS_TOKEN_DELIM_URL</code> This value is replaced by the URL-encoded value of the access token</li>
+                                <li><code>@ApiRequest.ACCESS_TOKEN_DELIM_BASE64</code> This value is replaced by the Base64-encoded value of the access token</li>
+                            </ul>
+                            <div class="form-group">
+                                <label for="TestUri">API Test URI</label>
+                                @Html.TextBoxFor(c => c.Settings.TestUri, new { @class = "form-control" })
+                                <small id="TestHeadersInfo" class="form-text text-muted">
+                                    If the access token is valid, the server should return a success response (2xx). If the token is invalid, the server must
+                                    return a failure response (4xx or 5xx).
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="TestMethod">HTTP Method</label>
+                                @Html.DropDownListFor(c => c.Settings.TestMethod, Html.GetEnumSelectList<HttpMethodsEnum>(), null, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="TestHeaders">Additional HTTP Headers</label>
+                                @Html.TextAreaFor(c => c.Settings.TestHeaders, new { @class = "form-control", aria_describedby = "TestHeadersInfo" })
+                                <small id="TestHeadersInfo" class="form-text text-muted">
+                                    Any additional HTTP headers that should be sent in the request.
+                                    Each line contains one header. A header starts with a name, followed by a colon and then its value.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="TestPostData">Form POST Data</label>
+                                @Html.TextAreaFor(c => c.Settings.TestPostData, new { @class = "form-control", aria_describedby = "TestPostDataInfo" })
+                                <small id="TestPostDataInfo" class="form-text text-muted">
+                                    Extra data that should be sent with the POST
+                                    request. By default, OAuch assumes that the data is 'form-urlencoded'. If you use another content type,
+                                    you should specify it by adding a 'Content-Type' header in the 'additional HTTP headers' field. The contents
+                                    of this field is converted to bytes using the UTF-8 encoding.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-oidc" role="tabpanel" aria-labelledby="label-oidc">
+                            <p>
+                                OAuch has specific tests for the OpenID Connect 1.0 protocol. To enable support for OpenID Connect,
+                                the requested scope parameter of the default client (or the scope specified in one of the grant overrides)
+                                must contain the 'openid' scope.
+                            </p>
+                            <div class="form-group">
+                                <label for="TestUri">Issuer</label>
+                                @Html.TextBoxFor(c => c.Settings.OpenIdIssuer, new { @class = "form-control", aria_describedby = "OpenIdIssuerInfo" })
+                                <small id="OpenIdIssuerInfo" class="form-text text-muted">
+                                    This is URL using the https scheme with no query or fragment component that the OpenID provider asserts as its Issuer Identifier.
+                                    This string is used for the <em>iss</em> Claim value in ID Tokens issued from this Issuer. You can find the value of this parameter
+                                    in the OpenID metadata of the authorization server.
+                                    If you do not know this value, you can leave this parameter empty to skip the checks related to this setting.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="JwksUri">JWKS URI</label>
+                                @Html.TextBoxFor(c => c.Settings.JwksUri, new { @class = "form-control", aria_describedby = "RevocationUriHelp" })
+                                <small id="JwksUriHelp" class="form-text text-muted">
+                                    The URL of the JSON Web Key Sets document that holds the public keys of the server. This is used to verify the signatures on identity tokens.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-advanced" role="tabpanel" aria-labelledby="label-advanced">
+                            <div class="form-group">
+                                <label for="TestUri">Token Request Delay</label>
+                                <p>
+                                    Some servers apply rate limiting on token requests. You can use this slider to add a delay between every
+                                    OAuch token request that is sent to the server.
+                                </p>
+                                <input id="Settings_TokenDelay" type="text" name="Settings.TokenDelay" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientAuthenticationMechanism">Default PKCE Behavior</label>
+                                @Html.DropDownListFor(c => c.Settings.PKCEDefault, Html.GetEnumSelectList<PKCESupportTypes>(), null, new { @class = "form-control", aria_describedby = "ClientAuthenticationMechanismInfo" })
+                                <small id="ClientAuthenticationMechanismInfo" class="form-text text-muted">
+                                    This is the default behavior with regard to PKCE whenever the authorization code flow is used (this includes the hybrid code grants). OAuch will override this setting when
+                                    required by a test (e.g., when it is testing for PKCE support).
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="ResponseMode">Default Response Mode</label>
+                                @Html.DropDownListFor(c => c.Settings.ResponseMode, Html.GetEnumSelectList<ResponseModes>(), null, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="UseRequestParameter">Use a Request Parameter</label>
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(c => c.Settings.UseRequestParameter, new { data_toggle = "toggle", data_size = "sm" })
+                                </div>
+                                <small id="UseRequestParameterInfo" class="form-text text-muted">
+                                    Send authorization parameters as a single JSON Web Token in the 'request' parameter. This may be required in high-security settings.
+                                    If a client signing key is specified (see below), it will be used to sign the JWT.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="RequestSigningKey">Client Signing Key</label>
+                                @Html.TextAreaFor(c => c.Settings.RequestSigningKey, new { @class = "form-control", aria_describedby = "RequestSigningKeyInfo" })
+                                <small id="RequestSigningKeyInfo" class="form-text text-muted">
+                                    The secret key of the client to sign token requests. This parameter is required if you want to use a 'request' parameter
+                                    or if you select the 'private_key_jwt' client authentication mechanism. The contents of this parameter should be a single
+                                    JSON Web Key (both the public and private key components, <em>and</em> the encryption algorithm to use with it [the <em>alg</em> property]).
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="ClientAuthenticationMechanism">Client Authentication Mechanism</label>
+                                @Html.DropDownListFor(c => c.Settings.ClientAuthenticationMechanism, Html.GetEnumSelectList<ClientAuthenticationMechanisms>(), null, new { @class = "form-control" })
+                                <small id="ClientAuthenticationMechanismHelp" class="form-text text-muted">
+                                    During client registration, the client may register a client authentication method. By default, the client_secret_basic method is used.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="TestUri">Client Authentication Audience</label>
+                                @Html.TextBoxFor(c => c.Settings.RequestAudience, new { @class = "form-control" })
+                                <small id="RequestAudienceHelp" class="form-text text-muted">
+                                    This is the value that will be used for the audience claim in the request JWT when the 'private_key_jwt' client authentication mechanism is used.
+                                    If left empty, OAuch uses the URL of the token server.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-docs" role="tabpanel" aria-labelledby="label-docs">
+                            <p>
+                                If not all the tests are relevant to your organization, you may wish to exclude some tests from the
+                                testing process. This can be the case if you have made deliberate trade-offs, for example between
+                                security and performance or between security and compatibility.
+                            </p>
+                            <div id="selectedStandards" class="form-group">
+                                <label>Standard Documents</label>
+                                <select id="Settings_SelectedStandards" name="Settings.SelectedStandards" class="selectpicker show-tick" data-width="100%" multiple="multiple">
+                                    @{
+                                        var docCats = new DocumentCategories[] { DocumentCategories.OAuth2, DocumentCategories.OpenIDConnect, DocumentCategories.Draft };
+                                    }
+                                    @foreach (var c in docCats) {
+                                        <optgroup label="@ToString(c)">
+                                            @foreach (var t in ComplianceDatabase.AllDocuments.Where(tc => tc.DocumentCategory == c)) {
+                                                <text>@CreateDocumentOption(t)</text>
+                                            }
+                                        </optgroup>
+                                    }
+                                </select>
+                                <small id="ScopeHelp" class="form-text text-muted">
+                                    By default, OAuch includes all supported OAuth and OpenID Connect standard specifications. OAuch will automatically detect which
+                                    standards are (not) supported and adjust the test accordingly. Hence, if your server does not support a specific standard, there
+                                    is no need to remove it from this list.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-danger" role="tabpanel" aria-labelledby="label-danger">
+                            <div class="form-group">
+                                <label for="SiteName">Delete Site</label>
+                                <p>
+                                    If you wish to delete this site from our database, click the button below. This will remove the site's settings and all the
+                                    test results that are associated with it. CAUTION: this action cannot be undone.
+                                </p>
+                                <p>
+                                    @Html.ActionLink("Delete site", "DeleteSite", "Dashboard", new { id = Model.ActiveSite?.SiteId }, new { onclick = "return deleteConfirm();", @class = "btn btn-danger" })
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                <a href="@Url.Action("Overview", "Dashboard", new { id = Model.ActiveSite?.SiteId })" class="btn btn-default">Cancel</a>
+            </p>
+        }
+    </div>
+</div>
+@section Styles {
+    <link href="/plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/plugins/ion-rangeslider/css/ion.rangeSlider.min.css">
+    <link rel="stylesheet" href="/plugins/bootstrap-select/css/bootstrap-select.min.css">
+    <style>
+        #selectedStandards .bootstrap-select .dropdown-menu li a {
+            color: darkgray;
+        }
+        #selectedStandards .bootstrap-select .dropdown-menu li .selected {
+            color: black;
+        }
+        #excludedFlows .bootstrap-select .dropdown-menu li a {
+            color: black;
+        }
+        #excludedFlows .bootstrap-select .dropdown-menu li .selected {
+            color: red;
+        }
+        .od {
+            padding: 5px 0;
+        }
+    </style>
+}
+@section Scripts {
+    <script src="/plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+    <script src="/plugins/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
+    <script src="/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script>
+        $('#Settings_TokenDelay').ionRangeSlider({
+            min: 0,
+            max: 15,
+            skin: 'big',
+            from: @Model.Settings.TokenDelay,
+            type: 'single',
+            step: 1,
+            postfix: ' sec',
+            prettify: false,
+            hasGrid: true
+        });
+        $(function () {
+            $('.selectpicker').selectpicker(
+                {
+                    tickIcon: 'fa-check',
+                    iconBase: 'fas',
+                    selectedTextFormat: 'count > 3'
+                });
+        });
+        function validate() {
+            @* Check validity of site name *@
+            var newName = $('#SiteName').val();
+            if (!newName || 0 === newName.length || 20 < newName.length || !(/^[a-zA-Z0-9._\- ]+$/.test(newName))) {
+                $('#SiteName').addClass("is-invalid");
+                $('#vert-tabs-tab a[href="#tab-site"]').tab('show')
+                return false;
+            }
+            return true;
+        }
+        function deleteConfirm() {
+            var cf = prompt("Deleting the data of this site cannot be undone. Please type 'yes' to confirm this action.");
+            if (cf && cf.toUpperCase() == "YES") {
+                return true;
+            }
+            if (cf !== null) {
+                alert("You have to type 'yes' to confirm the action.");
+            }
+            return false;
+        }
+    </script>
+}

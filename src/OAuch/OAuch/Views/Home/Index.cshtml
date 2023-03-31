@@ -1,0 +1,40 @@
+﻿@{ 
+    ViewData["Title"] = "Welcome!";
+}
+<div class="row">
+    <div class="col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-2 col-xl-5 ">
+        <p style="font-family: Josefin Sans; font-size: 60px; font-weight: bold;">
+            So, your API is using OAuth 2.0?
+        </p>
+        <p style="font-family: Josefin Sans; font-size: 16px;">
+            Using the OAuth 2.0 protocol to secure your web APIs is a great choice. However, are you sure that
+            your implementation is on par with the latest security guidelines and best practices? Have you ever
+            tested how well it defends against actual threats?
+        </p>
+        <p style="font-family: Josefin Sans; font-size: 16px;">
+            OAuch is a compliance testing framework for the OAuth 2.0 protocol. It takes an in-depth look at how an 
+            implementation of an OAuth 2.0 authorization server
+            adheres to the standards and mitigates known threats. OAuch generates a report based on the analysis of the
+            tests and identifies potential weaknesses.
+        </p>
+        @*<p style="font-family: Josefin Sans; font-size: 16px;">
+            OAuch is offered for free by <a href="/Home/About">the DistriNet research group</a>,
+            and its source code can be downloaded <a href="#" target="_blank">from BitBucket</a>.
+        </p>*@
+        <p style="text-align: center;">
+            <a href="/Login/WithLink" class="btn btn-primary btn-lg" style="margin: 10px; padding-left: 40px; padding-right: 40px;">Continue without signing in</a>
+        </p>
+        <p style="text-align: center;">
+            ... or sign in with:
+        </p>
+        <p style="text-align: center;">
+            <a href="/Login/WithGoogle" class="btn btn-gg btn-lg" style="margin: 10px; padding-left: 40px; padding-right: 40px;"><i class="fab fa-google mr-2"></i> Google</a>
+            <a href="/Login/WithMicrosoft" class="btn btn-ms btn-lg" style="margin: 10px; padding-left: 40px; padding-right: 40px;"><i class="fab fa-microsoft mr-2"></i> Microsoft</a>
+            <a href="/Login/WithFacebook" class="btn btn-fb btn-lg" style="margin: 10px; padding-left: 40px; padding-right: 40px;"><i class="fab fa-facebook mr-2"></i> Facebook</a>
+            <a href="/Login/WithTwitter" class="btn btn-tw btn-lg" style="margin: 10px; padding-left: 40px; padding-right: 40px;"><i class="fab fa-twitter mr-2"></i> Twitter</a>
+        </p>
+    </div>
+    <div class="d-none d-xl-block col-xl-3">
+        <img src="/img/logo_large.png" class="img-responsive" />
+    </div>
+</div>

@@ -1,0 +1,150 @@
+﻿@model OAuch.ViewModels.DashboardViewModel
+@using OAuch.Compliance.Results 
+@{
+    ViewData["Title"] = "Site dashboard";
+}
+<h1 class="display-4">OAuch dashboard</h1>
+@if (Model.Sites.Count == 0) {
+    <div class="row">
+        <div class="col-xl-8">
+            <p>
+                It looks like you have not yet added a site to test. Click on the @Html.ActionLink("Add new site", "AddSite") link in the left
+                menu to add a new site to OAuch. Make sure you have your OAuth client details at hand (client ID, client secret, authorization URI, token URI, ...).
+            </p>
+            <p>
+                Alternatively, you can @Html.ActionLink("add a demo site", "AddDemoSite") to quickly try OAuch. In this case, OAuch will add a new
+                demo site and set it up with the details of Duende IdentityServer's demo website (available at <a href="https://demo.duendesoftware.com/" target="_blank">https://demo.duendesoftware.com/</a>).
+                When testing this OAuth implementation, you can use <em>bob</em> as both username and password to log in.
+            </p>
+            <p>Once you have added one or more sites, this page will show an overview of the results of each site.</p>
+        </div>
+    </div>
+} else {
+    <p>This is an overview of the sites you have added to OAuch.</p>
+    <div class="row">
+        @foreach (var site in Model.Sites) {
+            string r = "?", rc = "rating-unkn", deprecated = "?", failureRate = "?", threats = "?", lt = "untested";
+            var siteResult = Model.SiteResults.FirstOrDefault(r => r.SiteId == site.SiteId);
+            if (siteResult != null && !float.IsNaN(siteResult.Result.OverallCompliance.OverallScore.FailureRate)) {
+                deprecated = siteResult.Result.OverallCompliance.DeprecatedFeatures.Count(df => df.IsCompliant == false).ToString();
+                failureRate = siteResult.Result.OverallCompliance.OverallScore.FailureRate.ToString("P0");
+                threats = siteResult.Result.UnmitigatedThreats.ToString();
+                lt = siteResult.Result.StartedAt.ToString("d MMMM yyyy");
+                if (siteResult.Result.SimpleRating == SimpleRatings.A || siteResult.Result.SimpleRating == SimpleRatings.APlus) {
+                    r = siteResult.Result.SimpleRating == SimpleRatings.APlus ? "A+" : "A";
+                    rc = "rating-a";
+                } else if (siteResult.Result.SimpleRating == SimpleRatings.B) {
+                    r = "B";
+                    rc = "rating-b";
+                } else {
+                    r = "C";
+                    rc = "rating-c";
+                }
+            }
+            <div class="col-md-6 col-xl-4">
+                <div class="card card-widget widget-user-2">
+                    <div class="widget-user-header bg-@rc">
+                        <div class="widget-user-image">
+                            <div class="rating @rc">@r</div>
+                        </div>
+                        <h3 class="widget-user-username">@site.Name</h3>
+                        <p class="widget-user-desc">Latest test: <em>@lt</em></p>
+                    </div>
+                    <div class="card-footer p-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    Unmitigated threats <span class="float-right badge bg-danger">@threats</span>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    Deprecated features <span class="float-right badge bg-warning">@deprecated</span>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    Missing countermeasures <span class="float-right badge bg-info">@failureRate</span>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Results", "Dashboard", new { id = site.SiteId })" class="nav-link">
+                                    See detailed results
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Settings", "Dashboard", new { id = site.SiteId })" class="nav-link">
+                                    Change site settings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("RunTest", "Dashboard", new { id = site.SiteId })" class="nav-link">
+                                    Start a new test run
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+@section Styles {
+    <style>
+        .badge {
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        .rating {
+            width: 64px;
+            height: 64px;
+            font-family: Arial, Arial, Helvetica, sans-serif, sans-serif;
+            text-align: center;
+            margin: 7px auto;
+            font-size: 40px;
+            font-weight: bold;
+            color: #fff;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 7px;
+            float: left;
+        }
+
+        .rating-a {
+            background: #7BD749;
+            border-color: #60C22B;
+        }
+
+        .rating-b {
+            background: #FFD02D;
+            border-color: #E7B60E;
+        }
+
+        .rating-c {
+            background: #FF533C;
+            border-color: #E7331A;
+        }
+
+        .rating-unkn {
+            background: #B0B0B0;
+            border-color: #A0A0A0;
+        }
+
+        .bg-rating-a {
+            background: #CFFFA8;
+        }
+
+        .bg-rating-b {
+            background: #FFFFB2;
+        }
+
+        .bg-rating-c {
+            background: #FFC5BA;
+        }
+
+        .bg-rating-unkn {
+            background: #E0E0E0;
+        }
+    </style>
+}

@@ -348,6 +348,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
 /src/OAuch/OAuch/oauch.db
 /src/OAuch/OAuch/oauch.db-shm
 /src/OAuch/OAuch/oauch.db-wal

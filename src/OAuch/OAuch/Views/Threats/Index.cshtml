@@ -1,0 +1,40 @@
+﻿@model OAuch.ViewModels.ThreatsViewModel
+@using OAuch.ViewModels;
+@using OAuch.Helpers; 
+@{
+    ViewData["Title"] = "Threat Overview";
+
+    //IEnumerable<IGrouping<string, TestInfoViewModel>> GetTests () {
+    //    return Model.Tests.Select(t => new TestInfoViewModel(t)).GroupBy(c => c.CategoryDescription).OrderBy(k => k.Key, TestInfoViewModel.TestCategoryComparer);
+    //}
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h1 class="display-4">Threats Overview</h1>
+        <p>
+            The OAuth working group has published a comprehensive threat model shortly after publishing the original OAuth 2.0 standard. This threat model is further 
+            refined in the latest <em>Security Best Current Practices</em> document to include additional threats that have been observed in real-world usage of OAuth.
+
+            The threat model describes for each threat how an implementation may be attacked and which countermeasures can be applied. Some threats are mitigated by a
+            combination of multiple countermeasures, while others can be mitigated by a single countermeasure. In many cases, alternative sets of countermeasures may 
+            be used to address a threat. Some countermeasures may (partially) mitigate multiple threats. 
+
+            The model assumes a powerful attacker that has full access to the network between the OAuth client and the authorization server, and the client and the
+            resource server. The attacker may eavesdrop on any communication between those parties and has unlimited resources to mount attacks. In addition, two of 
+            the three parties involved in the OAuth protocol may collude to mount an attack against the 3rd party.
+        </p>
+        <p>
+            This threat model has been adopted in OAuch and is used to offer precise feedback to the user. OAuch uses test cases to detect which countermeasures are
+            implemented by the authorization server. It then uses the information from the threat model to determine which threats are mitigated. For every threat, 
+            it takes the list of mitigations that are proposed by the threat model and compares it with the mitigations that have been detected. If the threat is 
+            properly mitigated, it is marked as <em>fully mitigated</em>. When no relevant countermeasures are active, the threat is <em>unmitigated</em>. Threats 
+            can also be <em>partially mitigated</em> if some countermeasures are present, but not all. When multiple sets of countermeasures can mitigate a threat, it
+            is sufficient that only one set is fully implemented. 
+        </p>
+        <ul>
+            @foreach (var threat in Model.Threats.OrderBy(t => t.Id)) {
+                <li><a href="/Threats/Info/@threat.Id">@threat.Title</a> (@threat.Id)</li>
+            }
+        </ul>
+    </div>
+</div>

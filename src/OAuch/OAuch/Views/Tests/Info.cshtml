@@ -1,0 +1,54 @@
+﻿@model OAuch.ViewModels.TestViewModel
+@using OAuch.Shared.Enumerations
+@using OAuch.Helpers 
+@{
+    ViewData["Title"] = "Test info";
+
+
+    string RequirementLevelToString(RequirementLevels rl) {
+        if (rl == RequirementLevels.Must) {
+            return "must";
+        } else if (rl == RequirementLevels.Should) {
+            return "should";
+        } else if (rl == RequirementLevels.May) {
+            return "may";
+        }
+        return "unknown requirement level";
+    }
+    string GetSection(string location) {
+        int idx = location.IndexOf(' ');
+        if (idx > 0) {
+            return location.Substring(0, idx).TrimEnd('.');
+        }
+        return "unknown";
+    }
+    string GetGitUrl() {
+        string shortId = HelperMethods.ShortenTestId(Model.Test.TestId);
+        string category = HelperMethods.GetTestCategory(shortId);
+        string testClass = shortId.Substring(category.Length + 1);
+        return $"https://bitbucket.org/oauch/oauch-website/src/master/src/OAuch/OAuch.Tests/Tests/{ category }/{ testClass }.cs";
+    }
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h6><small><strong class="text-monospace">@HelperMethods.ShortenTestId(Model.Test.TestId, true)</strong></small></h6>
+        <h2>@Model.Test.Title</h2>
+        <p>@Model.Test.Description</p>
+        @if (!string.IsNullOrWhiteSpace(Model.Test.TestingStrategy)) {
+            <h5><strong>Testing strategy</strong></h5>
+            <p>@Html.Raw(Model.Test.TestingStrategy)</p>
+        }
+        <p><a href="@GetGitUrl()" target="_blank">View source code on BitBucket</a></p>
+        @if (Model.Requirements.Count > 0) {
+            <h5><strong>Documents</strong></h5>
+            <p>This test is part of the following document(s):</p>
+            <ul>
+                @foreach (var req in Model.Requirements) {
+                    var sect = GetSection(req.Value.LocationInDocument);
+                    <li><a href="@req.Key.Url#section-@sect" target="_blank">@req.Key.Name</a> (@req.Key.Id), section @sect  (@RequirementLevelToString(req.Value.RequirementLevel))</li>
+                }
+            </ul>
+        }
+        <p>Back to <a href="/Tests">the test case overview</a> or <a href="/Threats">the threat overview</a></p>
+    </div>
+</div>

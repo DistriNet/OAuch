@@ -1,0 +1,1117 @@
+﻿@model OAuch.ViewModels.ReportingViewModel
+@using System.Text
+@using OAuch.Helpers 
+@using OAuch.Shared.Enumerations 
+@using OAuch.Compliance
+@using OAuch.Protocols.OAuth2
+@using OAuch.Compliance.Results
+@using Microsoft.AspNetCore.Html
+@using OAuch.Shared
+@{
+    Layout = null;
+    var documents = Model.Result.TestSettings.SelectedStandards?.Select(did => ComplianceDatabase.AllDocuments.FirstOrDefault(d => d.Id == did)).Where(d => d != null).ToList() ?? new List<OAuthDocument?>();
+    if (documents.Count == 0)
+        documents = ComplianceDatabase.AllDocuments.ToList();
+
+    // https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
+
+    string FormatOutcomeForThreat(ThreatReport report) {
+        if (report.Outcome == null || report.Outcome == TestOutcomes.Failed)
+            return "UNDETERMINED";
+        switch (report.Outcome) {
+            case TestOutcomes.Skipped:
+                return "NOT RELEVANT";
+            case TestOutcomes.SpecificationFullyImplemented:
+                return "FULLY MITIGATED";
+            case TestOutcomes.SpecificationPartiallyImplemented:
+                return "PARTIALLY MITIGATED";
+            case TestOutcomes.SpecificationNotImplemented:
+            default:
+                return "NOT MITIGATED";
+        }
+    }
+    string FormatOutcomeForCounterMeasure(TestOutcomes? outcome) {
+        if (outcome == null)
+            return "pending";
+        switch (outcome) {
+            case TestOutcomes.Skipped:
+                return "skipped";
+            case TestOutcomes.Failed:
+                return "failed";
+            case TestOutcomes.SpecificationFullyImplemented:
+                return "supported";
+            case TestOutcomes.SpecificationPartiallyImplemented:
+                return "partially supported";
+            case TestOutcomes.SpecificationNotImplemented:
+            default:
+                return "not supported";
+        }
+    }
+    TestOutcomes? GetTestOutcome(string testId) {
+        var testResult = Model.Result.AllResults.FirstOrDefault(t => t.TestId == testId);
+        if (testResult == null)
+            return null;
+        return testResult.Outcome;
+    }
+    string OutcomeClass(TestOutcomes? outcome) {
+        if (outcome == TestOutcomes.SpecificationNotImplemented)
+            return "font-weight-bold";
+        return "";
+    }
+    string Pluralize(string baseString, int count) {
+        if (count == 1)
+            return baseString;
+        return baseString + "s";
+    }
+
+    string FormatResult(Test testInfo, TestOutcomes? outcome) {
+        var rs = "SKIPPED";
+        var st = "SKIPPED";
+        string suffix = "";
+        if (outcome == TestOutcomes.SpecificationFullyImplemented || outcome == TestOutcomes.SpecificationPartiallyImplemented) {
+            rs = testInfo.ResultFormatter.CountermeasureFullyImplemented;
+            st = "SUCCEEDED";
+        } else { // not implemented
+            rs = testInfo.ResultFormatter.CountermeasureNotImplemented;
+            st = "FAILED";
+        }
+        return $"<ul><li>{ Html.Encode(testInfo.Title) }: <strong>{ rs }</strong></li><li>Test status: <strong>{ st }</strong></li></ul><p>{suffix}</p>";
+    }
+
+    string FindServers() {
+        var urls = new string?[] {
+            Model.Result.TestSettings.AuthorizationUri,
+            Model.Result.TestSettings.DeviceAuthorizationUri,
+            Model.Result.TestSettings.TokenUri,
+            Model.Result.TestSettings.RevocationUri,
+            Model.Result.TestSettings.JwksUri
+        };
+        var hostList = new List<string>();
+        foreach (var s in urls) {
+            if (!string.IsNullOrWhiteSpace(s) && Uri.TryCreate(s, UriKind.Absolute, out var resultUri)) {
+                var h = resultUri.Host.ToLower();
+                if (!hostList.Contains(h))
+                    hostList.Add(h);
+            }
+        }
+        if (hostList.Count == 1)
+            return "the server <b>" + hostList[0] + "</b>";
+        var ret = "the servers ";
+        for (int i = 0; i < hostList.Count; i++) {
+            if (i == hostList.Count - 1) {
+                ret += " and ";
+            } else if (i > 0) {
+                ret += ", ";
+            }
+            ret += "<b>" + hostList[i] + "</b>";
+        }
+        return ret;
+    }
+    HtmlString ToClass(SimpleRatings l) {
+        switch (l) {
+            case SimpleRatings.APlus:
+            case SimpleRatings.A:
+                return new HtmlString("a");
+            case SimpleRatings.B:
+                return new HtmlString("b");
+            case SimpleRatings.C:
+                return new HtmlString("c");
+            default:
+                return new HtmlString("unkn");
+        }
+    }
+    HtmlString ToLabelString(SimpleRatings l) {
+        switch (l) {
+            case SimpleRatings.APlus:
+                return new HtmlString("A+");
+            case SimpleRatings.A:
+                return new HtmlString("A");
+            case SimpleRatings.B:
+                return new HtmlString("B");
+            case SimpleRatings.C:
+                return new HtmlString("C");
+            default:
+                return new HtmlString("?");
+        }
+    }
+    HtmlString Format(string? input, bool code = true) {
+        if (string.IsNullOrWhiteSpace(input))
+            return new HtmlString("<em>(empty)</em>");
+        input = input.Replace("\r\n", "<br/>\r\n");
+        if (code)
+            return new HtmlString($"<code>{ input }</code>");
+        return new HtmlString($"{ input }");
+    }
+    HtmlString FormatOverrides() {
+        var settings = new Dictionary<string, Dictionary<string, string>>();
+        if (Model.Result.TestSettings.Overrides != null) {
+            foreach (var o in Model.Result.TestSettings.Overrides) {
+                var flow = OAuthHelper.GetFlowName(o.FlowType);
+                Add(flow, "Client ID", o.OverrideSettings?.ClientId);
+                Add(flow, "Client Secret", o.OverrideSettings?.ClientSecret);
+                Add(flow, "Scope", o.OverrideSettings?.Scope);
+            }
+        }
+        var pwFlow = OAuthHelper.GetFlowName(OAuthHelper.PASSWORD_FLOW_TYPE);
+        Add(pwFlow, "Username", Model.Result.TestSettings.Username);
+        Add(pwFlow, "Password", Model.Result.TestSettings.Password);
+        if (settings.Count == 0) {
+            return new HtmlString("<p><em>There are no grant-specific overrides.</em></p>");
+        }
+
+        var sb = new StringBuilder();
+        sb.Append("<ul class=\"settings\">");
+        foreach (var grant in settings) {
+            sb.Append("<li><strong>");
+            sb.Append(grant.Key);
+            sb.Append("</strong><ul class=\"settings\">");
+            foreach (var overrides in grant.Value) {
+                sb.Append("<li><strong>");
+                sb.Append(overrides.Key);
+                sb.Append("</strong><br/><code>");
+                sb.Append(overrides.Value);
+                sb.Append("</code></li>");
+            }
+            sb.Append("</ul></li>");
+        }
+        sb.Append("</ul>");
+
+        return new HtmlString(sb.ToString());
+
+        void Add(string category, string key, string? value) {
+            if (value == null || value.Length == 0)
+                return;
+            if (!settings.TryGetValue(category, out var cat)) {
+                cat = new Dictionary<string, string>();
+                settings[category] = cat;
+            }
+            cat[key] = value;
+        }
+    }
+    HtmlString FormatSigningKey(string? jwk) {
+        if (jwk == null)
+            return Format(null);
+        var key = OAuch.Protocols.JWK.JsonWebKey.Create(jwk);
+        if (key == null)
+            return Format("invalid JWK");
+        var keyString = Format(key.ToString(), true);
+        return new HtmlString(keyString.Value + "<br/><em>(the key data has been removed from this report)</em>");
+    }
+    HtmlString FormatPassword(string? pass) {
+        if (pass == null)
+            return Format(null);
+        return new HtmlString("********");
+    }
+    HtmlString FormatResultValue(int value, float pct) {
+        if (value == 0)
+            return new HtmlString("-");
+        return new HtmlString($"<strong>{ value }</strong> ({ pct.ToString("P0") })");
+    }
+    HtmlString FormatFlow(TokenProviderInfo flow) {
+        var sb = new StringBuilder();
+        if (flow.HasAccessTokens) {
+            if (flow.HasJwtAccessTokens) {
+                sb.Append("JWT ");
+            }
+            sb.Append("access tokens");
+        }
+        if (flow.HasIdentityTokens) {
+            if (sb.Length > 0)
+                sb.Append("; ");
+            sb.Append("identity tokens");
+        }
+        if (flow.HasRefreshTokens) {
+            if (sb.Length > 0)
+                sb.Append("; ");
+            sb.Append("refresh tokens");
+        }
+        return new HtmlString(sb.ToString());
+    }
+    int CalculatePositionInDist() {
+        var failureRate = Model.Result.OverallCompliance.OverallScore.FailureRate * 100;
+        failureRate = ((failureRate - 8) / 50) * 100; // we start at 8 in the graph and we end at 58
+        if (failureRate < 0)
+            failureRate = 0;
+        if (failureRate > 100)
+            failureRate = 100;
+        return (int)failureRate;
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>OAuch Security Report - @Model.SiteName</title>
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/adminlte.min.css">
+    <link rel="stylesheet" href="/css/site.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+    <style>
+        a, a:visited {
+            color: black;
+            text-decoration: none;
+        }
+        a:hover {
+            color: blue;
+            text-decoration: underline;
+        }
+        .rating {
+            font-family: Arial, Arial, Helvetica, sans-serif, sans-serif;
+            text-align: center;
+            margin: auto;
+            font-weight: bold;
+            color: #fff;
+            border-style: solid;
+        }
+
+        .rating-a {
+            background: #7BD749;
+            border-color: #60C22B;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .rating-b {
+            background: #FFD02D;
+            border-color: #E7B60E;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .rating-c {
+            background: #FF533C;
+            border-color: #E7331A;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .rating-unkn {
+            background: #C0C0C0;
+            border-color: #A0A0A0;
+            -webkit-print-color-adjust: exact;
+        }
+
+        h1, h2, h3, h4, p, li, #summaryTable {
+            font-family: 'Lora', serif;
+        }
+
+        p, li {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        ul.settings li {
+            text-align: left;
+        }
+
+        .coverinfo {
+            font-family: 'Source Sans Pro', sans-serif;
+            text-align: center;
+        }
+
+        .coverurl {
+            font-family: 'Source Sans Pro', sans-serif;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0.5cm;
+        }
+
+        .footerimg {
+            width: 100%;
+        }
+
+        div.footerimg p {
+            text-align: center;
+        }
+
+        #summaryTable .leftHeader {
+            text-align: left;
+        }
+
+        #summaryTable tr.topHeader {
+            border-bottom: solid 2px;
+        }
+
+        #summaryTable tr.bottomRow {
+            border-top: solid 2px;
+        }
+
+        code {
+            line-break: loose;
+            hyphens: none;
+            word-break: break-all;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+            page-break-inside: auto;
+        }
+
+        .timeline-header {
+            overflow-wrap: break-word;
+        }
+
+        .distlabel {
+            float: left;
+            width: 33.3%;
+            font-weight: bold;
+            font-variant: small-caps;
+        }
+
+        .overlayLine {
+            position: absolute;
+            top: 0;
+            display: block;
+            height: 100%;
+            width: 2px;
+            background: red;
+            -webkit-print-color-adjust: exact;
+        }
+        .spacedUl li {
+            margin-bottom: 15px;
+        }
+    </style>
+    <style media="screen">
+        .rating {
+            width: 2.8cm;
+            height: 2.8cm;
+            font-size: 1.8cm;
+            border-width: 0.1cm;
+            border-radius: 0.5cm;
+        }
+
+        #summaryTable {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0.5cm;
+            margin-bottom: 0.5cm;
+        }
+
+            #summaryTable th, #summaryTable td {
+                padding-left: 0.2cm;
+                padding-right: 0.2cm;
+                text-align: center;
+            }
+
+        ul.settings li {
+            margin-bottom: 0.3cm;
+        }
+
+        .coverimg {
+            width: 12cm;
+            height: 12cm;
+            margin: 0 auto;
+        }
+
+        div.footerimg {
+            margin-top: 2cm;
+        }
+
+            div.footerimg p, .contactInfo, .coverurl {
+                font-size: 10pt;
+            }
+
+        .covertitle {
+            margin: 0.5cm auto;
+            text-align: center;
+            font-size: 28pt;
+            font-family: 'Josefin Sans', sans-serif;
+        }
+
+        body {
+            background-color: #333333;
+        }
+
+        h1 {
+            margin-top: 2cm;
+            font-size: 30pt;
+        }
+
+        h2 {
+            margin-top: 1.5cm;
+            font-size: 16pt;
+            font-weight: bolder;
+        }
+
+        h3 {
+            font-size: 16pt;
+        }
+
+        .report {
+            padding: 2cm;
+            margin: 1cm auto;
+            border: 1px solid darkgray;
+            width: 21cm;
+            background-color: white;
+            box-shadow:
+            /* The top layer shadow */
+            0 -1px 1px rgba(0,0,0,0.15),
+            /* The second layer */
+            0 -10px 0 -5px #eee,
+            /* The second layer shadow */
+            0 -10px 1px -4px rgba(0,0,0,0.15),
+            /* The third layer */
+            0 -20px 0 -10px #eee,
+            /* The third layer shadow */
+            0 -20px 1px -9px rgba(0,0,0,0.15);
+        }
+
+        .reportInfo {
+            margin: 1cm auto;
+            width: 21cm;
+            color: white;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .contactInfo {
+            margin-top: 2cm;
+        }
+    </style>
+    <style media="print">
+        .tf {
+            padding-top: 5cm;
+        }
+        .timeline > div > i.fas, .timeline > div > .timeline-item > .timeline-header {
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
+        .rating {
+            width: 3.8cm;
+            height: 3.8cm;
+            font-size: 2.3cm;
+            border-width: 0.15cm;
+            border-radius: 0.75cm;
+        }
+
+        #summaryTable {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 1cm;
+            margin-bottom: 1cm;
+        }
+
+            #summaryTable th, #summaryTable td {
+                padding-left: 0.4cm;
+                padding-right: 0.4cm;
+                padding-top: 0.1cm;
+                padding-bottom: 0.1cm;
+                text-align: center;
+            }
+
+        ul.settings li {
+            margin-bottom: 0.5cm;
+        }
+
+        .coverimg {
+            width: 18cm;
+            height: 18cm;
+            margin: 0 auto;
+        }
+
+        div.footerimg {
+            margin-top: 32cm;
+        }
+
+        .covertitle {
+            margin: 0.5cm auto 6.5cm auto;
+            text-align: center;
+            font-size: 48pt;
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 700;
+        }
+
+        div.footerimg p, div.contactInfo p {
+            margin-top: 0.5cm;
+            font-size: 14pt;
+        }
+
+        .coverurl {
+            font-size: 14pt;
+        }
+
+        .coverinfo {
+            width: 19cm;
+            margin: auto;
+            font-size: 20pt;
+        }
+
+        @@page {
+            margin: 3.8cm;
+        }
+
+        p, li, #summaryTable {
+            font-size: 18pt;
+        }
+
+        h1 {
+            font-size: 48pt;
+            page-break-before: always;
+        }
+
+        h2 {
+            /*margin-top: 2cm;*/
+            page-break-before: always;
+            font-weight: bolder;
+        }
+
+            h2.nobreak {
+                margin-top: 1.5cm;
+                page-break-before: auto;
+                page-break-after: avoid;
+            }
+
+        h3 {
+            font-size: 24pt;
+        }
+
+        ul.settings {
+            page-break-before: avoid;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        h1, h2, h3, .time-label, .timeline-header {
+            page-break-after: avoid;
+        }
+
+        .reportInfo {
+            display: none;
+        }
+
+        .pageEnd {
+            page-break-after: always;
+        }
+
+        .blankPage, .contactInfo {
+            page-break-after: always;
+            page-break-before: always;
+        }
+
+        .contactInfo {
+            margin-top: 36cm;
+        }
+
+        .distlabel {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="reportInfo">
+        <p>
+            The CSS style of this page is optimized to be printed. Please use the Print-functionality of your browser to print a hard copy or save a copy of this report as a PDF file.
+            Chromium-based browsers, like <a href="https://www.google.com/chrome/" target="_blank"  style="color: yellow;">Chrome</a> or <a href="https://www.microsoft.com/en-us/edge" target="_blank"  style="color: yellow;">Edge</a>
+            offer the best printing support. <a href="https://www.mozilla.org/en-US/firefox/" target="_blank"  style="color: yellow;">FireFox</a> offers partial support and
+            <a href="https://www.apple.com/safari/" target="_blank" style="color: yellow;">Safari</a> currently has no support.
+        </p>
+    </div>
+    <div class="report">
+        @* cover page *@
+        <div class="coverimg">
+            <img src="/img/logo_large.png" class="coverimg" />
+        </div>
+        <p class="covertitle">OAuch Compliance Report</p>
+        <p class="coverinfo">
+            This report contains the results of an automated security compliance assessment of the OAuth&nbsp;2.0 implementation hosted on @Html.Raw(FindServers())
+        </p>
+        <div class="contactInfo">
+            <p>
+                Copyright &copy; @DateTime.Now.Year, The Distrinet Research Group<br />
+                <a href="https://distrinet.cs.kuleuven.be/" target="_blank">https://distrinet.cs.kuleuven.be/</a><br />
+                Contact: <a href="mailto:info@oauch.io">info@oauch.io</a><br /><br />
+                The OAuch logo is based on the OAuth logo created by Chris Messina. The logo is released under the Creative Commons Attribution ShareAlike 3.0 license.
+            </p>
+        </div>
+        @* intro *@
+        <h1 id="introduction">Introduction</h1>
+        <p>
+            OAuch is a security best practices and threats analyzer for OAuth 2.0 authorization server implementations. Its main goal is to analyze the compliance of an 
+            authorization server with the OAuth standards to uncover unmitigated threats and point out security improvements. OAuch tests an authorization server using a large set 
+            of test cases to check an authorization server's compliance with the security specifications defined in the original OAuth 2.0 standard, as well as
+            other documents that refine the security assumptions and requirements. These documents include the OAuth threat model, the Security Best Current Practices,
+            and others. In addition to OAuth, OAuch also supports OpenID Connect providers.
+        </p>
+        <p>
+            OAuch generates a comprehensive report of the analyzed authorization server that lists all the countermeasures that the authorization server does or does not support, as well
+            as any deprecated features that are enabled. These results are then fed into a threat analysis process where all threats that apply to OAuth implementations
+            are evaluated. For each threat, the analysis determines whether the threat is fully mitigated, partially mitigated, or unmitigated. OAuch also
+            informs the user how to further mitigate threats that are not yet fully mitigated.
+        </p>
+        <p>
+            OAuch focuses on the authorization server recommendations and thus only tests the behavior of an authorization server implementation. Security issues on the authorization server side typically
+            have a higher impact than issues on the OAuth client side. Some OAuth-related threats can be mitigated on the client. However, in the threat analysis, OAuch
+            considers a worst-case scenario and assumes that a client does not have these mitigations in place. This is not an unlikely assumption: it has been
+            shown in the academic literature that many clients have a flawed implementation and are unsafe. Threats that can only be mitigated on the client
+            and not on the server are not considered.
+        </p>
+        <p>
+            This document provides a summary of the analysis. It also contains a list of all the problems or missing countermeasures that have been
+            found in the tested implementation.
+        </p>
+        @* interpretation summary *@
+        <h1 id="interpretation">Site Rating and Scores</h1>
+        <p>
+            OAuch calculates several statistics after each test run. The most important output is the number of unmitigated threats. These threats represent
+            weak points in the implementation, which can be exploited under the right circumstances. The number of partially mitigated threats and deprecated
+            features are the second most important outputs. Partially mitigated threats may or may not be exploitable; OAuch does not report to what degree
+            these threats have been mitigated, only that there is at least one partial countermeasure active. Deprecated features should be avoided if possible,
+            as they are typically deprecated on the grounds of being insecure.
+        </p>
+        <p>
+            In addition to these three important indicators, OAuch also computes the failure rates of the test cases. This metric is calculated by dividing the
+            number of failed tests by the total number of tests that are executed and converting the result to a percentage. This percentage indicates to what
+            degree an authorization server correctly implements the OAuth specification. An overall failure rate is reported, as well as the individual failure rates of the three
+            requirement levels that are used in the OAuth specification (<em>must</em>, <em>should</em>, <em>may</em>). The calculation only takes executed tests
+            into account. Tests that are skipped because they are not relevant for the authorization server do not affect the result.
+        </p>
+        <p>
+            A test run will execute more test cases if the authorization server supports many flows or enables more features. This will increase the number of failed test cases,
+            but will also increase the number of executed tests, keeping the failure rate relatively stable.
+        </p>
+        <p>
+            To enable users to quickly interpret the results of an analysis, OAuch uses the number of unmitigated threats to calculate a simple A/B/C rating for
+            a site. Sites with zero or one unmitigated threat(s) are assigned an <strong>A</strong> rating, sites with 5 or less unmitigated threats a
+            <strong>B</strong> rating, and sites with more unmitigated threats a <strong>C</strong> rating. This rating is designed to give an immediate impression
+            of how well the tested site is doing.
+        </p>
+
+        @* tabel met summary *@
+        <h1 id="resultssummary">Summary of the results</h1>
+        <ul>
+            <li><strong>Test ID:</strong> <a href="https://oauch.io/Dashboard/Results/@Model.SiteId?rid=@Model.ResultId" target="_blank" style="color: #e83e8c;"><code>@Model.ResultId</code></a></li>
+            <li><strong>Test date:</strong> @Model.StartedAt.ToString("MMMM d, yyyy")</li>
+            <li><strong>Site name:</strong> @Model.SiteName (<code>@Model.SiteId</code>)</li>
+        </ul>
+        <p>
+            The site has been tested for compliance with the security requirements in the following OAuth and/or OpenID Connect specification(s):
+        </p>
+        <ul>
+            @foreach (var doc in Model.Result.DocumentCompliance) {
+                if (doc.IsDocumentSupported) {
+                    <li><em>@doc.Document.Name</em> (<strong>@doc.Document.Id</strong>)</li>
+                }
+            }
+        </ul>
+        <p>
+            Out of a total of @Model.Result.ExecutedTests.TotalTests tests that were selected for this site, @Model.Result.ExecutedTests.SucceededTests @Pluralize("test", @Model.Result.ExecutedTests.SucceededTests) succeeded
+            and @Model.Result.ExecutedTests.FailedTests @Pluralize("test", Model.Result.ExecutedTests.FailedTests) failed (failure rate: @Model.Result.ExecutedTests.FailureRate.ToString("P1")).
+            @if (Model.Result.SkippedTests > 0) {
+                <text>Another @Model.Result.SkippedTests test(s) were skipped because they were not relevant for this site's configuration or because they were excluded.</text>
+            }
+        </p>
+        <p>
+            OAuch has tested the following OAuth flows:
+        </p>
+        <ul>
+            @foreach (var flow in Model.Result.SupportedFlows) {
+                <li>
+                    <strong>@flow.Settings.Name</strong> (@FormatFlow(flow))
+                </li>
+            }
+        </ul>
+        @if (Model.Result.SupportedFlows.Count < OAuthHelper.AllFlows.Length) {
+            <p>
+                Any other OAuth flows were either not working or were configured to be excluded from the test process.
+            </p>
+        }
+
+        <div class="row" style="page-break-inside:avoid;">
+            <div class="col-8">
+                <ul>
+                    <li style="list-style:none; margin-left: -26px;"><strong>Threats</strong></li>
+                    <li>Mitigated threats: <strong>@Model.Result.FullyMitigatedThreats</strong></li>
+                    <li>Partially mitigated threats: <strong>@Model.Result.PartiallyMitigatedThreats</strong></li>
+                    <li>Unmitigated threats: <strong>@Model.Result.UnmitigatedThreats</strong></li>
+                </ul>
+                <ul>
+                    <li style="list-style:none; margin-left: -26px;"><strong>Deprecated features</strong></li>
+                    <li>Deprecated features detected: <strong>@Model.Result.OverallCompliance.DeprecatedFeatures.Count(f => f.IsCompliant == false)</strong></li>
+                </ul>
+                <ul>
+                    <li style="list-style:none; margin-left: -26px;"><strong>Countermeasures</strong></li>
+                    <li>Mandatory test cases failed: <strong>@Model.Result.OverallCompliance.MustScore.FailedTests</strong> (@Model.Result.OverallCompliance.MustScore.FailureRate.ToString("P1"))</li>
+                    <li>Recommended test cases failed: <strong>@Model.Result.OverallCompliance.ShouldScore.FailedTests</strong> (@Model.Result.OverallCompliance.ShouldScore.FailureRate.ToString("P1"))</li>
+                    <li>Optional test cases failed: <strong>@Model.Result.OverallCompliance.MayScore.FailedTests</strong> (@Model.Result.OverallCompliance.MayScore.FailureRate.ToString("P1"))</li>
+                    <li>Overall test cases failed: <strong>@Model.Result.OverallCompliance.OverallScore.FailedTests</strong> (@Model.Result.OverallCompliance.OverallScore.FailureRate.ToString("P1"))</li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <div class="rating rating-@ToClass(Model.Result.SimpleRating)">@ToLabelString(Model.Result.SimpleRating)</div>
+            </div>
+        </div>
+        <p>&nbsp;</p>
+        <div style="page-break-inside:avoid;">
+            <table id="summaryTable" style="width: 90%;">
+                <tr class="topHeader">
+                    <th class="leftHeader">Document</th>
+                    <th>Mandatory</th>
+                    <th>Recommended</th>
+                    <th>Optional</th>
+                </tr>
+                @foreach (var doc in Model.Result.DocumentCompliance) {
+                    if (doc.IsDocumentSupported) {
+                        <tr>
+                            <td class="leftHeader">@doc.Document.Id</td>
+                            <td>@FormatResultValue(doc.MustScore.FailedTests, doc.MustScore.FailureRate)</td>
+                            <td>@FormatResultValue(doc.ShouldScore.FailedTests, doc.ShouldScore.FailureRate)</td>
+                            <td>@FormatResultValue(doc.MayScore.FailedTests, doc.MayScore.FailureRate)</td>
+                        </tr>
+                    }
+                }
+            </table>
+            <p class="text-center">Table 1: <em>A per-document overview of the failed test cases, grouped by requirement level.</em></p>
+        </div>
+        <p>&nbsp;</p>
+        <div class="text-center" style="page-break-inside:avoid;">
+            <div style="clear:both; position: relative;">
+                <img src="~/img/ratedist.png" style="width: 100%;" />
+                <span class="overlayLine" style="left: @(CalculatePositionInDist())%;"></span>
+                <div>
+                    <div class="text-left distlabel">better</div>
+                    <div class="text-center distlabel">average: 33%</div>
+                    <div class="text-right distlabel">worse</div>
+                </div>
+            </div>
+            <p class="text-center">Figure 1: <em>The distribution of failure rates for other tested sites. The position of your site is indicated with the red vertical line. This distribution is based on an ecosystem analysis
+                performed on 100 sites in December 2020. More information on <a href="https://lirias.kuleuven.be/3765111?limo=0" target="_blank">https://lirias.kuleuven.be/3765111?limo=0</a></em></p>
+        </div>
+
+        @* threat info *@
+        @if (Model.Result.UnmitigatedThreats > 0 || Model.Result.PartiallyMitigatedThreats > 0) {
+            <h1 id="threats">Threats</h1>
+            <p>
+                The OAuth working group has published a comprehensive threat model shortly after publishing the original OAuth 2.0 standard. This threat model is further refined in the latest Security Best Current Practices
+                document to include additional threats that have been observed in real-world usage of OAuth. The threat model describes for each threat how an implementation may be attacked and which countermeasures can be
+                applied. Some threats are mitigated by a combination of multiple countermeasures, while others can be mitigated by a single countermeasure. In many cases, alternative sets of countermeasures may be used to 
+                address a threat. Some countermeasures may (partially) mitigate multiple threats. The model assumes a powerful attacker that has full access to the network between the OAuth client and the authorization server,
+                and the client and the resource server. The attacker may eavesdrop on any communication between those parties and has unlimited resources to mount attacks. In addition, two of the three parties involved in 
+                the OAuth protocol may collude to mount an attack against the 3rd party.
+            </p>
+            <p>
+                This threat model has been adopted in OAuch and is used to offer precise feedback. OAuch uses test cases to detect which countermeasures are implemented by the authorization server. It then uses 
+                the information from the threat model to determine which threats are mitigated. For every threat, it takes the list of mitigations that are proposed by the threat model and compares it with the mitigations 
+                that have been detected. If the threat is properly mitigated, it is marked as fully mitigated. When no relevant countermeasures are active, the threat is unmitigated. Threats can also be partially mitigated
+                if some countermeasures are present, but not all. When multiple sets of countermeasures can mitigate a threat, it is sufficient that only one set is fully implemented.
+            </p>
+
+            foreach (var threatReport in Model.Result.ThreatReports) {
+                if (threatReport.Outcome != TestOutcomes.SpecificationNotImplemented && threatReport.Outcome != TestOutcomes.SpecificationPartiallyImplemented)
+                    continue;
+
+                <div style="page-break-inside:avoid;">
+                    <h2 class="nobreak">Threat <strong>"@threatReport.Threat.Title"</strong></h2>
+                    <p>@threatReport.Threat.Description</p>
+                    <p>Threat status: <strong>@FormatOutcomeForThreat(threatReport)</strong></p>
+                    @foreach (var ireport in threatReport.InstanceReports) {
+                        if (!ireport.IsRelevant.HasValue || ireport.IsRelevant.Value) {
+                            if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
+                                var mit = ireport.ThreatInstance.MitigatedBy[0];
+                                <p>
+                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                        @ireport.ThreatInstance.ExtraDescription
+                                    }
+                                    This threat can be mitigated if all of the following countermeasures are fully implemented:
+                                </p>
+                                <ul>
+                                    @foreach (var cm in mit) {
+                                        var to = GetTestOutcome(cm.TestId);
+                                        <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
+                                    }
+                                </ul>
+                            } else {
+                                <p>
+                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                        @ireport.ThreatInstance.ExtraDescription
+                                    }
+                                    This threat can be mitigated if any of the following sets of countermeasures are fully implemented:
+                                </p>
+                                <ul>
+                                    @for (int i = 0; i < ireport.ThreatInstance.MitigatedBy.Count; i++) {
+                                        var mit = ireport.ThreatInstance.MitigatedBy[i];
+                                        <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
+                                        foreach (var cm in mit) {
+                                            var to = GetTestOutcome(cm.TestId);
+                                            <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        }
+                    }
+                </div>
+            }
+        }
+
+
+
+        @* deprecated features info *@
+        @if (Model.Result.OverallCompliance.HasDeprecatedFeaturesEnabled == true) {
+            <h1 id="deprecatedFeatures">Deprecated Features</h1>
+            <p>
+                This section gives an overview of the features that are enabled on the tested site, but have been deprecated in newer specifications. Deprecated features
+                may be enabled for backward compatibility reasons. However, features are typically deprecated because of security concerns. Hence, a careful analysis of the
+                drawbacks must be made before enabling such a feature.
+            </p>
+            <ul class="spacedUl">
+                @foreach (var deprecatedFeature in Model.Result.OverallCompliance.DeprecatedFeatures) {
+                    if (deprecatedFeature.IsCompliant == false) {
+                        if (ComplianceDatabase.Tests.TryGetValue(deprecatedFeature.TestResult?.TestId, out var test)) {
+                            <li>
+                                @(test.Title): <strong>@test.ResultFormatter.Format(deprecatedFeature.TestResult.Outcome)</strong><br />
+                                @{
+                                    string docName = deprecatedFeature.Document.Id;
+                                    switch (docName) {
+                                        case "SecBCP":
+                                            docName = "the <em>Security Best Current Practices</em> document";
+                                            break;
+                                        case "OIDC":
+                                            docName = "the <em>OpenID Connect</em> standard";
+                                            break;
+                                        case "FormPost":
+                                            docName = "the <em>FormPost</em> specification";
+                                            break;
+                                    }
+                                }
+                                @switch (deprecatedFeature.RequirementLevel) {
+                                    case RequirementLevels.Must:
+                                        <text>This has been deprecated by @Html.Raw(docName) and <em>MUST NOT</em> be used anymore.</text>
+                                        break;
+                                    case RequirementLevels.Should:
+                                        <text>This has been deprecated by @Html.Raw(docName) and <em>SHOULD NOT</em> be used anymore.</text>
+                                        break;
+                                    case RequirementLevels.May:
+                                        <text>This has been deprecated by @Html.Raw(docName) and is no longer recommended.</text>
+                                        break;
+                                }
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        }
+
+        @* test settings *@
+        @if (Model.IncludeSettings) {
+            <h1 id="testsettings">Test Settings</h1>
+            <p>
+                This section contains the settings that were used to run the test case. Note that these settings contain sensitive information such as the client secret. It is recommended to deactivate
+                these values and revoke the appropriate permissions before distributing this document.
+            </p>
+            <h2 class="nobreak">Basic Settings</h2>
+            <ul class="settings">
+                <li>
+                    <strong>Authorization URI</strong><br />
+                    @Format(Model.Result.TestSettings.AuthorizationUri)
+                </li>
+                <li>
+                    <strong>Callback URI</strong><br />
+                    @Format(Model.Result.TestSettings.CallbackUri)
+                </li>
+                <li>
+                    <strong>Token URI</strong><br />
+                    @Format(Model.Result.TestSettings.TokenUri)
+                </li>
+                <li>
+                    <strong>Device Authorization URI</strong><br />
+                    @Format(Model.Result.TestSettings.DeviceAuthorizationUri)
+                </li>
+                <li>
+                    <strong>Revocation URI</strong><br />
+                    @Format(Model.Result.TestSettings.RevocationUri)
+                </li>
+            </ul>
+
+            <h2 class="nobreak">Client Identification</h2>
+            <ul class="settings">
+                <li>
+                    <strong>Client ID</strong><br />
+                    @Format(Model.Result.TestSettings.DefaultClient.ClientId)
+                </li>
+                <li>
+                    <strong>Client Secret</strong><br />
+                    @Format(Model.Result.TestSettings.DefaultClient.ClientSecret)
+                </li>
+                <li>
+                    <strong>Client Certificate</strong><br />
+                    @Format(Model.Result.TestSettings.CertificateId == null ? "no" : "yes", false)
+                </li>
+                <li>
+                    <strong>Scope</strong><br />
+                    @Format(Model.Result.TestSettings.DefaultClient.Scope)
+                </li>
+                <li>
+                    <strong>Alternative Client ID</strong><br />
+                    @Format(Model.Result.TestSettings.AlternativeClient.ClientId)
+                </li>
+                <li>
+                    <strong>Alternative Client Secret</strong><br />
+                    @Format(Model.Result.TestSettings.AlternativeClient.ClientSecret)
+                </li>
+                <li>
+                    <strong>Scope</strong><br />
+                    @Format(Model.Result.TestSettings.AlternativeClient.Scope)
+                </li>
+            </ul>
+
+            <h2 class="nobreak">Grant-Specific Overrides</h2>
+            @FormatOverrides()
+
+            <h2 class="nobreak">API Settings</h2>
+            <ul class="settings">
+                <li>
+                    <strong>API Test URI</strong><br />
+                    @Format(Model.Result.TestSettings.TestUri)
+                </li>
+                <li>
+                    <strong>HTTP Method</strong><br />
+                    @Format(Model.Result.TestSettings.TestMethod.ToString(), false)
+                </li>
+                <li>
+                    <strong>Additional HTTP Headers</strong><br />
+                    @Format(Model.Result.TestSettings.TestHeaders)
+                </li>
+                <li>
+                    <strong>Form POST Data</strong><br />
+                    @Format(Model.Result.TestSettings.TestPostData)
+                </li>
+            </ul>
+
+            <h2 class="nobreak">OpenID Connect</h2>
+            <ul class="settings">
+                <li>
+                    <strong>Issuer</strong><br />
+                    @Format(Model.Result.TestSettings.OpenIdIssuer)
+                </li>
+                <li>
+                    <strong>JWKS URI</strong><br />
+                    @Format(Model.Result.TestSettings.JwksUri)
+                </li>
+            </ul>
+
+            <h2 class="nobreak">Advanced Settings</h2>
+            <ul class="settings">
+                <li>
+                    <strong>Token Request Delay</strong><br />
+                    @Format(Model.Result.TestSettings.TokenDelay.ToString() + " seconds", false)
+                </li>
+                <li>
+                    <strong>Default PKCE Behavior</strong><br />
+                    @Format(Model.Result.TestSettings.PKCEDefault.ToString())
+                </li>
+                <li>
+                    <strong>Response Mode</strong><br />
+                    @Format(Model.Result.TestSettings.ResponseMode.ToString())
+                </li>
+                <li>
+                    <strong>Use a Request Parameter</strong><br />
+                    @Format(Model.Result.TestSettings.UseRequestParameter ? "Yes" : "No", false)
+                </li>
+                <li>
+                    <strong>Client Signing Key</strong><br />
+                    @FormatSigningKey(Model.Result.TestSettings.RequestSigningKey)
+                </li>
+                <li>
+                    <strong>Client Authentication Mechanism</strong><br />
+                    @Format(Model.Result.TestSettings.ClientAuthenticationMechanism.ToString())
+                </li>
+                <li>
+                    <strong>Client Authentication Audience</strong><br />
+                    @Format(Model.Result.TestSettings.RequestAudience)
+                </li>
+            </ul>
+        }
+        @* detailed test info *@
+        <h1 id="testresults">Test Results</h1>
+        <p>
+            The remainder of this document contains the description of the test cases that have failed and a
+            detailed log of the test run. Test cases that succeeded are not included in this
+            document. The results and logs of these omitted test cases can be found on the OAuch website.
+        </p>
+        <p>
+            Note that these logs contain sensitive information such as the client secret. It is recommended to deactivate
+            these values and revoke the appropriate permissions before distributing this document.
+        </p>
+
+        @{
+            int counter = 0;
+            var formatter = new HtmlLogFormatter();
+        }
+        @foreach (var test in Model.Result.AllResults) {
+            if (ComplianceDatabase.Tests.TryGetValue(test.TestId, out var testInfo)) {
+                if (!Model.IncludePendingTests && test.Outcome == null)
+                    continue;
+                if (!Model.IncludeSkippedTests && test.Outcome == TestOutcomes.Skipped)
+                    continue;
+                if (!Model.IncludeFailedTests && test.Outcome == TestOutcomes.Failed)
+                    continue;
+                if (!Model.IncludeSucceededTests && test.Outcome == TestOutcomes.SpecificationFullyImplemented || test.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
+                    continue;
+
+                var requirementLevels = new Dictionary<OAuthDocument, TestRequirementLevel>();
+                foreach (var doc in documents) {
+                    var trl = doc.Countermeasures.FirstOrDefault(c => c.Test.TestId == test.TestId);
+                    if (trl != null) {
+                        requirementLevels[doc] = trl;
+                    }
+                }
+                if (requirementLevels.Count == 0)
+                    continue;
+
+                counter++;
+
+                if (!Model.IncludeLog) {
+                    @:@Html.Raw("<div style=\"page-break-inside:avoid;\">")
+                }
+                <h2 @Html.Raw((counter == 1 || !Model.IncludeLog) ? "class='nobreak'" : "")>TC@(counter) - <em>@HelperMethods.ShortenTestId(test.TestId)</em></h2>
+                @* show a description of the test, if there is one *@
+                <p>
+                    @testInfo.Description
+                </p>
+
+                <h3>Requirement Level(s)</h3>
+                <ul>
+                    @foreach (var rl in requirementLevels) {
+                        <li>@rl.Key.Id: <strong>@rl.Value.RequirementLevel.ToString()</strong></li>
+                    }
+                </ul>
+
+                <h3>Test result</h3>
+                @Html.Raw(FormatResult(testInfo, test.Outcome));
+
+                @if (!string.IsNullOrWhiteSpace(testInfo.TestingStrategy)) {
+                    <h3>Testing strategy</h3>
+                    @Html.Raw(testInfo.TestingStrategy);
+                }
+
+                @* print the log *@
+                if (Model.IncludeLog) {
+                    <h3>Test log</h3>
+                    @Html.Raw(formatter.ToHtml(Model.ResultId, test, true))
+                }
+                if (!Model.IncludeLog) {
+                    @:@Html.Raw("</div>")
+                }
+            }
+        }
+
+        @* end page *@
+        <div class="blankPage">&nbsp;</div>
+        <h1 id="lastpage">&nbsp;</h1>
+        <div class="footerimg">
+            <img src="/img/logos_footer.png" class="footerimg" />
+            <p>Copyright &copy; @DateTime.Now.Year, The Distrinet Research Group &mdash; <a href="https://distrinet.cs.kuleuven.be/" target="_blank">https://distrinet.cs.kuleuven.be/</a></p>
+        </div>
+    </div>
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/adminlte.min.js"></script>
+</body>
+</html>
