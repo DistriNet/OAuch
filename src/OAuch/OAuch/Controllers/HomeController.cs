@@ -38,11 +38,5 @@ namespace OAuch.Controllers {
         public IActionResult About() {
             return View();
         }
-        public IActionResult Terms() {
-            return View();
-        }
-        public IActionResult Privacy() {
-            return View();
-        }
     }
 }
