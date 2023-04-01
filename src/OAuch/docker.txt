@@ -1,0 +1,11 @@
+Build docker image from repo:
+   docker build -t oauch-image -f Dockerfile .
+
+Create a docker container from the image (with mapped HTTPS port)
+   docker create --name core-oauch -p 443:443 oauch-image
+   docker start core-oauch
+ -or-
+   docker run --name core-oauch -p 443:443 oauch-image
+
+
+More info: https://learn.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=windows

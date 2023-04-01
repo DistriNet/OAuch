@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace OAuch.Helpers {
@@ -17,11 +18,23 @@ namespace OAuch.Helpers {
 #if DEBUG
                     _buildVersion += "d";
 #endif
+                    _buildVersion += $" (.NET {Environment.Version.ToString(3)} / {GetOS()} / {RuntimeInformation.OSArchitecture})";
                 }
                 return _buildVersion;
             }
         }
         private static string? _buildVersion;
+
+        private static string GetOS() { 
+            switch (Environment.OSVersion.Platform) {
+                case PlatformID.Win32NT:
+                    return "Win";
+                case PlatformID.Unix:
+                    return "Unix";
+                default:
+                    return "Unk.";
+            }            
+        }
 
         private static string? _copyright;
         public static string Copyright {
