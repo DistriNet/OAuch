@@ -1,11 +1,27 @@
 Build docker image from repo:
    docker build -t oauch-image -f Dockerfile .
 
-Create a docker container from the image (with mapped HTTPS port)
-   docker create --name core-oauch -p 443:443 oauch-image
-   docker start core-oauch
- -or-
-   docker run --name core-oauch -p 443:443 oauch-image
 
+Create a docker container from the image (with mapped HTTPS port) on local computer:
+   docker create --name oauch -p 443:443 oauch-image
+   docker start oauch
+ -or-
+   docker run --name oauch -p 443:443 oauch-image
 
 More info: https://learn.microsoft.com/en-us/dotnet/core/docker/build-container?tabs=windows
+
+
+Push image to docker hub:
+   docker login
+   docker tag oauch-image:latest <username>/oauch-image:latest
+   docker push <username>/oauch-image:latest
+   docker tag oauch-image:2023.1.1 <username>/oauch-image:2023.1.1
+   docker push <username>/oauch-image:2023.1.1
+Where <username> is your docker hub username and 2023.1.1 is the version number
+
+More info: https://medium.com/codex/push-docker-image-to-docker-hub-acc978c76ad/
+
+
+To download the official OAuch docker images, run:
+   docker pull pieterphilippaerts/oauch-image
+   docker run --name oauch -p 443:443 pieterphilippaerts/oauch-image
