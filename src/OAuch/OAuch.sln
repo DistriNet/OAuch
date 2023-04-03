@@ -13,6 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuch.Shared", "OAuch.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuch.Compliance", "OAuch.Tests\OAuch.Compliance.csproj", "{2D46C9D3-CCEC-4E32-9701-C1A32BBB2B6A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A76F1CD-3926-4C9E-AD73-4AB83E55A840}"
+	ProjectSection(SolutionItems) = preProject
+		docker.txt = docker.txt
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

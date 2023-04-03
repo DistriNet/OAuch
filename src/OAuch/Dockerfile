@@ -19,4 +19,5 @@ COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.d
 # Expose port 443 to the outside
 EXPOSE 443
 # Start OAuch
+ENV DOTNET_ENVIRONMENT Docker
 ENTRYPOINT ["dotnet", "OAuch.dll"]
