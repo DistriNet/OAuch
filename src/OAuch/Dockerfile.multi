@@ -1,0 +1,41 @@
+#
+#  Dockerfile that supports multiple architectures
+#    => see https://devblogs.microsoft.com/dotnet/improving-multiplatform-container-support/
+#    => this is not the default configuration yet, because it will only work
+#       properly starting from .NET 8
+#
+#  Build for multiple platforms and push to repository
+#     docker buildx build --pull --push -t pieterphilippaerts/oauch-multi -f Dockerfile.multi --platform linux/arm64,linux/amd64,linux/arm .
+#
+
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/nightly/sdk:8.0-preview-alpine AS build-env
+ARG TARGETARCH
+WORKDIR /OAuch
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore -a $TARGETARCH
+# Build and publish a release
+RUN dotnet publish -a $TARGETARCH --no-restore -o docker-build
+# Create HTTPS certificates
+RUN dotnet dev-certs https
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview-alpine
+WORKDIR /OAuch
+COPY --from=build-env /OAuch/docker-build .
+# Copy the HTTPS certificates from the build environment
+COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
+# Expose port 443 to the outside
+EXPOSE 443
+
+# These ENVs are only needed because OAuch currently uses .NET 7
+ENV DOTNET_ROLL_FORWARD=Major
+ENV DOTNET_ROLL_FORWARD_PRE_RELEASE=1
+
+# Start OAuch
+ENV DOTNET_ENVIRONMENT Docker
+USER $APP_UID
+#ENTRYPOINT ["dotnet", "OAuch.dll"]
+ENTRYPOINT ["./OAuch"]

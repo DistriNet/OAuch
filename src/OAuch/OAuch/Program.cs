@@ -41,16 +41,20 @@ namespace OAuch
             return cert;
         }
         private static X509Certificate2? LoadCertificate(string subject, StoreLocation location) {
-            using (var store = new X509Store(StoreName.My, location)) {
-                store.Open(OpenFlags.ReadOnly);
-                var certificate = store.Certificates.Find(
-                    X509FindType.FindBySubjectName,
-                    subject, false);
+            try {
+                using (var store = new X509Store(StoreName.My, location)) {
+                    store.Open(OpenFlags.ReadOnly);
+                    var certificate = store.Certificates.Find(
+                        X509FindType.FindBySubjectName,
+                        subject, false);
 
-                if (certificate.Count == 0) {
-                    return null;
+                    if (certificate.Count == 0) {
+                        return null;
+                    }
+                    return certificate[0];
                 }
-                return certificate[0];
+            } catch {
+                return null;
             }
         }
         private static X509Certificate2? _certificate;
