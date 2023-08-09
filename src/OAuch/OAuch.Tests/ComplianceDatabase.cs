@@ -1902,7 +1902,7 @@ namespace OAuch.Compliance {
                         //},
                         new OAuthDocument {
                             Id = "SecBCP",
-                            Name = "OAuth 2.0 Security Best Current Practice", /* draft 15 or 16 */
+                            Name = "OAuth 2.0 Security Best Current Practice (draft 23)",
                             Description = "This document describes best current security practice for OAuth 2.0. It updates and extends the OAuth 2.0 Security Threat Model to incorporate practical experiences gathered since OAuth 2.0 was published and covers new threats relevant due to the broader application of OAuth 2.0.",
                             Url = "https://tools.ietf.org/html/draft-ietf-oauth-security-topics",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
@@ -1988,6 +1988,11 @@ namespace OAuch.Compliance {
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.UsesTokenRotationTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.2.2. Refresh Tokens"
+                                 },
+                                 new TestRequirementLevel { 
+                                     Test = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.2.2. Refresh Tokens"
                                  },
