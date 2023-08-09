@@ -19,7 +19,7 @@ namespace OAuch.Compliance.Tests.Revocation {
         public IsModernTlsSupportedTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(IsModernTlsSupportedTestImplementation);
     }
-    public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestBase {
+    public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestImplementationBase {
         public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows)
             : base(context, result, context.SiteSettings.RevocationUri, supportedFlows) { }
     }

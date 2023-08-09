@@ -9,8 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
-    public abstract class IsModernTlsSupportedTestBase : TestImplementation<IsModernTlsSupportedExtraInfo> {
-        public IsModernTlsSupportedTestBase(TestRunContext context, TestResult<IsModernTlsSupportedExtraInfo> result, string? url, HasSupportedFlowsTestResult supportedFlows) : base(context, result, supportedFlows) {
+    public abstract class IsModernTlsSupportedTestImplementationBase : TestImplementation<IsModernTlsSupportedExtraInfo> {
+        public IsModernTlsSupportedTestImplementationBase(TestRunContext context, TestResult<IsModernTlsSupportedExtraInfo> result, string? url, HasSupportedFlowsTestResult supportedFlows) : base(context, result, supportedFlows) {
             _url = url;
         }
         public override async Task Run() {

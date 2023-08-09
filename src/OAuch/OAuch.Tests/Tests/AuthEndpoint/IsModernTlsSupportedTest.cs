@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
-        public class IsModernTlsSupportedTest : Test {
+    public class IsModernTlsSupportedTest : Test {
         public override string Title => "Does the authorization server support a modern version of TLS";
         public override string Description => "This test determines whether the authorization server supports modern versions of the TLS protocol (v1.2 and higher).";
         public override string? TestingStrategy => null;
@@ -19,9 +19,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
         public IsModernTlsSupportedTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(IsModernTlsSupportedTestImplementation);
     }
-    public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestBase {
-        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows) 
-            : base(context, result, context.SiteSettings.AuthorizationUri, supportedFlows) {}
+    public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestImplementationBase {
+        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows)
+            : base(context, result, context.SiteSettings.AuthorizationUri, supportedFlows) { }
     }
-
 }

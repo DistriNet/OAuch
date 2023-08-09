@@ -2202,6 +2202,169 @@ namespace OAuch.Compliance {
                             }
                         },
                         new OAuthDocument {
+                            Id = "FAPI1Base",
+                            Name = "Financial-grade API Security Profile (FAPI) 1.0 – Part 1: Baseline",
+                            Description = "A secured OAuth profile that aims to provide specific implementation guidelines for security and interoperability.",
+                            Url = "https://openid.net/specs/openid-financial-api-part-1-1_0.html",
+                            IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest",
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OpenIDConnect,
+                            DeprecatedFeatures  = new List<TestRequirementLevel> {
+                                 new TestRequirementLevel {
+                                    Test = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
+                                    RequirementLevel = RequirementLevels.Must,
+                                    LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                 }
+                            },
+                            Countermeasures= new List<TestRequirementLevel> {
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.IsRevocationEndpointSecureTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
+                                },
+                            }
+                        },
+                        new OAuthDocument {
+                            Id = "FAPI1Adv",
+                            Name = "Financial-grade API Security Profile (FAPI) 1.0 – Part 2: Advanced",
+                            Description = "A highly secured OAuth profile that aims to provide specific implementation guidelines for security and interoperability.",
+                            Url = "https://openid.net/specs/openid-financial-api-part-2-1_0.html",
+                            IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest",
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OpenIDConnect,
+                            DeprecatedFeatures  = new List<TestRequirementLevel> {
+                                 new TestRequirementLevel { 
+                                    Test = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
+                                    RequirementLevel = RequirementLevels.Must,
+                                    LocationInDocument = "8.5. TLS considerations"
+                                 }
+                            },
+                            Countermeasures= new List<TestRequirementLevel> {
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.HasValidCertificateTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.IsRevocationEndpointSecureTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.IsModernTlsSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AreStrongCiphersEnabledTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.AreStrongCiphersEnabledTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.AreStrongCiphersEnabledTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "8.5. TLS considerations"
+                                },
+
+
+                            }
+                        },
+                        new OAuthDocument {
                             Id = "AttsDefs",
                             Name = "OAuth 2.0 Attacks & Defenses",
                             Description = "This document contains a small set of test cases for attacks on OAuth implementations that are not covered by the other documents.",
