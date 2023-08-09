@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class HasValidCertificateTest : Test {
         public override string Title => "Trusted API certificate";
         public override string Description => "This test determines whether the certificate that is being used by the API server is widely trusted.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasValidCertificateTestResult);
     }

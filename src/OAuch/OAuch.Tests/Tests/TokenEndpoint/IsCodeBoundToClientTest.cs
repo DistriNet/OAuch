@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsCodeBoundToClientTest : Test {
         public override string Title => "Is the authorization code bound to the client";
         public override string Description => "This test checks if the authorization code is bound to the client.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsCodeBoundToClientTestResult);
     }

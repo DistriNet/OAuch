@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.DeviceAuthEndpoint {
     public class HasValidCertificateTest : Test {
         public override string Title => "Trusted device authorization certificate";
         public override string Description => "This test determines whether the certificate that is being used by the device authorization server is widely trusted.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasValidCertificateTestResult);
     }

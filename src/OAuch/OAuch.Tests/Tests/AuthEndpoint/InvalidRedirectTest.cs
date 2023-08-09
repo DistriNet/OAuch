@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class InvalidRedirectTest : Test {
         public override string Title => "Does the authorization server automatically redirect the user-agent to the invalid redirection URI";
         public override string Description => "This test checks whether the authorization server automatically redirect the user-agent to the invalid redirection URI.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(InvalidRedirectTestResult);
     }

@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class KeyReferencesTest : Test {
         public override string Title => "Are references to keys communicated using discovery and registration parameters";
         public override string Description => "This test determines whether the identity token uses keys that are communicated in advance using Discovery and Registration parameters, instead of the JWS x5u, x5c, jku and jwk header claims.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(KeyReferencesTestResult);
     }

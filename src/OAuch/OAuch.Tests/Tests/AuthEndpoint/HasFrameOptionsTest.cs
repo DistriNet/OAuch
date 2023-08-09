@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class HasFrameOptionsTest : Test {
         public override string Title => "Authorization page has X-Frame-Options header";
         public override string Description => "This test determines whether the authorization endpoint uses the X-Frame-Options header to avoid framing of the authorization page.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasFrameOptionsTestResult);
     }

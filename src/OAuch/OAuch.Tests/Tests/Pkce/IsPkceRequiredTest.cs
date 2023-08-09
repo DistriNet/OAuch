@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class IsPkceRequiredTest : Test {
         public override string Title => "Does the server require PKCE";
         public override string Description => "This test determines whether the server requires the use of PKCE for the authorization code grant.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsPkceRequiredTestResult);
     }

@@ -17,8 +17,6 @@ namespace OAuch.Compliance.Tests.Features {
 
         public override string Description => "This test determines whether the OAuth endpoints supports older versions of the TLS protocol (v1.0 and 1.1) or any version of the SSL protocol.";
 
-        public override string? TestingStrategy => null;
-
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
 
         public override Type ResultType => typeof(IsDeprecatedTlsSupportedTestResult);

@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC8628SupportedTest : Test {
         public override string Title => "Does the server support RFC8628 (device grant)";
         public override string Description => "This test determines whether the server supports RFC8628 'OAuth 2.0 Device Authorization Grant'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RFC8628SupportedTestResult);
     }

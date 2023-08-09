@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsRefreshAuthenticationRequiredTest : Test {
         public override string Title => "Is refresh authentication required";
         public override string Description => "This test checks if the token endpoint requires client authentication when refreshing a token.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsRefreshAuthenticationRequiredTestResult);
     }

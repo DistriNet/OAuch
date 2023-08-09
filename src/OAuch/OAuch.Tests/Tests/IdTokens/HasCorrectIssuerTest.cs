@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasCorrectIssuerTest : Test {
         public override string Title => "Is the token issuer set";
         public override string Description => "This test determines whether the identity token contains the correct value in the issuer claim.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasCorrectIssuerTestResult);
     }

@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class AuthorizationCodeTimeoutTest : Test {
         public override string Title => "Do authorization codes have a short timeout";
         public override string Description => "This test checks if authorization codes time out after at most 10 minutes.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(AuthorizationCodeTimeoutTestResult);
     }

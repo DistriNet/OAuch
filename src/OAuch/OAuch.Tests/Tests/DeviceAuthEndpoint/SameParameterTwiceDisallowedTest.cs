@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.DeviceAuthEndpoint {
     public class SameParameterTwiceDisallowedTest : Test {
         public override string Title => "Does the device authorization server allow multiple instances of the same parameter";
         public override string Description => "This test checks whether the device authorization server accepts authorization requests with parameters that are included more than once.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(SameParameterTwiceDisallowedTestResult);
     }

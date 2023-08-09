@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Features {
 
         public override string Description => "This test determines whether at least one grant type is supported by the authorization server.";
 
-        public override string? TestingStrategy => null;
 
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
 

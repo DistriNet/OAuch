@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RequireUserConsentTest : Test {
         public override string Title => "Is consent required";
         public override string Description => "This test checks if the authorization server requires user consent before issuing a token without client authentication.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => new TestResultFormatter("PROBABLY", "PROBABLY", "PROBABLY NOT");
         public override Type ResultType => typeof(RequireUserConsentTestResult);
     }

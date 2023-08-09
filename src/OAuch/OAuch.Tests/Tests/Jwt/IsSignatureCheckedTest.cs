@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsSignatureCheckedTest : Test {
         public override string Title => "Is the JWT signature checked";
         public override string Description => "This test checks if the authorization server rejects JWTs with an invalid signature.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsSignatureCheckedTestResult);
     }

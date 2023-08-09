@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasAzpForMultiAudienceTest : Test {
         public override string Title => "Is the 'azp' claim present for multiple audiences";
         public override string Description => "This test determines whether the authorized party claim in the identity token is present if multiple audiences are presented.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasAzpForMultiAudienceTestResult);
     }

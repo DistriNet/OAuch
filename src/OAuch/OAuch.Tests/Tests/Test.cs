@@ -29,7 +29,6 @@ namespace OAuch.Compliance {
 
         public abstract string Title { get; }
         public abstract string Description { get; }
-        public abstract string? TestingStrategy { get; } // an explanation of the steps involved in the tests
         public abstract TestResultFormatter ResultFormatter { get; }
         public override bool Equals(object? obj) {
             Test? t = obj as Test;

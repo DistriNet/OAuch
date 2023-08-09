@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class HasContentSecurityPolicyTest : Test {
         public override string Title => "Authorization page has Content Security Policy";
         public override string Description => "This test determines whether the authorization endpoint uses a content security policy to avoid framing of the authorization page.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasContentSecurityPolicyTestResult);
     }

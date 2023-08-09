@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class IsAuthorizationCodeHashPresentTest : Test {
         public override string Title => "Is the c_hash claim present";
         public override string Description => "This test determines whether the value of the c_hash claim is present if the ID Token is issued from the Authorization Endpoint.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsAuthorizationCodeHashPresentTestResult);
     }

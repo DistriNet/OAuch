@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC6749SupportedTest : Test {
         public override string Title => "Does the server support RFC6749 (OAuth authorization framework)";
         public override string Description => "This test determines whether the server supports RFC6749 'The OAuth 2.0 Authorization Framework'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RFC6749SupportedTestResult);
     }

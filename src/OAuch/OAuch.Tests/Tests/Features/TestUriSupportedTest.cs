@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.Features {
 
         public override string Description => "This test determines whether the test URI is working.";
 
-        public override string? TestingStrategy => null;
 
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
 

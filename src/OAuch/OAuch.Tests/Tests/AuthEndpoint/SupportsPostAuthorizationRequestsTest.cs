@@ -18,7 +18,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class SupportsPostAuthorizationRequestsTest : Test {
         public override string Title => "Does the server support POST authentication requests";
         public override string Description => "This test checks whether the authorization server supports sending authentication parameters via a POST request.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(SupportsPostAuthorizationRequestsTestResult);
     }

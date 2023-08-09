@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class OpenIdSupportedTest : Test {
         public override string Title => "Is OpenID Connect supported";
         public override string Description => "This test determines whether the server supports the OpenID Connect 1.0 framework.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(OpenIdSupportedTestResult);
     }

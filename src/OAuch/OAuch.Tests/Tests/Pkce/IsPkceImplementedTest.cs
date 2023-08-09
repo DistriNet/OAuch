@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class IsPkceImplementedTest : Test {
         public override string Title => "Is PKCE implemented";
         public override string Description => "This test checks if the PKCE standard is properly implemented.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsPkceImplementedTestResult);
     }

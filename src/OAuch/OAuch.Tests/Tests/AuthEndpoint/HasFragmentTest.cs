@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class HasFragmentTest : Test {
         public override string Title => "Does the authorization URL have a fragment";
         public override string Description => "This test checks that the authorization URL does not have a fragment.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(HasFragmentTestResult);
     }

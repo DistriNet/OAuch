@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class IsPkcePlainDowngradeDetectedTest : Test {
         public override string Title => "Is PKCE downgrade detected (token request)";
         public override string Description => "Attackers can downgrade PKCE protection without the server noticing. The authorization request used S256 PKCE, but an attacker can downgrade this to plain PKCE by modifying the token request.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsPkcePlainDowngradeDetectedTestResult);
     }

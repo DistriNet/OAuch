@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class CanRefreshTokensBeRevokedTest : Test {
         public override string Title => "Can refresh tokens be revoked";
         public override string Description => "This test checks if the revocation endpoint supports revoking refresh tokens.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(CanRefreshTokensBeRevokedTestResult);
     }

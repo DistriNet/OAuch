@@ -17,7 +17,6 @@ namespace OAuch.Compliance.Tests.Features {
         }
         private Type _resultType;
         protected string FlowType { get; }
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => _resultType;
     }

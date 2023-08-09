@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class HasPragmaHeaderTest : Test {
         public override string Title => "Is pragma header present";
         public override string Description => "This test determines whether Pragma header is present in authorization endpoint responses";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasPragmaHeaderTestResult);
     }

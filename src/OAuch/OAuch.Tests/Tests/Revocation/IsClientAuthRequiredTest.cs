@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class IsClientAuthRequiredTest : Test {
         public override string Title => "Does revocation require client authentication";
         public override string Description => "This test checks if the revocation endpoint requires client authentication.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsClientAuthRequiredTestResult);
     }

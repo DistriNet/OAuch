@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsExpirationCheckedTest : Test {
         public override string Title => "Is JWT expiration checked";
         public override string Description => "This test checks if the authorization server checks accepts an expired client authentication JWT.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsExpirationCheckedTestResult);
     }

@@ -1086,11 +1086,6 @@
                 <h3>Test result</h3>
                 @Html.Raw(FormatResult(testInfo, test.Outcome));
 
-                @if (!string.IsNullOrWhiteSpace(testInfo.TestingStrategy)) {
-                    <h3>Testing strategy</h3>
-                    @Html.Raw(testInfo.TestingStrategy);
-                }
-
                 @* print the log *@
                 if (Model.IncludeLog) {
                     <h3>Test log</h3>

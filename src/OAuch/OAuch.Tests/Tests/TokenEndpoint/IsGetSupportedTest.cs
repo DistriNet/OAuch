@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsGetSupportedTest : Test {
         public override string Title => "Does the token server support GET requests";
         public override string Description => "This test checks if the token server supports GET requests.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(IsGetSupportedTestResult);
     }

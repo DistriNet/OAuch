@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsJwtReplayDetectedTest : Test {
         public override string Title => "Are replayed JWT's detected";
         public override string Description => "This test checks if the authorization server detects replayed JWT's.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsJwtReplayDetectedTestResult);
     }

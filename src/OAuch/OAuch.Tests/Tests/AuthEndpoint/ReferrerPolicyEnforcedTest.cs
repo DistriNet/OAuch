@@ -17,7 +17,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class ReferrerPolicyEnforcedTest : Test {
         public override string Title => "Does the server suppress the referrer";
         public override string Description => "This test checks whether the server suppresses the 'Referer' header by applying the appropriate referrer policy";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(ReferrerPolicyEnforcedTestResult);
     }

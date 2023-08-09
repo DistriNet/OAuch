@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class TokenValidAfterMultiExchangeTest : Test {
         public override string Title => "Are tokens invalidated after exchanging the same code multiple times";
         public override string Description => "This test checks if tokens are invalidated after exchanging the same code multiple times.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(TokenValidAfterMultiExchangeTestResult);
     }

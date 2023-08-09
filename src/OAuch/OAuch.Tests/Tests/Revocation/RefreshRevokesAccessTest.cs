@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class RefreshRevokesAccessTest : Test {
         public override string Title => "Are access tokens revoked after refresh token revocation";
         public override string Description => "This test checks whether the authorization server revokes access tokens after a refresh token from the same authorization grant is revoked.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RefreshRevokesAccessTestResult);
     }

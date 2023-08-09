@@ -17,7 +17,6 @@ namespace OAuch.Compliance.Tests.Jwt {
 
         public override string Description => "This test determines whether the API server accepts a JWT access token without a signature.";
 
-        public override string? TestingStrategy => null;
 
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
 

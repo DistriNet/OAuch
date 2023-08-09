@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class IsRevocationEndpointSecureTest : Test {
         public override string Title => "Is the revocation endpoint secure";
         public override string Description => "This test determines whether the server's revocation endpoint uses HTTPS.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsRevocationEndpointSecureTestResult);
     }

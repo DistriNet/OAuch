@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class NoncePresentInTokenTest : Test {
         public override string Title => "Is the nonce present in the ID token";
         public override string Description => "This test determines whether the identity token contains the 'nonce' claim and that it has the correct value.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(NoncePresentInTokenTestResult);
     }

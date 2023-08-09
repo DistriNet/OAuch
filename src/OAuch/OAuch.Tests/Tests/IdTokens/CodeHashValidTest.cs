@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class CodeHashValidTest : Test {
         public override string Title => "Is the c_hash claim correct";
         public override string Description => "This test determines whether the value of the c_hash claim is correct.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(CodeHashValidTestResult);
     }

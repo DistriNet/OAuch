@@ -17,7 +17,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsClientAuthenticationRequiredTest : Test {
         public override string Title => "Is client authentication required";
         public override string Description => "This test checks if the token endpoint requires client authentication when requesting a token.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsClientAuthenticationRequiredTestResult);
     }

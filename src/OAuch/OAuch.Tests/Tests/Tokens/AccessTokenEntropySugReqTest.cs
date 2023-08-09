@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class AccessTokenEntropySugReqTest : Test {
         public override string Title => "Are the access tokens secure (160 bits)";
         public override string Description => "This test calculates the entropy of the access tokens and verifies that it conforms to the suggested requirements of 160 bits";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(AccessTokenEntropySugReqTestResult);
     }

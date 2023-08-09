@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class UnrecognizedParameterAllowedTest : Test {
         public override string Title => "Does the token endpoint ignore unrecognized parameters";
         public override string Description => "This test checks if the token endpoint allows adding (unrecognized) parameters to the request. This can be important to support future extensions of the OAuth 2.0 protocol.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(UnrecognizedParameterAllowedTestResult);
     }

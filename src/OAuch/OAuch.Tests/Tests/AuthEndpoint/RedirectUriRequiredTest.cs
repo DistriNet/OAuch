@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RedirectUriRequiredTest : Test {
         public override string Title => "Does the authorization server require the redirect uri";
         public override string Description => "This test checks whether the authorization server requires the presence of the redirect uri parameter.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RedirectUriRequiredTestResult);
     }

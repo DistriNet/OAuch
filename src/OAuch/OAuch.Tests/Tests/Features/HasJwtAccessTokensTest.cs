@@ -10,7 +10,6 @@ namespace OAuch.Compliance.Tests.Features {
     public class HasJwtAccessTokensTest : Test {
         public override string Title => $"Are JWT access token used";
         public override string Description => $"This test determines whether the server grants JWT access tokens.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasJwtAccessTokensTestResult);
     }

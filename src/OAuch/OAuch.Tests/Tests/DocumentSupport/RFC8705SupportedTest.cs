@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC8705SupportedTest : Test {
         public override string Title => "Does the server support RFC8705 (mTLS)";
         public override string Description => "This test determines whether the server supports RFC8705 'OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RFC8705SupportedTestResult);
     }

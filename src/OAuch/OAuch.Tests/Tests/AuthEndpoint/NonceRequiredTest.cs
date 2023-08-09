@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class NonceRequiredTest : Test {
         public override string Title => "Is the nonce parameter required";
         public override string Description => "This test checks whether the authorization server requires the presence of the nonce parameter when using the OpenId implicit flow.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(NonceRequiredTestResult);
     }

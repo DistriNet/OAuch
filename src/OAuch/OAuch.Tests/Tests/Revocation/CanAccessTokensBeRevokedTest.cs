@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class CanAccessTokensBeRevokedTest : Test {
         public override string Title => "Can access tokens be revoked";
         public override string Description => "This test checks if the revocation endpoint supports revoking access tokens.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(CanAccessTokensBeRevokedTestResult);
     }

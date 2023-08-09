@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class AreStrongCiphersEnabledTest : Test {
         public override string Title => "Does the authorization server support only secure cipher suites";
         public override string Description => "This test determines whether the authorization server supports only secure cipher suites in TLS v1.2.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(AreStrongCiphersEnabledTestResult);
     }

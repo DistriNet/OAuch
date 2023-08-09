@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class SupportsPostResponseModeTest : Test {
         public override string Title => "Does the server support Post Form response mode";
         public override string Description => "This test checks whether the authorization server supports the Form Post response mode.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(SupportsPostResponseModeTestResult);
     }

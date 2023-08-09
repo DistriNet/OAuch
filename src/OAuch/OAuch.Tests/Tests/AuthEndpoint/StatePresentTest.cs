@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class StatePresentTest : Test {
         public override string Title => "Is the state parameter present in the authorization response";
         public override string Description => "This test checks that the authorization server includes the state parameter in its responses.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(StatePresentTestResult);
     }

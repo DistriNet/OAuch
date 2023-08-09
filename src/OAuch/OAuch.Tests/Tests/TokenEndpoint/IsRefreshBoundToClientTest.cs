@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsRefreshBoundToClientTest : Test {
         public override string Title => "Is the refresh token bound to a client";
         public override string Description => "This test checks if the refresh token is bound to a specific client.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsRefreshBoundToClientTestResult);
     }

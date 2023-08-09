@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class HasIssuerClaimTest : Test {
         public override string Title => "Is JWT issuer checked";
         public override string Description => "This test checks if the authorization server checks for the presence of the issuer (iss) claim in the client authentication JWT.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasIssuerClaimTestResult);
     }

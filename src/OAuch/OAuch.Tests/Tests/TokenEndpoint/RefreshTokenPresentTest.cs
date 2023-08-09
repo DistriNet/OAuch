@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class RefreshTokenPresentTest : Test {
         public override string Title => "Does the client credentials flow grant refresh tokens";
         public override string Description => "This test checks whether the client credentials flow grants refresh tokens.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(RefreshTokenPresentTestResult);
     }

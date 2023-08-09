@@ -34,10 +34,6 @@
         <h6><small><strong class="text-monospace">@HelperMethods.ShortenTestId(Model.Test.TestId, true)</strong></small></h6>
         <h2>@Model.Test.Title</h2>
         <p>@Model.Test.Description</p>
-        @if (!string.IsNullOrWhiteSpace(Model.Test.TestingStrategy)) {
-            <h5><strong>Testing strategy</strong></h5>
-            <p>@Html.Raw(Model.Test.TestingStrategy)</p>
-        }
         <p><a href="@GetGitUrl()" target="_blank">View source code on GitHub</a></p>
         @if (Model.Requirements.Count > 0) {
             <h5><strong>Documents</strong></h5>

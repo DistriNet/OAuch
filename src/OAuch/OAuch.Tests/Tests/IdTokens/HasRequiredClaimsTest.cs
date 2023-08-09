@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasRequiredClaimsTest : Test {
         public override string Title => "Are all required required claims present";
         public override string Description => "This test determines whether the identity token contains all the required claims.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasRequiredClaimsTestResult);
     }

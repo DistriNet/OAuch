@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasCorrectMacTest : Test {
         public override string Title => "Is the token mac correct";
         public override string Description => "This test determines whether the mac signature of the identity token is correct.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasCorrectMacTestResult);
     }

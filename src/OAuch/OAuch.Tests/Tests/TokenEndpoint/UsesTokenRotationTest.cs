@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class UsesTokenRotationTest : Test {
         public override string Title => "Is refresh token rotation used";
         public override string Description => "This test checks if the token endpoint uses refresh token rotation";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(UsesTokenRotationTestResult);
     }

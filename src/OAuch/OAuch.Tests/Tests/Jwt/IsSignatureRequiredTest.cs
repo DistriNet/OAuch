@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsSignatureRequiredTest : Test {
         public override string Title => "Is a JWT signature required";
         public override string Description => "This test checks if the authorization server rejects unsigned JWTs.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsSignatureRequiredTestResult);
     }

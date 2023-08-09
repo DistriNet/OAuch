@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasAuthorizedPartyTest : Test {
         public override string Title => "Is the token authorized party set correctly";
         public override string Description => "This test determines whether the identity token contains the correct value for the authorized party.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasAuthorizedPartyTestResult);
     }

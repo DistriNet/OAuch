@@ -10,7 +10,6 @@ namespace OAuch.Compliance.Tests.Features {
     public class HasRefreshTokensTest : Test {
         public override string Title => $"Are refresh tokens supported";
         public override string Description => $"This test determines whether the server grants refresh tokens.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasRefreshTokensTestResult);
     }

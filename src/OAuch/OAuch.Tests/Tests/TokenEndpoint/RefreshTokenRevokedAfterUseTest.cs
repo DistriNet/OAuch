@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class RefreshTokenRevokedAfterUseTest : Test {
         public override string Title => "Is the refresh token revoked after use";
         public override string Description => "This test checks if the token endpoint revokes an old refresh token if a new one is issued to the client.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RefreshTokenRevokedAfterUseTestResult);
     }

@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class CacheControlTest : Test {
         public override string Title => "Is Cache-Control header sent when the access token is used in the URI";
         public override string Description => "This test checks whether the Cache-Control header is sent when a call is made to the API endpoint that passes the access token via the URL.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(CacheControlTestResult);
     }

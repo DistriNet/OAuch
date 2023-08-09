@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class HasSubjectClaimTest : Test {
         public override string Title => "Is JWT subject checked";
         public override string Description => "This test checks if the authorization server checks for the presence of the subject (sub) claim in the client authentication JWT.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasSubjectClaimTestResult);
     }

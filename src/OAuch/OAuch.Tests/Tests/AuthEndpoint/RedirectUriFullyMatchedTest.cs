@@ -17,7 +17,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RedirectUriFullyMatchedTest : Test {
         public override string Title => "Does the authorization server exactly match the full redirect uri";
         public override string Description => "This test checks whether the authorization server exactly matches the full redirect uri.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RedirectUriFullyMatchedTestResult);
     }

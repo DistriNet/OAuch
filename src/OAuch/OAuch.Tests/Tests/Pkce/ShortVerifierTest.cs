@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class ShortVerifierTest : Test {
         public override string Title => "Are insecure code verifiers rejected";
         public override string Description => "This test checks whether the server rejects PKCE code verifiers that are too short (less than 34 characters).";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(ShortVerifierTestResult);
     }

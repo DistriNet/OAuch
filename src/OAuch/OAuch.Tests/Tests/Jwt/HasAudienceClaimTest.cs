@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class HasAudienceClaimTest : Test {
         public override string Title => "Is JWT audience checked";
         public override string Description => "This test checks if the authorization server checks for the presence of the audience (aud) claim in the client authentication JWT.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasAudienceClaimTestResult);
     }

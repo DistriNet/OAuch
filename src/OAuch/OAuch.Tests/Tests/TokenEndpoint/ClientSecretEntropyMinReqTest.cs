@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class ClientSecretEntropyMinReqTest : Test {
         public override string Title => "Is the client secret secure (128 bits)";
         public override string Description => "This test calculates the entropy of the client secret and verifies that it conforms to the required minimum length of 128 bits";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(ClientSecretEntropyMinReqTestResult);
     }

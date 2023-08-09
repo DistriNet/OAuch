@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RefreshTokenPresentTest : Test {
         public override string Title => "Does the implicit flow grant refresh tokens";
         public override string Description => "This test checks whether the implicit flow grants refresh tokens.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(RefreshTokenPresentTestResult);
     }

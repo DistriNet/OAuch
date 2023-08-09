@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class IsAccessTokenHashCorrectTest : Test {
         public override string Title => "Is the at_hash claim correct";
         public override string Description => "This test determines whether the value of the at_hash claim is correct.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsAccessTokenHashCorrectTestResult);
     }

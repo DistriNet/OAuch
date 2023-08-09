@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class MultipleCodeExchangesTest : Test {
         public override string Title => "Can codes be exchanged multiple times";
         public override string Description => "This test checks if the token server allows authorization codes to be used multiple times.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(MultipleCodeExchangesTestResult);
     }

@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class IsPkceDowngradeDetectedTest : Test {
         public override string Title => "Is PKCE downgrade detected (authorization request)";
         public override string Description => "Attackers can downgrade PKCE protection without the server noticing. The server should disallow authorization code exchanges where a code_verifier is presented, if there was no code_challenge present in the authorization request.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsPkceDowngradeDetectedTestResult);
     }

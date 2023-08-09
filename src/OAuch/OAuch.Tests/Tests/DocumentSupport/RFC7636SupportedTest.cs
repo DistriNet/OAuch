@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC7636SupportedTest : Test {
         public override string Title => "Does the server support RFC7636 (PKCE)";
         public override string Description => "This test determines whether the server supports RFC7636 'Proof Key for Code Exchange by OAuth Public Clients'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RFC7636SupportedTestResult);
     }

@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class FragmentFixTest : Test {
         public override string Title => "Does the server attach a fragment";
         public override string Description => "This test checks whether the server attaches an arbitrary fragment identifier to prevent browsers from reattaching fragments to redirection URLs.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(FragmentFixTestResult);
     }

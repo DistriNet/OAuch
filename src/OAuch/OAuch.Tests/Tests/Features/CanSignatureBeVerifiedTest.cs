@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.Features {
     public class CanSignatureBeVerifiedTest : Test {
         public override string Title => "Can signatures be verified";
         public override string Description => "This test tries to download the key set from the JWKS URI. If the keyset cannot be downloaded, signatures on tokens cannot be verified.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(CanSignatureBeVerifiedTestResult);
     }

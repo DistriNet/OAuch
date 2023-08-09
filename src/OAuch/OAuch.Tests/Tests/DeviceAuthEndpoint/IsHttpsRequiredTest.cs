@@ -13,7 +13,6 @@ namespace OAuch.Compliance.Tests.DeviceAuthEndpoint {
     public class IsHttpsRequiredTest : Test {
         public override string Title => "Is HTTPS required at the device authorization endpoint";
         public override string Description => "This test checks whether the device authorization endpoint enforces HTTPS connections.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(IsHttpsRequiredTestResult);
     }

@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class IsModernTlsSupportedTest : Test {
         public override string Title => "Does the revocation endpoint support a modern version of TLS";
         public override string Description => "This test determines whether the revocation endpoint supports modern versions of the TLS protocol (v1.2 and higher).";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsModernTlsSupportedTestResult);
     }

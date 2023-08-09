@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class TokenAsQueryParameterDisabledTest : Test {
         public override string Title => "Can the token be passed via the query";
         public override string Description => "This test determines whether the server disallows passing the access token via a query parameter.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(TokenAsQueryParameterDisabledTestResult);
     }

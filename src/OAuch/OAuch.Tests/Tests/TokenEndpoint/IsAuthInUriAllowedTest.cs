@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsAuthInUriAllowedTest : Test {
         public override string Title => "Are authentication parameters in the URI allowed";
         public override string Description => "This test checks if the authentication parameters can be passed via the URI (instead of the request body or the Authorization header).";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
         public override Type ResultType => typeof(IsAuthInUriAllowedTestResult);
     }

@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class InvalidatedRefreshTokenTest : Test {
         public override string Title => "Is the active refresh token revoked after a multi-exchange";
         public override string Description => "This test checks if the active refresh token is revoked when the same (old) refresh token is presented twice at the token endpoint";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(InvalidatedRefreshTokenTestResult);
     }

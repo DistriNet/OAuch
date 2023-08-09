@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class SupportsAuthorizationHeaderTest : Test {
         public override string Title => "Is the authorization header supported";
         public override string Description => "This test determines whether the API endpoint supports authentication via the Authorization header.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(SupportsAuthorizationHeaderTestResult);
     }

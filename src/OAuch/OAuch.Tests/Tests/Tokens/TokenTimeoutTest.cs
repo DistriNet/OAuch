@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class TokenTimeoutTest : Test {
         public override string Title => "Do access tokens have a short timeout";
         public override string Description => "This test checks if access tokens time out after at most one hour.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(TokenTimeoutTestResult);
     }

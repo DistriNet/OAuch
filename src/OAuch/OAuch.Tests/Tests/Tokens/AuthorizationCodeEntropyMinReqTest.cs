@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class AuthorizationCodeEntropyMinReqTest : Test {
         public override string Title => "Are the authorization codes secure (128 bits)";
         public override string Description => "This test calculates the entropy of the authorization codes and verifies that it conforms to the minimum requirements of 128 bits";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(AuthorizationCodeEntropyMinReqTestResult);
     }

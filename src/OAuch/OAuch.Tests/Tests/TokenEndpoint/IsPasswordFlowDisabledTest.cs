@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsPasswordFlowDisabledTest : Test {
         public override string Title => $"Is the password flow disabled";
         public override string Description => $"This test determines whether the password flow is disabled.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsPasswordFlowDisabledTestResult);
     }

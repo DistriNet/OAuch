@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class IsResponseTypeCheckedTest : Test {
         public override string Title => "Does the authorization server check the response type";
         public override string Description => "This test checks if the authorization server requires a valid value for the response type parameter.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsResponseTypeCheckedTestResult);
     }

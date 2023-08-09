@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class ClientSecretLongEnoughTest : Test {
         public override string Title => "Is the client secret long enough";
         public override string Description => "This test determines whether the client secret is long enough. Client secret values must contain at least the minimum of number of octets required for MAC keys for the particular algorithm used.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(ClientSecretLongEnoughTestResult);
     }

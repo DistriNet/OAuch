@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsBasicAuthenticationSupportedTest : Test {
         public override string Title => "Is basic authentication supported";
         public override string Description => "This test verifies whether the token endpoint supports the basic authentication scheme (or a more secure authentication scheme) for clients that were issues a password.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsBasicAuthenticationSupportedTestResult);
     }

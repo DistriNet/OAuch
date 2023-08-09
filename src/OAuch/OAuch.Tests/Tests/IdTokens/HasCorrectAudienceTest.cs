@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.IdTokens {
     public class HasCorrectAudienceTest : Test {
         public override string Title => "Is the token audience set";
         public override string Description => "This test determines whether the audience claim in the identity token is correct.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasCorrectAudienceTestResult);
     }

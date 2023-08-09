@@ -10,7 +10,6 @@ namespace OAuch.Compliance.Tests.Pkce {
     public class HashedPkceDisabledTest : Test {
         public override string Title => "Does the server support hashed PKCE";
         public override string Description => "This test determines whether the server supports hashed PKCE.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HashedPkceDisabledTestResult);
     }

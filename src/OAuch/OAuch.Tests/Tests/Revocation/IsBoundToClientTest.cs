@@ -14,7 +14,6 @@ namespace OAuch.Compliance.Tests.Revocation {
     public class IsBoundToClientTest : Test {
         public override string Title => "Is revocation bound to a specific client";
         public override string Description => "This test checks if the revocation endpoint only revokes tokens that are bound to the authenticated client.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsBoundToClientTestResult);
     }

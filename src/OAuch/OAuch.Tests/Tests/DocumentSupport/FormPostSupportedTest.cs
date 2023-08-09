@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class FormPostSupportedTest : Test {
         public override string Title => "Does the server support Form Post response mode";
         public override string Description => "This test determines whether the server supports the 'OAuth 2.0 Form Post Response Mode'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(FormPostSupportedTestResult);
     }

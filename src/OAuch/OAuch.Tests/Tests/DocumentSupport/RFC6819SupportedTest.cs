@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC6819SupportedTest : Test {
         public override string Title => "Does the server support RFC6819 (OAuth threat model)";
         public override string Description => "This test determines whether the server supports RFC6819 'OAuth 2.0 Threat Model and Security Considerations'.";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RFC6819SupportedTestResult);
     }

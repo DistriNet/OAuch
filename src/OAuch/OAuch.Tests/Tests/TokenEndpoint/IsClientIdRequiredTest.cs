@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class IsClientIdRequiredTest : Test {
         public override string Title => "Is client id required";
         public override string Description => "This test checks if the server requires the client id for non-confidential clients that exchange an authorization code.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsClientIdRequiredTestResult);
     }

@@ -16,7 +16,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class RedirectUriCheckedTest : Test {
         public override string Title => "Is the redirect URI checked when exchanging a code";
         public override string Description => "This test checks if the token endpoint checks the redirect uri when exchanging an authorization code.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(RedirectUriCheckedTestResult);
     }

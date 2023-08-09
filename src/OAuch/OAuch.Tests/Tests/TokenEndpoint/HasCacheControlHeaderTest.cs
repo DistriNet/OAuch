@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class HasCacheControlHeaderTest : Test {
         public override string Title => "Is cache control header present";
         public override string Description => "This test determines whether Cache-Control header is present in authorization endpoint responses";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(HasCacheControlHeaderTestResult);
     }

@@ -11,7 +11,6 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class DeviceCodeEntropyTest : Test {
         public override string Title => "Are the device codes secure (128 bits)";
         public override string Description => "This test calculates the entropy of the device codes and verifies that it conforms to the minimum length of 128 bits";
-        public override string? TestingStrategy => null;
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(DeviceCodeEntropyTestResult);
     }

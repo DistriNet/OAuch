@@ -15,7 +15,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class SupportsJwtClientAuthenticationTest : Test {
         public override string Title => "Is JWT authentication implemented";
         public override string Description => "This test checks if the authorization server supports JWT authentication.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(SupportsJwtClientAuthenticationTestResult);
     }

@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsNotBeforeCheckedTest : Test {
         public override string Title => "Is JWT 'not before' checked";
         public override string Description => "This test checks if the authorization server rejects a client authentication JWT if it is used before its 'not before' time.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsNotBeforeCheckedTestResult);
     }

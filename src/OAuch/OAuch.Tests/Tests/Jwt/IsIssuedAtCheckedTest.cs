@@ -12,7 +12,6 @@ namespace OAuch.Compliance.Tests.Jwt {
     public class IsIssuedAtCheckedTest : Test {
         public override string Title => "Is JWT 'issued at' checked";
         public override string Description => "This test checks if the authorization server rejects a client authentication JWT with an 'issued at' timestamp long in the past.";
-        public override string? TestingStrategy => "";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsIssuedAtCheckedTestResult);
     }
