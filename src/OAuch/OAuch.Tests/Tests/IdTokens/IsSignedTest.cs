@@ -43,31 +43,10 @@ namespace OAuch.Compliance.Tests.IdTokens {
                     return;
 
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-                var kid = idToken.Header.KeyId;
-                JsonWebKey? key;
-                if (kid == null) {
-                    // 'kid' is required if there are multiple keys in the key set
-                    if (keyset.Count == 1) {
-                        key = keyset.First();
-                    } else {
-                        LogInfo("The ID token does not have a key identifier ('kid') claim in its header.");
-                        return;
-                    }
-                } else {
-                    key = keyset[kid];
-                    if (key == null) {
-                        LogInfo($"The key with identifier '{ kid }' could not be found in the key set downloaded from the JWKS URI.");
-                        return;
-                    }
-                }
-                if (key.Algorithm != null && key.Algorithm != alg) {
-                    LogInfo($"The key from the JWKS key store only allows for a specific algorithm to be used, but the ID token uses another algorithm.", key.Algorithm.Name, alg.Name);
+                var key = idToken.Header.GetAsymmetricSigningKey(keyset, LogInfo);
+                if (key == null)
                     return;
-                }
-                if (key.Usage != null && key.Usage != JwkKeyUsage.Sign) {
-                    LogInfo($"The key from the JWKS key store does not allow it to be used for signing.");
-                    return;
-                }
+
                 if (idToken.Verify(key.TokenKey)) {
                     Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
                     LogInfo("The signature is valid.");

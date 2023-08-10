@@ -1,4 +1,7 @@
-﻿using OAuch.Shared;
+﻿using Newtonsoft.Json.Linq;
+using OAuch.Protocols.JWK;
+using OAuch.Protocols.JWT;
+using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,35 @@ using System.Web;
 
 namespace OAuch.Compliance.Tests.Shared {
     public static class Extensions {
+        public static JsonWebKey? GetAsymmetricSigningKey(this JoseHeader header, JwkSet keyset, Action<string> log) {
+            var kid = header.KeyId;
+            JsonWebKey? key;
+            if (kid == null) {
+                // 'kid' is required if there are multiple keys in the key set
+                if (keyset.Count == 1) {
+                    key = keyset.First();
+                } else {
+                    log("The ID token does not have a key identifier ('kid') claim in its header.");
+                    return null;
+                }
+            } else {
+                key = keyset[kid];
+                if (key == null) {
+                    log($"The key with identifier '{kid}' could not be found in the key set downloaded from the JWKS URI.");
+                    return null;
+                }
+            }
+            if (key.Algorithm != null && key.Algorithm != header.Algorithm) {
+                log($"The key from the JWKS key store only allows for a specific algorithm to be used, but the ID token uses another algorithm. (expected '{key.Algorithm.Name}', received '{header.Algorithm!.Name}')");
+                return null;
+            }
+            if (key.Usage != null && key.Usage != JwkKeyUsage.Sign) {
+                log($"The key from the JWKS key store does not allow it to be used for signing.");
+                return null;
+            }
+            return key;
+        }
+
         public static PKCESupportTypes MostSecureSupportedPKCEType(this TestRunContext context) {
             var supportedTypes = context.State.Get<List<PKCESupportTypes>>(StateKeys.WorkingPkceTypes);
             if (supportedTypes.Contains(PKCESupportTypes.Hash))

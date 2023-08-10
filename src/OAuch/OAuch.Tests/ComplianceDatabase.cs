@@ -1,4 +1,5 @@
-﻿using OAuch.Shared.Enumerations;
+﻿using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2214,7 +2215,13 @@ namespace OAuch.Compliance {
                                     Test = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
                                     RequirementLevel = RequirementLevels.Must,
                                     LocationInDocument = "7.1. TLS and DNSSEC considerations"
-                                 }
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Features.PlainPkceTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                 },
+
                             },
                             Countermeasures= new List<TestRequirementLevel> {
                                 new TestRequirementLevel {
@@ -2272,6 +2279,33 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "7.1. TLS and DNSSEC considerations"
                                 },
+
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.IdTokens.ClientSecretLongEnoughTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.IdTokens.SigningKeySecureTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.ClientKeySecureTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.HashedPkceDisabledTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+
                             }
                         },
                         new OAuthDocument {

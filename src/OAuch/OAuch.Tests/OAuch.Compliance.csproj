@@ -20,8 +20,5 @@
 	  <ProjectReference Include="..\OAuch.Protocols\OAuch.Protocols.csproj" />
 	  <ProjectReference Include="..\OAuch.Shared\OAuch.Shared.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Tests\Fapi\" />
-	</ItemGroup>
 
 </Project>

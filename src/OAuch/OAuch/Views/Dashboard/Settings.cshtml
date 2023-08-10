@@ -291,7 +291,7 @@
                                 @Html.DropDownListFor(c => c.Settings.ResponseMode, Html.GetEnumSelectList<ResponseModes>(), null, new { @class = "form-control" })
                             </div>
                             <div class="form-group">
-                                <label for="UseRequestParameter">Use a Request Parameter</label>
+                                <label for="UseRequestParameter">Use a Request Parameter (JAR)</label>
                                 <div class="form-check">
                                     @Html.CheckBoxFor(c => c.Settings.UseRequestParameter, new { data_toggle = "toggle", data_size = "sm" })
                                 </div>
