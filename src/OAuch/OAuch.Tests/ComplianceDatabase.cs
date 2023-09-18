@@ -1,4 +1,5 @@
-﻿using OAuch.Compliance.Tests.TokenEndpoint;
+﻿using OAuch.Compliance.Tests.Pkce;
+using OAuch.Compliance.Tests.TokenEndpoint;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
@@ -2305,6 +2306,89 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceDowngradeDetectedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.ShortVerifierTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.PlainPkceDisabledTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.AuthorizationCodeEntropyMinReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.AuthorizationCodeEntropySugReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropyMinReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropySugReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.AccessTokenEntropyMinReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.AccessTokenEntropySugReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Tokens.ShortTokenTimeoutTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                OAuch.Compliance.Tests.AuthEndpoint.SupportsPostAuthorizationRequestsTest
+
+
+
+
+
+
+
 
                             }
                         },
@@ -2379,6 +2463,8 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "8.5. TLS considerations"
                                 },
+
+
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AreStrongCiphersEnabledTest"],
                                      RequirementLevel = RequirementLevels.Must,
