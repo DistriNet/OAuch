@@ -2381,7 +2381,7 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
-                                OAuch.Compliance.Tests.AuthEndpoint.SupportsPostAuthorizationRequestsTest
+                                //OAuch.Compliance.Tests.AuthEndpoint.SupportsPostAuthorizationRequestsTest
 
 
 
