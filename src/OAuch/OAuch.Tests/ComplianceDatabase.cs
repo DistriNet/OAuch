@@ -940,7 +940,8 @@ namespace OAuch.Compliance {
                                       MitigatedBy = new List<TestCombination> {
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.Pkce.IsPkceDowngradeDetectedTest"],
-                                              Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"]
+                                              Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"],
+                                              Tests["OAuch.Compliance.Tests.Pkce.IsPkceTokenDowngradeDetectedTest"]
                                           }
                                       }
                                 }
@@ -1556,6 +1557,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "4.4. Server Returns the Code"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceTokenDowngradeDetectedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "4.4. Server Returns the Code"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "4.4. Server Returns the Code"
@@ -1964,6 +1970,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "2.1.1. Authorization Code Grant"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceTokenDowngradeDetectedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.1.1. Authorization Code Grant"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.1.1. Authorization Code Grant"
@@ -2308,6 +2319,11 @@ namespace OAuch.Compliance {
                                 },
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceDowngradeDetectedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceTokenDowngradeDetectedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
