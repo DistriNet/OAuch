@@ -1,4 +1,5 @@
-﻿using OAuch.Compliance.Tests.Pkce;
+﻿using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.Pkce;
 using OAuch.Compliance.Tests.TokenEndpoint;
 using OAuch.Shared.Enumerations;
 using System;
@@ -148,7 +149,9 @@ namespace OAuch.Compliance {
                                       MitigatedBy = new List<TestCombination> {
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
-                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"]
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
                                           }
                                       }
                                 }
@@ -209,7 +212,9 @@ namespace OAuch.Compliance {
                                           },
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
-                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"]
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
                                           }
                                       }
                                 }
@@ -238,6 +243,8 @@ namespace OAuch.Compliance {
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"] // BCP 4.10.2
                                           }
                                       }
@@ -348,7 +355,8 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.AuthorizationCodeTimeoutTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
-                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"]
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"]
                                           }
                                       }
                                 }
@@ -428,6 +436,8 @@ namespace OAuch.Compliance {
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RedirectUriCheckedTest"]
                                           }
                                       }
@@ -835,6 +845,7 @@ namespace OAuch.Compliance {
                                           },
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.FragmentFixTest"]
                                           }
                                       }
@@ -865,6 +876,7 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"]
                                           },
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.ReferrerPolicyEnforcedTest"],
@@ -1178,7 +1190,17 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "3.1.2.2. Registration Requirements"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "3.1.2.2. Registration Requirements"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "3.1.2.2. Registration Requirements"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "3.1.2.2. Registration Requirements"
                                  },
@@ -1260,6 +1282,11 @@ namespace OAuch.Compliance {
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "4.1.2. Authorization Response"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.1.2. Authorization Response"
                                  },
@@ -1697,6 +1724,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.1.1. Automatic Revocation of Derived Tokens If Abuse Is Detected"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "5.2.1.1. Automatic Revocation of Derived Tokens If Abuse Is Detected"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.2.2. Binding of Refresh Token to 'client_id'"
@@ -1732,7 +1764,17 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
                                  },
@@ -1960,6 +2002,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "2.1.  Protecting Redirect-Based Flows"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.1.  Protecting Redirect-Based Flows"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.1.1. Authorization Code Grant"
@@ -2041,6 +2088,11 @@ namespace OAuch.Compliance {
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "4.2.4. Countermeasures"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.2.4. Countermeasures"
                                  },
@@ -2353,7 +2405,17 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5.2.2. Authorization server"
+                                },
+                                new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },

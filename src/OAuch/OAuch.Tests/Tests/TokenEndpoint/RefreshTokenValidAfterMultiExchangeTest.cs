@@ -12,18 +12,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
-    public class TokenValidAfterMultiExchangeTest : Test {
-        public override string Title => "Are access tokens invalidated after exchanging the same authorization code multiple times";
-        public override string Description => "This test checks if access tokens are invalidated after exchanging the same authorization code multiple times.";
+    public class RefreshTokenValidAfterMultiExchangeTest : Test {
+        public override string Title => "Are refresh tokens invalidated after exchanging the same authorization code multiple times";
+        public override string Description => "This test checks if refresh tokens are invalidated after exchanging the same authorization code multiple times.";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
-        public override Type ResultType => typeof(TokenValidAfterMultiExchangeTestResult);
+        public override Type ResultType => typeof(RefreshTokenValidAfterMultiExchangeTestResult);
     }
-    public class TokenValidAfterMultiExchangeTestResult : TestResult {
-        public TokenValidAfterMultiExchangeTestResult(string testId) : base(testId) { }
-        public override Type ImplementationType => typeof(TokenValidAfterMultiExchangeTestImplementation);
+    public class RefreshTokenValidAfterMultiExchangeTestResult : TestResult {
+        public RefreshTokenValidAfterMultiExchangeTestResult(string testId) : base(testId) { }
+        public override Type ImplementationType => typeof(RefreshTokenValidAfterMultiExchangeTestImplementation);
     }
-    public class TokenValidAfterMultiExchangeTestImplementation : TestImplementation {
-        public TokenValidAfterMultiExchangeTestImplementation(TestRunContext context, TokenValidAfterMultiExchangeTestResult result, HasSupportedFlowsTestResult flows, TestUriSupportedTestResult api, MultipleCodeExchangesTestResult multiExchange) : base(context, result, flows, api, multiExchange) { }
+    public class RefreshTokenValidAfterMultiExchangeTestImplementation : TestImplementation {
+        public RefreshTokenValidAfterMultiExchangeTestImplementation(TestRunContext context, RefreshTokenValidAfterMultiExchangeTestResult result, HasSupportedFlowsTestResult flows, TestUriSupportedTestResult api, MultipleCodeExchangesTestResult multiExchange) : base(context, result, flows, api, multiExchange) { }
 
         public async override Task Run() {
             if (HasFailed<TestUriSupportedTestResult>() || HasFailed<MultipleCodeExchangesTestResult>()) {
@@ -38,17 +38,17 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             }
 
             var provider = flows.CreateProviderWithStage<CreateTokenRequest, Dictionary<string, string?>, HttpRequest>(this.Context,
-                (f, p) => f.HasAuthorizationCodes);
+                (f, p) => f.HasAuthorizationCodes, true, true);
             if (provider == null) {
                 Result.Outcome = TestOutcomes.Skipped;
-                LogInfo("Could not find a working flow with authorization codes");
+                LogInfo("Could not find a working flow with authorization codes and refresh tokens");
                 return;
             }
 
             var workingAccessToken = await provider.GetToken();
-            if (workingAccessToken.AuthorizationCode == null || workingAccessToken.AccessToken == null) {
+            if (workingAccessToken.AuthorizationCode == null || workingAccessToken.RefreshToken == null) {
                 Result.Outcome = TestOutcomes.Skipped;
-                LogInfo("Could not find a working flow with authorization codes");
+                LogInfo("Could not find a working flow with authorization codes and refresh tokens");
                 return;
             }
 
@@ -67,13 +67,17 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 // multi exchange was denied; now see if access token is still working
                 LogInfo("Waiting 5 seconds...");
                 await Task.Delay(5000);
-                var apiRequest = new ApiRequest(Context);
-                var apiResponse = await apiRequest.Send(workingAccessToken);
-                if (apiResponse.StatusCode.IsOk())
-                    Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-                else
+                var refreshProvider = provider.CreateRefreshProvider();
+                var refreshedResult = await refreshProvider.RefreshToken(workingAccessToken.RefreshToken);
+                if (refreshedResult.RefreshToken == null || refreshedResult.AccessToken == null) {
                     Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
+                    LogInfo("The refresh token was revoked");
+                } else {
+                    Result.Outcome = TestOutcomes.SpecificationNotImplemented;
+                    LogInfo("The refresh token was not revoked");
+                }
             } else {
+                // multi exchange was allowed; should not happen here
                 Result.Outcome = TestOutcomes.Skipped;
             }
         }

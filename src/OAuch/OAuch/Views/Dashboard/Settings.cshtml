@@ -219,7 +219,8 @@
                                 @Html.TextBoxFor(c => c.Settings.TestUri, new { @class = "form-control" })
                                 <small id="TestHeadersInfo" class="form-text text-muted">
                                     If the access token is valid, the server should return a success response (2xx). If the token is invalid, the server must
-                                    return a failure response (4xx or 5xx).
+                                    return a failure response (4xx or 5xx). If the server always returns a success response (also with invalid tokens), you
+                                    can use a failure indicator (see below).
                                 </small>
                             </div>
                             <div class="form-group">
@@ -242,6 +243,20 @@
                                     request. By default, OAuch assumes that the data is 'form-urlencoded'. If you use another content type,
                                     you should specify it by adding a 'Content-Type' header in the 'additional HTTP headers' field. The contents
                                     of this field is converted to bytes using the UTF-8 encoding.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="TestFailureIndicator">Failure Indicator</label>
+                                @Html.TextAreaFor(c => c.Settings.TestFailureIndicator, new { @class = "form-control", aria_describedby = "TestFailureIndicatorInfo" })
+                                <small id="TestFailureIndicatorInfo" class="form-text text-muted">
+                                    Some API servers always return an HTTP 2xx code, even when using an invalid access token. In case of an error, they
+                                    typically include some description of the error in the body of the reply. This makes it difficult to distinguish
+                                    between successful API requests and failed requests. OAuch can use a failure indicator to detect a failed request
+                                    (despite a 2xx HTTP code). The failure indicator is a string that &#8212; if present in the server's reply &#8212; 
+                                    indicates a failed request. Whenever OAuch performs an API request and the server returns a 2xx return value, OAuch
+                                    will look for the failure indicator in the returned result. If the indicator is present, OAuch treats the result
+                                    as a failure. The string comparison is case insensitive.<br />If the server returns HTTP 4xx/5xx errors when an invalid access token is used, the failure
+                                    indicator can be left empty.
                                 </small>
                             </div>
                         </div>

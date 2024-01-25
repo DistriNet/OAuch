@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Security;
+using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,6 +101,15 @@ namespace OAuch.Protocols.OAuth2 {
 
                 var request = GetRequest(Settings.TestUri, token);
                 var response = await Http.SendRequest(request);
+
+                // check if there is a failure indicator
+                if (!string.IsNullOrWhiteSpace(Context.SiteSettings.TestFailureIndicator)) {
+                    var contents = response.ToString(true);
+                    if (contents.Contains(Context.SiteSettings.TestFailureIndicator, StringComparison.InvariantCultureIgnoreCase)) {
+                        response = new HttpResponse(response.Request, HttpStatusCode.Unauthorized, response.Headers, response.Content, response.SecurityReport);
+                    }
+                }
+
                 return response;
             } catch (Exception e) {
                 Context.Log.Log(e);

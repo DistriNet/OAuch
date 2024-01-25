@@ -43,7 +43,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
         public static string CallbackUri {
             get {
-                return "https://oauch.io/Callback"; // "https://test.oauch.pieterp.be:44336/Callback"; // https://localhost:44336/Callback
+                return "https://oauch.io/Callback";
             }
         }
         public static void AddResponseMode(Dictionary<string, string?> pars, ResponseModes requested, ResponseModes def) {

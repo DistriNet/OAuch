@@ -76,6 +76,7 @@ namespace OAuch.Shared.Settings {
         public HttpMethodsEnum TestMethod { get; set; }
         public string? TestHeaders { get; set; }
         public string? TestPostData { get; set; }
+        public string? TestFailureIndicator { get; set; }
 
         // OpenID settings
         public string? OpenIdIssuer { get; set; }
