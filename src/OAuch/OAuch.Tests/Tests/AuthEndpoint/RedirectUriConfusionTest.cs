@@ -96,6 +96,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
 
             var redirectResultProcessor = new ConfusedPathResultProcessor();
             provider.Pipeline.AddAfter<SendAuthorizationRedirect, string, ICallbackResult?>(redirectResultProcessor);
+            var unescapedRedirect = new UnescapedRedirectProcessor();
+            provider.Pipeline.Replace<BuildAuthorizationUrl, Dictionary<string, string?>, string>(unescapedRedirect);
 
             var result = await provider.GetToken();
             ExtraInfo.WrongRedirect = redirectResultProcessor.WrongRedirect;
@@ -113,6 +115,23 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                     this.WrongRedirect = value.Url.Contains("FAKEPATH");
                 }
                 return Task.FromResult(value);
+            }
+        }
+        public class UnescapedRedirectProcessor : Processor<Dictionary<string, string?>, string> {
+            // this processor makes sure that redirect_uri isn't encoded;
+            // we need to use the redirect_uri precisely like it is specified (as it is specifically
+            // constructed to confuse parsers)
+            public override Task<string?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
+                var uriBuilder = new UriBuilder(tokenProvider.SiteSettings.AuthorizationUri!);
+                var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+                value.Remove("redirect_uri");
+                foreach (var key in value.Keys) {
+                    var s = value[key];
+                    if (!string.IsNullOrEmpty(s))
+                        query[key] = s;
+                }
+                uriBuilder.Query = (value.Count > 0 ? (query.ToString() + "&") : "") + "redirect_uri=" + tokenProvider.SiteSettings.CallbackUri;
+                return Task.FromResult<string?>(uriBuilder.ToString());
             }
         }
     }
