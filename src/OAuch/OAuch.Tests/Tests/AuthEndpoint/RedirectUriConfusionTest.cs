@@ -73,6 +73,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             };
 
             Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
+            int cnt = 1;
             foreach(var c in modifiedCallbacks) {
                 var status = await TestCallback(flows, c);
                 if (status == TestOutcomes.SpecificationNotImplemented) {
@@ -80,6 +81,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                     Result.Outcome = status;
                     break;
                 }
+                await Context.Browser.SendMessage($"Confusion test {cnt}/{modifiedCallbacks.Length} completed.");
+                cnt++;
             }
         }
         private async Task<TestOutcomes> TestCallback(HasSupportedFlowsTestResult flows, string callback) {
