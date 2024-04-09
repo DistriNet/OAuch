@@ -448,7 +448,7 @@ namespace OAuch.Compliance {
                             Id = "6819_4_4_1_8",
                             Title = "CSRF Attack against redirect-uri",
                             Description = "Cross-site request forgery (CSRF) is a web-based attack whereby HTTP requests are transmitted from a user that the web site trusts or has authenticated. CSRF attacks on OAuth approvals can allow an attacker to obtain authorization to OAuth protected resources without the consent of the user.",
-                            Document = Documents["SecBCP"],
+                            Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.8.",
                             Instances = new List<ThreatInstance> {
                                 new ThreatInstance {
@@ -1002,6 +1002,35 @@ namespace OAuch.Compliance {
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"],
                                             Tests["OAuch.Compliance.Tests.Pkce.HashedPkceDisabledTest"],
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest"],
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_7",
+                            Title = "Cross Site Request Forgery",
+                            Description = "An attacker might attempt to inject a request to the redirect URI of the legitimate client on the victim's device, e.g., to cause the client to access resources under the attacker's control. This is a variant of an attack known as Cross-Site Request Forgery (CSRF).",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.7.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                            Tests["OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest"]
+                                          },
+                                          new TestCombination {
+                                            Tests["OAuch.Compliance.Tests.IdTokens.NoncePresentInTokenTest"]
                                           }
                                       }
                                 }
