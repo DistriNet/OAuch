@@ -828,6 +828,33 @@ namespace OAuch.Compliance {
                             }
                         },
                         new Threat {
+                            Id = "BCP_4_1_1",
+                            Title = "Redirect URI Validation Attacks on Authorization Code Grant",
+                            Description = "Some authorization servers allow clients to register redirect URI patterns instead of complete redirect URIs. This approach turned out to be more complex to implement and more error prone to manage than exact redirect URI matching. Several successful attacks exploiting flaws in the pattern matching implementation or concrete configurations have been observed in the wild.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.1.1.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"]
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"]
+                                          },
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
                             Id = "BCP_4_1_2",
                             Title = "Redirect URI Validation Attacks on Implicit Grant",
                             Description = "Implicit clients can be subject to an attack that utilizes the fact that user agents re-attach fragments to the destination URL of a redirect if the location header does not contain a fragment. This allows circumvention even of very narrow redirect URI patterns, but not strict URL matching.",
@@ -838,6 +865,9 @@ namespace OAuch.Compliance {
                                      ExtraDescription = null,
                                       DependsOnFeatures = new List<Test>{
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
                                       },
                                       MitigatedBy = new List<TestCombination> {
                                           new TestCombination {
@@ -862,7 +892,6 @@ namespace OAuch.Compliance {
                                 new ThreatInstance {
                                      ExtraDescription = null,
                                       DependsOnFeatures = new List<Test>{
-                                          /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
@@ -911,6 +940,47 @@ namespace OAuch.Compliance {
                                           new TestCombination {
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.SupportsPostResponseModeTest"]
                                           }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_3_2_A",
+                            Title = "Access Token in Browser History (Leaking API Request)",
+                            Description = "An access token may end up in the browser history if a client or a web site that already has a token deliberately navigates to a page like provider.com/get_user_profile?access_token=abcdef.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.3.2.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.ApiEndpoint.TokenAsQueryParameterDisabledTest"]
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_3_2_B",
+                            Title = "Access Token in Browser History (Implicit Grant)",
+                            Description = "In the implicit grant, a URL like client.example/redirection_endpoint#access_token=abcdef may end up in the browser history as a result of a redirect from a provider's authorization endpoint.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.3.2.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          // cannot be mitigated
                                       }
                                 }
                             }
@@ -1952,7 +2022,7 @@ namespace OAuch.Compliance {
                         //},
                         new OAuthDocument {
                             Id = "SecBCP",
-                            Name = "OAuth 2.0 Security Best Current Practice (draft 23)",
+                            Name = "OAuth 2.0 Security Best Current Practice (draft 25)",
                             Description = "This document describes best current security practice for OAuth 2.0. It updates and extends the OAuth 2.0 Security Threat Model to incorporate practical experiences gathered since OAuth 2.0 was published and covers new threats relevant due to the broader application of OAuth 2.0.",
                             Url = "https://tools.ietf.org/html/draft-ietf-oauth-security-topics",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
@@ -2043,6 +2113,11 @@ namespace OAuch.Compliance {
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.DocumentSupport.RFC8705SupportedTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "2.2.1. Access Tokens"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "2.2.1. Access Tokens"
                                  },

@@ -354,7 +354,12 @@
                                             } else {
                                                 foreach (var ireport in threatReport.InstanceReports) {
                                                     if (!ireport.IsRelevant.HasValue || ireport.IsRelevant.Value) {
-                                                        if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
+                                                        if (ireport.ThreatInstance.MitigatedBy.Count == 0) {
+                                                            <p>
+                                                                This threat has no countermeasures that can be used to mitigate it. The only way to protect against it is by
+                                                                making sure that the prerequisites are not met (e.g., by disabling certain authorization grants or deprecated features).
+                                                            </p>
+                                                        } else  if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
                                                             var mit = ireport.ThreatInstance.MitigatedBy[0];
                                                             <p>
                                                                 @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
@@ -368,7 +373,6 @@
                                                                     <li>@HelperMethods.ShortenTestId(cm.TestId) [<span class="@OutcomeClass(to, false)">@FormatOutcomeForCounterMeasure(to)</span>] - @Html.ActionLink("more info", "Info", "Tests", new { id = cm.TestId })</li>
                                                                 }
                                                             </ul>
-                                                            <p>&nbsp;</p>
                                                         } else {
                                                             <p>
                                                                 @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
@@ -391,6 +395,7 @@
                                                     }
                                                 }
                                             }
+                                            <p>@Html.ActionLink("More information about this threat", "Info", "Threats", new { id = threatReport.Threat.Id }, new { target = "_blank" }) </p>
                                         </div>
                                         <div class="ribbon-wrapper ribbon-lg">
                                             <div class="ribbon @OutcomeClass(threatReport.Outcome, true)">@FormatOutcomeForThreat(threatReport)</div>

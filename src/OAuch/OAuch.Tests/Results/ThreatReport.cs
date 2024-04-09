@@ -89,6 +89,9 @@ namespace OAuch.Compliance.Results {
         /// Check if there is any TestCombination that mitigates the threat instance
         /// </summary>
         private TestOutcomes? CalculateThreatInstanceOutcome(IEnumerable<TestResult> results, List<TestCombination> mitigations) {
+            if (mitigations.Count == 0) // there are no mitigations for this threat; if it is relevant (i.e., if the preconditions are met, the implementation is vulnerable)
+                return TestOutcomes.SpecificationNotImplemented;
+
             TestOutcomes? ret = TestOutcomes.SpecificationNotImplemented;
             int skipped = 0;
             foreach (var mitigation in mitigations) {
