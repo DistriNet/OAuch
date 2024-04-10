@@ -1058,6 +1058,155 @@ namespace OAuch.Compliance {
                                 }
                             }
                         },
+
+
+                        new Threat {
+                            Id = "BCP_4_10",
+                            Title = "Misuse of Stolen Access Tokens",
+                            Description = "Access tokens can be stolen by an attacker in various ways. Authorization servers therefore SHOULD ensure that access tokens are sender-constrained and audience-restricted.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.10.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.ClientCredentialsFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest"],
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_11_1",
+                            Title = "Client as Open Redirector",
+                            Description = "An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation.  If the authorization server allows the client to register only part of the redirect URI, an attacker can use an open redirector operated by the client to construct a redirect URI that will pass the authorization server validation but will send the authorization 'code' or access token to an endpoint under the control of the attacker.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.11.1.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          /* Depends on one of the flows that uses the authorization endpoint */
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_11_2",
+                            Title = "Authorization Server as Open Redirector",
+                            Description = "An attacker could use the end-user authorization endpoint and the redirect URI parameter to abuse the authorization server as an open redirector. An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation. An attacker could utilize a user's trust in an authorization server to launch a phishing attack.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.11.2.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          /* Depends on one of the flows that uses the authorization endpoint */
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"] // BCP 4.11.2
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_14",
+                            Title = "Refresh Token Protection",
+                            Description = "Refresh tokens are an attractive target for attackers, since they represent the overall grant a resource owner delegated to a certain client. If an attacker is able to exfiltrate and successfully replay a refresh token, the attacker will be able to mint access tokens and use them to access resource servers on behalf of the resource owner.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.14.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                            Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.UsesTokenRotationTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.InvalidatedRefreshTokenTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenRevokedAfterUseTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshBoundToClientTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
+                                              Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropyMinReqTest"],
+                                              Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropySugReqTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
+                                          }
+                                      }
+                                }
+                            }
+                        },
+                        new Threat {
+                            Id = "BCP_4_16",
+                            Title = "Clickjacking",
+                            Description = "The authorization request is susceptible to clickjacking attacks, also called user interface redressing. An attacker can use this vector to obtain the user's authentication credentials, change the scope of access granted to the client, and potentially access the user's resources.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.16.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          /* Depends on one of the flows that uses the authorization endpoint */
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.HasFrameOptionsTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.HasContentSecurityPolicyTest"]
+                                          }
+                                      }
+                                }
+                            }
+                        },
+
                         new Threat {
                             Id = "7519_6",
                             Title = "Unverified JWTs (resource server)",
