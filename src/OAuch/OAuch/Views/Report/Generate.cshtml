@@ -702,7 +702,7 @@
         </ul>
         <p>
             Out of a total of @Model.Result.ExecutedTests.TotalTests tests that were selected for this site, @Model.Result.ExecutedTests.SucceededTests @Pluralize("test", @Model.Result.ExecutedTests.SucceededTests) succeeded
-            and @Model.Result.ExecutedTests.FailedTests @Pluralize("test", Model.Result.ExecutedTests.FailedTests) failed (failure rate: @Model.Result.ExecutedTests.FailureRate.ToString("P1")).
+            and @Model.Result.ExecutedTests.FailedTests @Pluralize("test", Model.Result.ExecutedTests.FailedTests) failed.
             @if (Model.Result.SkippedTests > 0) {
                 <text>Another @Model.Result.SkippedTests test(s) were skipped because they were not relevant for this site's configuration or because they were excluded.</text>
             }
@@ -775,13 +775,15 @@
                 <img src="~/img/ratedist.png" style="width: 100%;" />
                 <span class="overlayLine" style="left: @(CalculatePositionInDist())%;"></span>
                 <div>
-                    <div class="text-left distlabel">better</div>
-                    <div class="text-center distlabel">average: 33%</div>
-                    <div class="text-right distlabel">worse</div>
+                    <div class="text-left distlabel">lower failure rate<br/>(better)</div>
+                    <div class="text-center distlabel">average failure rate<br />33%</div>
+                    <div class="text-right distlabel">higher failure rate<br/>(worse)</div>
                 </div>
             </div>
-            <p class="text-center">Figure 1: <em>The distribution of failure rates for other tested sites. The position of your site is indicated with the red vertical line. This distribution is based on an ecosystem analysis
-                performed on 100 sites in December 2020. More information on <a href="https://lirias.kuleuven.be/3765111?limo=0" target="_blank">https://lirias.kuleuven.be/3765111?limo=0</a></em></p>
+            <p class="text-center">
+                Figure 1: <em>
+                    The normal distribution corresponds to the failure rates observed in the OAuth ecosystem (more info on <a href="https://lirias.kuleuven.be/3765111?limo=0" target="_blank">https://lirias.kuleuven.be/3765111?limo=0</a>).
+                    The tested site in this document has a failure rate of @((Model.Result.OverallCompliance.OverallScore.FailureRate * 100).ToString("0.0"))%, which is indicated with the red vertical line. Lower failure rates are better.<em></p>
         </div>
 
         @* threat info *@
