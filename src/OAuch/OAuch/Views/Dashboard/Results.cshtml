@@ -3,6 +3,7 @@
 @using OAuch.Shared.Enumerations
 @using OAuch.Compliance.Results
 @using OAuch.Helpers
+@using System.Diagnostics
 @{
     ViewData["Title"] = "Site results";
 
@@ -173,6 +174,11 @@
                     The site was successfully tested on @Model.StartedAt.ToString("MMMM d, yyyy") at @Model.StartedAt.ToString("HH:mm"). The details of this test run can be found below.
                     To test the site again, <a href="@Url.Action("RunTest", "Dashboard", new { id = Model.SiteId })">click here to start a new test run</a>.
                 </p>
+                @if (Debugger.IsAttached) {
+                    <p>
+                        If you are debugging OAuch and want to add new testcases to the current site results, please @Html.ActionLink("resume the test run", "Resume", new { id = Model.ResultId }).
+                    </p>
+                }
             </div>
             @*<div class="col-4" style="text-align:center;">
                     <a href="#" data-toggle="modal" data-target="#ratingInfo">

@@ -1,6 +1,7 @@
 ﻿@using OAuch.Database.Entities
 @using OAuch.ViewModels
 @using OAuch.Helpers 
+@using System.Diagnostics
 @{
     string title;
     if (ViewData["Title"] == null)
@@ -154,6 +155,17 @@
                                     </p>
                                 </a>
                             </li>
+                            @if (Debugger.IsAttached) {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("AddDemoSite", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.AddSite))">
+                                        <i class="nav-icon fas fa-plus-circle"></i>
+                                        <p>
+                                            Add demo site
+                                        </p>
+                                    </a>
+                                </li>
+                            }
+
                             <li class="nav-item">
                                 <a href="@Url.Action("Certificates", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Certificates))">
                                     <i class="nav-icon fas fa-file-signature"></i>

@@ -1,5 +1,6 @@
 ﻿@model OAuch.ViewModels.DashboardViewModel
 @using OAuch.Compliance.Results 
+@using System.Diagnostics
 @{
     ViewData["Title"] = "Site dashboard";
 }
@@ -82,6 +83,13 @@
                                     Start a new test run
                                 </a>
                             </li>
+                            @if (Debugger.IsAttached && site.LatestResultId != null) {
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Resume", "Dashboard", new { id = site.LatestResultId })" class="nav-link">
+                                        Resume (debug mode)
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>
