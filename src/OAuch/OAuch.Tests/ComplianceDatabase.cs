@@ -1206,7 +1206,34 @@ namespace OAuch.Compliance {
                                 }
                             }
                         },
-
+                        new Threat {
+                            Id = "BCP_4_17",
+                            Title = "Authorization Server Redirecting to Phishing Site",
+                            Description = "An attacker could utilize a correctly registered redirect URI to perform phishing attacks. The authorization server SHOULD only automatically redirect the user agent if it trusts the redirect URI. If the URI is not trusted, the authorization server MAY inform the user and rely on the user to make the correct decision.",
+                            Document = Documents["SecBCP"],
+                            LocationInDocument = "4.17.",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                     ExtraDescription = null,
+                                      DependsOnFeatures = new List<Test>{
+                                          /* Depends on one of the flows that uses the authorization endpoint */
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
+                                          Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidScopeTest"],
+                                              Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidResponseTypeTest"]
+                                          }
+                                      }
+                                }
+                            }
+                        },
                         new Threat {
                             Id = "7519_6",
                             Title = "Unverified JWTs (resource server)",
@@ -2379,7 +2406,16 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.15. Clickjacking"
                                  },
-
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidScopeTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidResponseTypeTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
+                                 },                                                                              
                             }
                         },
                         new OAuthDocument {

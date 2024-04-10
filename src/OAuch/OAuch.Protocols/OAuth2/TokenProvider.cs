@@ -151,6 +151,7 @@ namespace OAuch.Protocols.OAuth2 {
         public IDictionary<string, string> Items { get; set; }
         public string? OriginalContents { get; set; }
         public Exception? UnexpectedError { get; set; }
+        public bool WasCallbackStalled { get; set; } // did the user click on the 'Stalled test' button?
 
 
         private string? GetString(string name) {
