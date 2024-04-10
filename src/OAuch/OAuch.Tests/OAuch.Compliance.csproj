@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
+	  <TargetFramework>net8.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -17,6 +17,7 @@
 		<PackageReference Include="Unity" Version="5.11.10" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\OAuch.OAuthThreatModel\OAuch.OAuthThreatModel.csproj" />
 	  <ProjectReference Include="..\OAuch.Protocols\OAuch.Protocols.csproj" />
 	  <ProjectReference Include="..\OAuch.Shared\OAuch.Shared.csproj" />
 	</ItemGroup>

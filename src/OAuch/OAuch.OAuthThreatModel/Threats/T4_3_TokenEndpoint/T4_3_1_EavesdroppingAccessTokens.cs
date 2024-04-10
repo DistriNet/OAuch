@@ -1,0 +1,25 @@
+﻿using OAuch.OAuthThreatModel.Consequences;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint
+{
+    public class T4_3_1_EavesdroppingAccessTokens : Threat
+    {
+        public override string Description => "Eavesdropping Access Tokens";
+
+        public override string Id => "6819_4_3_1";
+
+        public override ConsequenceType[] DependsOn => [];
+
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
+
+        public override string[] Countermeasures => [
+            "The authorization servers must ensure that transmissions are protected using transport-layer mechanisms such as TLS",
+            "If end-to-end confidentiality cannot be guaranteed, reducing scope and expiry time for access tokens can be used to reduce the damage in case of leaks."
+            ];
+    }
+}

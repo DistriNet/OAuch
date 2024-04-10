@@ -1,0 +1,43 @@
+﻿using OAuch.OAuthThreatModel.Consequences;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
+    /// <summary>
+    /// If the client is public, it can be impersonated to get the access token
+    /// </summary>
+    public class T4_2_3A_AuthorizationByFraud : Threat {
+        public override string Description => "Malicious Client Obtains Existing Authorization by Fraud";
+
+        public override string Id => "6819_4_2_3";
+
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped];
+
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
+
+        public override string[] Countermeasures => [
+            "Authorization servers should not automatically process repeat authorizations to public clients unless the client is validated using a pre-registered redirect URI",
+            "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
+            ];
+    }
+    /// <summary>
+    /// If the client is confidential, it can be impersonated to get the authorization code
+    /// </summary>
+    public class T4_2_3B_AuthorizationByFraud : Threat {
+        public override string Description => "Malicious Client Obtains Existing Authorization by Fraud";
+
+        public override string Id => "6819_4_2_3";
+
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+
+        public override string[] Countermeasures => [
+            "Authorization servers should not automatically process repeat authorizations to public clients unless the client is validated using a pre-registered redirect URI",
+            "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
+            ];
+    }
+}
