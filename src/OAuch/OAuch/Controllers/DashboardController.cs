@@ -360,6 +360,22 @@ namespace OAuch.Controllers {
             FillMenu(model, site, PageType.Results);
             return View(model);
         }
+        public IActionResult DeleteResults(Guid id /* siteId */, Guid did /* ResultId to delete from the database */ , Guid? rid = null /* selected ResultId */) {
+            var site = GetSite(id);
+            if (site == null)
+                return NotFound();
+
+            var result = Database.SerializedTestRuns.FirstOrDefault(c => c.TestResultId == did);
+            if (result == null || result.SiteId != id) // could not find result, or the user tries to delete someone else's result
+                return NotFound();
+
+            // delete the result from the database
+            Database.SerializedTestRuns.Remove(result);
+            site.LatestResultId = Database.SerializedTestRuns.Where(c => c.SiteId == id && c.TestResultId != did).Select(c => c.TestResultId).FirstOrDefault();
+            Database.SaveChanges();
+
+            return RedirectToAction("Results", new { id = id, rid = rid });
+        }
 
         public IActionResult Log(Guid id /* result id */) {
             var serializedTestRun = Database.SerializedTestRuns.FirstOrDefault(tr => tr.TestResultId == id);
