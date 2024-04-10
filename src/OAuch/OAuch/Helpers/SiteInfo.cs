@@ -14,7 +14,7 @@ namespace OAuch.Helpers {
                     if (v == null)
                         v = new Version("1.0");
                     var bd = new DateTime(Builtin.CompileTime, DateTimeKind.Utc);
-                    _buildVersion = $"{ v.Major }.{ v.Minor }.{ bd.ToString("yyyy.MM.dd") }";
+                    _buildVersion = bd.ToString("yyyy.MM.dd"); // $"{ v.Major }.{ v.Minor }.{ bd.ToString("yyyy.MM.dd") }";
 #if DEBUG
                     _buildVersion += "d";
 #endif
