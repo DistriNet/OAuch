@@ -14,8 +14,6 @@ namespace OAuch.OAuthThreatModel.Enrichers {
         protected virtual bool? RelevancyResult { get; } = null;
 
         public override bool IsRelevant(IThreatModelContext context) {
-            if (base.IsRelevant(context) == false)
-                return false;
             return context.IsTestcaseImplemented(this.Id) == RelevancyResult;
         }
 

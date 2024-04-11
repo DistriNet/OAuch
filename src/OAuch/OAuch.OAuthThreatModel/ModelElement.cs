@@ -26,10 +26,11 @@ namespace OAuch.OAuthThreatModel {
         /// <param name="state">The list of consequence types that is already met.</param>
         /// <returns>true if the ModelElement is relevant, false if it can be discarded</returns>
         /// <remarks>This must be overridden in subclasses to perform additional relevancy checks.</remarks>
-        public virtual bool IsRelevant(IThreatModelContext context) {
+        public abstract bool IsRelevant(IThreatModelContext context);
+        public virtual bool ArePreconditionsMet(IThreatModelContext context) {
             if (this.DependsOn == null)
                 return true;
-            foreach(var ct in this.DependsOn) {
+            foreach (var ct in this.DependsOn) {
                 if (!context.CurrentState.Contains(ct))
                     return false;
             }
@@ -52,13 +53,13 @@ namespace OAuch.OAuthThreatModel {
 
     public interface IThreatModelContext {
         /// <summary>
-        /// Checks for a given threat id whether the threat is unmitigated or not
+        /// Checks for a given threat id whether the threat is not fully mitigated
         /// </summary>
         /// <param name="id">The threat id to check</param>
-        /// <returns>true if it is unmitigated, false if it is mitigated, null if no information is available</returns>        
-        bool? IsThreatUnmitigated(string id);
+        /// <returns>true if it is not fully mitigated, false if it is fully mitigated, null if no information is available</returns>        
+        bool? IsThreatNotMitigated(string id);
         /// <summary>
-        /// Checks for a given testcase id whether the threat is unmitigated or not
+        /// Checks for a given testcase id whether it is fully implemented
         /// </summary>
         /// <param name="id">The testcase id to check</param>
         /// <returns>true if it is fully implemented, false if it is partially or not implemented, null if no information is available</returns>        
@@ -66,6 +67,6 @@ namespace OAuch.OAuthThreatModel {
         /// <summary>
         /// The list of ConsequenceTypes that holds the current state of the threat model
         /// </summary>
-        IList<ConsequenceType> CurrentState { get; }
+        IEnumerable<ConsequenceType> CurrentState { get; }
     }
 }

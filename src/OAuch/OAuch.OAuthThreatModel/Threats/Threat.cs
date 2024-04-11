@@ -14,9 +14,7 @@ namespace OAuch.OAuthThreatModel.Threats {
         public abstract string[] Countermeasures { get; }
 
         public override bool IsRelevant(IThreatModelContext context) {
-            if (!base.IsRelevant(context))
-                return false;
-            if (context.IsThreatUnmitigated(this.Id) == false) // if the threat is unmitigated, it is relevant
+            if (context.IsThreatNotMitigated(this.Id) == true) // if the threat is not fully mitigated, it is relevant
                 return true;
             return false;
         }

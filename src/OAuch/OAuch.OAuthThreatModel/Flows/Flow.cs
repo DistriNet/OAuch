@@ -17,8 +17,6 @@ namespace OAuch.OAuthThreatModel.Flows {
         /// <returns>true if the ModelElement is relevant, false if it can be discarded</returns>
         /// <remarks>This must be overridden in subclasses to perform additional relevancy checks.</remarks>
         public override bool IsRelevant(IThreatModelContext context) {
-            if (!base.IsRelevant(context)) // are the preconditions met?
-                return false;
             return context.IsTestcaseImplemented(this.Id) == true;
         }
 

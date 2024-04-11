@@ -33,12 +33,26 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             ];
     }
 
-    public class BCP_4_11_2_OpenRedirection : Threat {
+    public class BCP_4_11_2_OpenRedirectionAC : Threat {
         public override string Description => "Authorization Server as Open Redirector";
 
         public override string Id => "BCP_4_11_2";
 
-        public override ConsequenceType[] DependsOn => [];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.Phishing];
+
+        public override string[] Countermeasures => [
+            "Require clients to register any full redirect URIs",
+            "Don't redirect to a redirect URI if the client identifier or redirect URI can't be verified"
+            ];
+    }
+    public class BCP_4_11_2_OpenRedirectionTiFC : Threat {
+        public override string Description => "Authorization Server as Open Redirector";
+
+        public override string Id => "BCP_4_11_2";
+
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.Phishing];
 

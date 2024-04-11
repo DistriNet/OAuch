@@ -359,7 +359,7 @@ namespace OAuch.Controllers {
             };
             FillMenu(model, site, PageType.Results);
 
-            var tmReport = model.Result.ThreatModelReport;
+            var tmr = model.Result.ThreatModelReport;
 
             return View(model);
         }
