@@ -28,8 +28,8 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
 
-        public override bool IsRelevant(IThreatModelContext context, IEnumerable<ConsequenceType> state) {
-            return base.IsRelevant(context, state);
+        public override bool IsRelevant(IThreatModelContext context) {
+            return base.IsRelevant(context);
         }
     }
 }
