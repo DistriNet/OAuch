@@ -1,4 +1,5 @@
 ﻿using OAuch.OAuthThreatModel.Consequences;
+using OAuch.OAuthThreatModel.Enrichers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,21 @@ namespace OAuch.OAuthThreatModel.Flows {
         /// <param name="state">The list of consequence types that is already met.</param>
         /// <returns>true if the ModelElement is relevant, false if it can be discarded</returns>
         /// <remarks>This must be overridden in subclasses to perform additional relevancy checks.</remarks>
-        public override bool IsRelevant(IThreatModelContext context, IEnumerable<ConsequenceType> state) {
-            if (!base.IsRelevant(context, state)) // are the preconditions met?
+        public override bool IsRelevant(IThreatModelContext context) {
+            if (!base.IsRelevant(context)) // are the preconditions met?
                 return false;
             return context.IsTestcaseImplemented(this.Id) == true;
         }
+
+        public static IList<Flow> All {
+            get {
+                if (_allFlows == null) {
+                    _allFlows = FindElements<Flow>();
+                }
+                return _allFlows;
+            }
+        }
+        private static IList<Flow>? _allFlows;
+
     }
 }

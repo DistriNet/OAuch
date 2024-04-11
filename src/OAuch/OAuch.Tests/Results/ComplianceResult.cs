@@ -56,6 +56,7 @@ namespace OAuch.Compliance.Results {
             this.UnmitigatedThreats = this.ThreatReports.Count(tr => tr.Outcome == TestOutcomes.SpecificationNotImplemented);
 
             this.ImprovementReport = new ImprovementReport(_allResults, this.ThreatReports);
+            this.ThreatModelReport = new ThreatModelReport(this.AllResults, this.ThreatReports);
         }
 
         //private IEnumerable<Threat> GetRelevantThreats(IList<TestResult> results) {
@@ -149,6 +150,7 @@ namespace OAuch.Compliance.Results {
         public IList<DocumentComplianceReport> DocumentCompliance { get; }
         public IList<ThreatReport> ThreatReports { get; }
         public ImprovementReport ImprovementReport { get; }
+        public ThreatModelReport ThreatModelReport { get; }
 
         public List<TestResult> AllResults { get; }
         public TestResult? this[string testId] {

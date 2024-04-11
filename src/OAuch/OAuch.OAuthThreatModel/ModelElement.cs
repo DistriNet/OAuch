@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OAuch.OAuthThreatModel {
     public abstract class ModelElement {
@@ -24,14 +26,27 @@ namespace OAuch.OAuthThreatModel {
         /// <param name="state">The list of consequence types that is already met.</param>
         /// <returns>true if the ModelElement is relevant, false if it can be discarded</returns>
         /// <remarks>This must be overridden in subclasses to perform additional relevancy checks.</remarks>
-        public virtual bool IsRelevant(IThreatModelContext context, IEnumerable<ConsequenceType> state) {
+        public virtual bool IsRelevant(IThreatModelContext context) {
             if (this.DependsOn == null)
                 return true;
             foreach(var ct in this.DependsOn) {
-                if (!state.Contains(ct))
+                if (!context.CurrentState.Contains(ct))
                     return false;
             }
             return true;
+        }
+
+        protected static IList<T> FindElements<T>() where T : ModelElement {
+            var testType = typeof(T);
+            var types = Assembly.GetExecutingAssembly().GetExportedTypes().Where(c => !c.IsAbstract && testType.IsAssignableFrom(c)).ToList();
+            var l = new List<T>();
+            foreach (var t in types) {
+                var i = Activator.CreateInstance(t) as T;
+                if (i != null) {
+                    l.Add(i);
+                }
+            }
+            return l;
         }
     }
 
@@ -48,5 +63,9 @@ namespace OAuch.OAuthThreatModel {
         /// <param name="id">The testcase id to check</param>
         /// <returns>true if it is fully implemented, false if it is partially or not implemented, null if no information is available</returns>        
         bool? IsTestcaseImplemented(string id);
+        /// <summary>
+        /// The list of ConsequenceTypes that holds the current state of the threat model
+        /// </summary>
+        IList<ConsequenceType> CurrentState { get; }
     }
 }

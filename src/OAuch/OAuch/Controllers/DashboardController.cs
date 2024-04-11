@@ -358,6 +358,9 @@ namespace OAuch.Controllers {
                 })
             };
             FillMenu(model, site, PageType.Results);
+
+            var tmReport = model.Result.ThreatModelReport;
+
             return View(model);
         }
         public IActionResult DeleteResults(Guid id /* siteId */, Guid did /* ResultId to delete from the database */ , Guid? rid = null /* selected ResultId */) {

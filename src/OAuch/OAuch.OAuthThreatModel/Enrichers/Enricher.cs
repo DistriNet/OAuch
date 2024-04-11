@@ -13,10 +13,20 @@ namespace OAuch.OAuthThreatModel.Enrichers {
         /// </summary>
         protected virtual bool? RelevancyResult { get; } = null;
 
-        public override bool IsRelevant(IThreatModelContext context, IEnumerable<ConsequenceType> state) {
-            if (base.IsRelevant(context, state) == false)
+        public override bool IsRelevant(IThreatModelContext context) {
+            if (base.IsRelevant(context) == false)
                 return false;
             return context.IsTestcaseImplemented(this.Id) == RelevancyResult;
         }
+
+        public static IList<Enricher> All { 
+            get {
+                if (_allEnrichers == null) {
+                    _allEnrichers = FindElements<Enricher>();
+                }
+                return _allEnrichers;
+            }
+        }
+        private static IList<Enricher>? _allEnrichers;
     }
 }
