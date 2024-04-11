@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Code in Browser History";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
 
         public override string[] Countermeasures => [
             "Authorization code replay prevention",
@@ -25,9 +25,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Access Token in Browser History";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"
@@ -38,9 +38,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Access Token in Browser History";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"

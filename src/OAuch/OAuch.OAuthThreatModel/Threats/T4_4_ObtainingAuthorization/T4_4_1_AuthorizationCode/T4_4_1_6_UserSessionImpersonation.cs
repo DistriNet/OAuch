@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "User Session Impersonation";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
         public override string[] Countermeasures => [
             "the redirect URI of the client should point to an HTTPS protected endpoint"
             ];

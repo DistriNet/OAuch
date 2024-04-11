@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,15 @@ namespace OAuch.OAuthThreatModel.Consequences {
             UsesReverseProxy = ConsequenceType.CreateConsequence("HTTP Application uses a Reverse Proxy", "If the reverse proxy would pass through any header sent from the outside, an attacker could try to directly send the faked header values through the proxy to the application server in order to circumvent security controls that way.");
             ClientCanChooseId = ConsequenceType.CreateConsequence("Clients can influence their Client Id", "If a client is able to choose its own client_id during registration with the authorization server, a malicious client may set it to a value identifying an end-user (e.g., a sub value if OpenID Connect is used).");
             UsesPostMessage = ConsequenceType.CreateConsequence("The authorization response is sent with in -browser communication techniques like postMessage", "If the authorization response is sent with in-browser communication techniques like postMessage instead of HTTP redirects, messages may inadvertently be sent to malicious origins or injected from malicious origins.");
+        }
+
+        public static IEnumerable<ConsequenceType> All {
+            get {
+                var type = typeof(ConsequenceTypes);
+                var props = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
+                var ct = typeof(ConsequenceType);
+                return props.Where(p => p.PropertyType == ct).Select(p => (ConsequenceType)p.GetValue(null)!);
+            }
         }
 
         // Threat consequences

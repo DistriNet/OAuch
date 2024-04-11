@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
 
         public override string Description => "Accidental Exposure of Passwords at Client Site";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PasswordLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PasswordLeaked];
         public override string[] Countermeasures => [
             "Use other flows that do not rely on the client's cooperation for secure resource owner credential handling",
             "Use digest authentication instead of plaintext credential processing"

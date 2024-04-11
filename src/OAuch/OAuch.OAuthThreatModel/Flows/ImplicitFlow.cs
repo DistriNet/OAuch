@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Implicit Flow";
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasTokenInFrontChannel];
     }
 }

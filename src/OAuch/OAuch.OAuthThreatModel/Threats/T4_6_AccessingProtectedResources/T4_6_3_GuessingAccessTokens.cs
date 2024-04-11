@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
 
         public override string Description => "Guessing Access Tokens";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Handle tokens should have a reasonable level of entropy",

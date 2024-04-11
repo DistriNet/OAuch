@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
 
         public override string Description => "Leak of Confidential Data in HTTP Proxies";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Clients and resource servers not using an OAuth HTTP authentication scheme should take care to use Cache-Control headers to minimize the risk that authenticated content is not protected",

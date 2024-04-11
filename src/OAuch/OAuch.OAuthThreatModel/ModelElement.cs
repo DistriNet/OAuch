@@ -14,11 +14,11 @@ namespace OAuch.OAuthThreatModel {
         /// <summary>
         /// A list of all the ConsequenceTypes this ModelElement depends on. If one of these is missing, the ModelElement is not relevant.
         /// </summary>
-        public abstract IReadOnlyList<ConsequenceType> DependsOn { get; }
+        public abstract ConsequenceType[] DependsOn { get; }
         /// <summary>
         /// A list of all the consequences that this ModelElement has if it is relevant.
         /// </summary>
-        public abstract IReadOnlyList<ConsequenceType> Consequences { get; }
+        public abstract ConsequenceType[] Consequences { get; }
         /// <summary>
         /// Checks if the ModelElement is relevant given the current context and state. This default implementation only checks whether the state contains all the DependsOn entries.
         /// </summary>
@@ -37,7 +37,7 @@ namespace OAuch.OAuthThreatModel {
             return true;
         }
 
-        protected static IList<T> FindElements<T>() where T : ModelElement {
+        protected static List<T> FindElements<T>() where T : ModelElement {
             var testType = typeof(T);
             var types = Assembly.GetExecutingAssembly().GetExportedTypes().Where(c => !c.IsAbstract && testType.IsAssignableFrom(c)).ToList();
             var l = new List<T>();

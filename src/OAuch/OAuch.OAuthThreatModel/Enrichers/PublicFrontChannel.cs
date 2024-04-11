@@ -11,8 +11,8 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "Flows with the access token in the front channel are public";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
     }
 }

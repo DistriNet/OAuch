@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "End-User Credentials Phished Using Compromised or Embedded Browser";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PasswordLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PasswordLeaked];
 
         public override string[] Countermeasures => [
             "Client applications should avoid directly asking users for their credentials",

@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Client as Open Redirector";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.Phishing];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.Phishing];
 
         public override string[] Countermeasures => [
             "Require clients to register full redirect URI"
@@ -24,9 +24,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Client as Open Redirector";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked, ConsequenceTypes.Phishing];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked, ConsequenceTypes.Phishing];
 
         public override string[] Countermeasures => [
             "Require clients to register full redirect URI"

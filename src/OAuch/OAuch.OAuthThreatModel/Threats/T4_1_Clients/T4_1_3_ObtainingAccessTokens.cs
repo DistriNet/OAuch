@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtaining Access Tokens";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Keep access tokens in transient memory and limit grants",

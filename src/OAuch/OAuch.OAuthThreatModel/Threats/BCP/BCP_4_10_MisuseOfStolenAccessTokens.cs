@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Misuse of Stolen Access Tokens";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.AccessTokenLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Sender-Constrained Access Tokens",

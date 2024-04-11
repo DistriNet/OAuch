@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Refresh Token Protection";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.RefreshTokenLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "For confidential clients, refresh tokens can only be used by the client for which they were issued",

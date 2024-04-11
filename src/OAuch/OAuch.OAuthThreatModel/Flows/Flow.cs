@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OAuch.OAuthThreatModel.Flows {
     public abstract class Flow : ModelElement {
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
         /// <summary>
         /// Checks if the ModelElement is relevant given the current context and state. This default implementation only checks whether the state contains all the DependsOn entries.
         /// </summary>
@@ -20,7 +20,7 @@ namespace OAuch.OAuthThreatModel.Flows {
             return context.IsTestcaseImplemented(this.Id) == true;
         }
 
-        public static IList<Flow> All {
+        public static List<Flow> All {
             get {
                 if (_allFlows == null) {
                     _allFlows = FindElements<Flow>();
@@ -28,7 +28,7 @@ namespace OAuch.OAuthThreatModel.Flows {
                 return _allFlows;
             }
         }
-        private static IList<Flow>? _allFlows;
+        private static List<Flow>? _allFlows;
 
     }
 }

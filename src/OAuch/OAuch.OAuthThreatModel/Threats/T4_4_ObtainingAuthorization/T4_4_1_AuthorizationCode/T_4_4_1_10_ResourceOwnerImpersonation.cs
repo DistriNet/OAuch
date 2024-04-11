@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "Resource Owner Impersonation";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
         public override string[] Countermeasures => [
             "Combine password authentication and user consent in a single form",
             "Make use of CAPTCHAs",

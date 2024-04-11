@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Open Redirectors on Client";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
 
         public override string[] Countermeasures => [
             "Require clients to register full redirect URI"
@@ -24,9 +24,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Open Redirectors on Client";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Require clients to register full redirect URI"

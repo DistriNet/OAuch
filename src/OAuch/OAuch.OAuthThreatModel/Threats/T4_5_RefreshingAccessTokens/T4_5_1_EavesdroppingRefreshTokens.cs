@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
 
         public override string Description => "Eavesdropping Refresh Tokens from Authorization Server";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "The authorization servers must ensure that these transmissions are protected using transport-layer mechanisms such as TLS",

@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
 
         public override string Description => "Obtaining Refresh Token from Authorization Server Database";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Enforce credential storage protection best practices",

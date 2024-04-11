@@ -10,9 +10,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP4_1_RedirectUriValidation {
         public override string Id => "BCP_4_1_1";
         public override string Description => "Redirect URI Validation Attacks on Authorization Code Grant";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
 
         public override string[] Countermeasures => [
             "The authorization server MUST ensure that the two URIs are equal",
@@ -24,9 +24,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP4_1_RedirectUriValidation {
         public override string Id => "BCP_4_1_2";
         public override string Description => "Redirect URI Validation Attacks on Implicit Grant";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "The authorization server MUST ensure that the two URIs are equal",

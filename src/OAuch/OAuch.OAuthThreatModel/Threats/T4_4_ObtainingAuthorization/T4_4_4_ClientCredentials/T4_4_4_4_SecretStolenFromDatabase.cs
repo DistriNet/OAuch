@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ClientCredential
 
         public override string Description => "Obtaining Client Secrets from Authorization Server Database";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.MachineToMachine];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.MachineToMachine];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
         public override string[] Countermeasures => [
             "Enforce credential storage protection best practices"

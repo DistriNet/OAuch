@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ImplicitGrant {
 
         public override string Description => "Malicious Client Obtains Authorization";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "The authorization server should authenticate the client, if possible",

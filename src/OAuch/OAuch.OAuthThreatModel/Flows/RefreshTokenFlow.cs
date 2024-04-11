@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Refresh Token Flow";
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasRefreshToken];
     }
 }

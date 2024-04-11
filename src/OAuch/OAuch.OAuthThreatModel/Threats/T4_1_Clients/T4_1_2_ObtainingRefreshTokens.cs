@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtain Refresh Token from Web Application";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Standard web server protection measures",
@@ -25,9 +25,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtain Refresh Token from Native Clients";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Store secrets in secure storage",
@@ -39,9 +39,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Steal Device";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Utilize device lock to prevent unauthorized device access",
@@ -53,9 +53,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Clone Device";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Utilize device lock to prevent unauthorized device access",

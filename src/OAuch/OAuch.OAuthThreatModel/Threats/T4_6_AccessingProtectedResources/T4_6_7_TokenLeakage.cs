@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
 
         public override string Description => "Token Leakage via Log Files and HTTP Referrers";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Use Authorization headers or POST parameters instead of URI request parameters",

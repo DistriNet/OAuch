@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Server Redirecting to Phishing Site";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel]; // Must use the authorization endpoint
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel]; // Must use the authorization endpoint
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.Phishing];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.Phishing];
 
         public override string[] Countermeasures => [
             "The authorization server needs to decide whether it can trust the redirect URI or not. It could take into account URI analytics done internally or through some external service to evaluate the credibility and trustworthiness content behind the URI, and the source of the redirect URI and other client data.",
@@ -24,9 +24,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Server Redirecting to Phishing Site";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode]; // Must use the authorization endpoint
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode]; // Must use the authorization endpoint
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.Phishing];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.Phishing];
 
         public override string[] Countermeasures => [
             "The authorization server needs to decide whether it can trust the redirect URI or not. It could take into account URI analytics done internally or through some external service to evaluate the credibility and trustworthiness content behind the URI, and the source of the redirect URI and other client data.",

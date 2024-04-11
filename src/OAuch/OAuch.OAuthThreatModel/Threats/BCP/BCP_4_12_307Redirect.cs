@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "307 Redirect";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.Uses307Redirect];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.Uses307Redirect];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PasswordLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PasswordLeaked];
 
         public override string[] Countermeasures => [
             "Authorization servers that redirect a request that potentially contains the user's credentials therefore MUST NOT use the HTTP 307 status code for redirection",

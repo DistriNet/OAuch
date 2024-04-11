@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
 
         public override string Description => "Replay of Authorized Resource Server Requests";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "The resource server should utilize transport security measures (e.g., TLS) in order to prevent such attacks",

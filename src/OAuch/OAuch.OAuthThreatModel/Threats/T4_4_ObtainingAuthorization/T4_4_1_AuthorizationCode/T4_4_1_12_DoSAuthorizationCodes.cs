@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "DoS Using Manufactured Authorization \"codes\"";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.DenialOfService];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.DenialOfService];
         public override string[] Countermeasures => [
             "CSRF defense and the \"state\" parameter created with secure random codes should be deployed on the client side",
             "The client should suspend the access by a user account if the number of invalid authorization \"codes\" submitted by this user exceeds a certain threshold",

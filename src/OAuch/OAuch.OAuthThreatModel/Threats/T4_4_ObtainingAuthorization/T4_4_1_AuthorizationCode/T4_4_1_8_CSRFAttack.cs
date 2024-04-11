@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "CSRF Attack against redirect-uri";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
         public override string[] Countermeasures => [
             "The \"state\" parameter should be used to link the authorization request with the redirect URI used to deliver the access token",
             "Client developers and end users can be educated to not follow untrusted URLs.",

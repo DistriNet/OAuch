@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "If the authorization code flow doesn't use a client secret, it is a public client";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
         protected override bool? RelevancyResult => false;
     }

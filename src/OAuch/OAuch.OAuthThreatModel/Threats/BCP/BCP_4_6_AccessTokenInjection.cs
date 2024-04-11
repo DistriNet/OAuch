@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Access Token Injection";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel, ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel, ConsequenceTypes.AccessTokenLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
         public override string[] Countermeasures => [
             "There is no way to detect such an injection attack in pure-OAuth flows, since the token is issued without any binding to the transaction or the particular user agent",
             ];

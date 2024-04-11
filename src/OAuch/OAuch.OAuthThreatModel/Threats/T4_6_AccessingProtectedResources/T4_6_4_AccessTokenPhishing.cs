@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
 
         public override string Description => "Access Token Phishing by Counterfeit Resource Server";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Clients should not make authenticated requests with an access token to unfamiliar resource servers, regardless of the presence of a secure channel",

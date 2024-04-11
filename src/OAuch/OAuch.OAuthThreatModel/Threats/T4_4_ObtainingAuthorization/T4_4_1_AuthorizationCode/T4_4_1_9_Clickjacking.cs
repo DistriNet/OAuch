@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "Clickjacking Attack against Authorization";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
         public override string[] Countermeasures => [
             "Avoidance of iFrames during authorization can be enforced on the server side by using the X-FRAME-OPTIONS header",
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
@@ -24,9 +24,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "Clickjacking Attack against Authorization";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
         public override string[] Countermeasures => [
             "Avoidance of iFrames during authorization can be enforced on the server side by using the X-FRAME-OPTIONS header",
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"

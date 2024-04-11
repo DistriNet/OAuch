@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ClientCredential
 
         public override string Description => "Accidental Exposure of Secret at Client Site";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.MachineToMachine];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.MachineToMachine];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
         public override string[] Countermeasures => [
             "Use digest authentication instead of plaintext credential processing"
             ];

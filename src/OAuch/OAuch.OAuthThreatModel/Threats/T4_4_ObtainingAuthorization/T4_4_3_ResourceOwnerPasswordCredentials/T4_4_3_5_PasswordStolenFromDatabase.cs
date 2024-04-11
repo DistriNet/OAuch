@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
 
         public override string Description => "Obtaining User Passwords from Authorization Server Database";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PasswordLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PasswordLeaked];
 
         public override string[] Countermeasures => [
             "Enforce credential storage protection best practices"

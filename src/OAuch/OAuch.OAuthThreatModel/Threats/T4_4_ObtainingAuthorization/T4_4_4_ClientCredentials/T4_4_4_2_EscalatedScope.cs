@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ClientCredential
 
         public override string Description => "Client Obtains Additional Scopes";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.MachineToMachine];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.MachineToMachine];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "The authorization server may generally restrict the scope of access tokens issued by this flow",

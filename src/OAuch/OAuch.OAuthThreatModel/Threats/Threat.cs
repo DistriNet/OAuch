@@ -19,7 +19,7 @@ namespace OAuch.OAuthThreatModel.Threats {
             return false;
         }
 
-        public static IList<Threat> All {
+        public static List<Threat> All {
             get {
                 if (_allThreats == null) {
                     _allThreats = FindElements<Threat>();
@@ -27,6 +27,6 @@ namespace OAuch.OAuthThreatModel.Threats {
                 return _allThreats;
             }
         }
-        private static IList<Threat>? _allThreats;
+        private static List<Threat>? _allThreats;
     }
 }

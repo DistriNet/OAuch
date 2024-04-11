@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "Authorization 'code' Phishing";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked];
         public override string[] Countermeasures => [
             "The redirect URI of the client should point to an HTTPS-protected endpoint",
             "The authorization server should require that the client be authenticated, i.e., confidential client"

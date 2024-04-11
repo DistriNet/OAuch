@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Access Token Leakage at the Resource Server";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientUsesMultipleResourceServers];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientUsesMultipleResourceServers];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Sender-constrained access tokens SHOULD be used to prevent the attacker from replaying the access tokens on other resource servers",

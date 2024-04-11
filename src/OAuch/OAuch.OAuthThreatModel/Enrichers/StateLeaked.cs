@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "If the state is leaked, the attacker can sidestep session authentication";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.StateLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.StateLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
         protected override bool? RelevancyResult => false;
     }
 }

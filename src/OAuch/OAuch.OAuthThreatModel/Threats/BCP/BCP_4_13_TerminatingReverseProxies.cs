@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "TLS Terminating Reverse Proxies";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.UsesReverseProxy];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.UsesReverseProxy];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "A reverse proxy MUST therefore sanitize any inbound requests to ensure the authenticity and integrity of all header values relevant for the security of the application servers."

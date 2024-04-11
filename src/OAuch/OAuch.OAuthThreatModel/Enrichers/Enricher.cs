@@ -17,7 +17,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
             return context.IsTestcaseImplemented(this.Id) == RelevancyResult;
         }
 
-        public static IList<Enricher> All { 
+        public static List<Enricher> All { 
             get {
                 if (_allEnrichers == null) {
                     _allEnrichers = FindElements<Enricher>();
@@ -25,6 +25,6 @@ namespace OAuch.OAuthThreatModel.Enrichers {
                 return _allEnrichers;
             }
         }
-        private static IList<Enricher>? _allEnrichers;
+        private static List<Enricher>? _allEnrichers;
     }
 }

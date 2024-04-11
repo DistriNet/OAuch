@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "PKCE Downgrade Attack";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
 
         public override string[] Countermeasures => [
             "Authorization servers MUST mitigate this attack by implementing PKCE correctly",

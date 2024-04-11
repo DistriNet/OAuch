@@ -12,9 +12,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "Authorization 'code' Leakage through Counterfeit Client";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.AuthorizationCodeLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
         public override string[] Countermeasures => [
             "The authorization server must associate the authorization \"code\" with the redirect URI",
             "The authorization server may also enforce the usage and validation of pre-registered redirect URIs",

@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Mix-Up Attacks";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientUsesMultipleAuthServers];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientUsesMultipleAuthServers];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Mix-Up Defense via Issuer Identification",

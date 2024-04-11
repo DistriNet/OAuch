@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
 
         public override string Description => "DoS Attacks That Exhaust Resources";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation, ConsequenceTypes.DenialOfService];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation, ConsequenceTypes.DenialOfService];
 
         public override string[] Countermeasures => [
             "The authorization server should consider limiting the number of access tokens granted per user",

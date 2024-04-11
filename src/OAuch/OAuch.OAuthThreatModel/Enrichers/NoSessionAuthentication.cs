@@ -11,8 +11,8 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "If the access token is sent in the front channel, the client must implement measures to ensure the access token is linked to the current session (e.g., through 'state' or 'nonce'). However, we assume the client does not implement these things correctly in OAuch.";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
     }
 }

@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Attacks on In-Browser Communication Flows";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.UsesPostMessage, ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.UsesPostMessage, ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AuthorizationCodeLeaked, ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Authorization servers MUST send postMessages to trusted client receiver origins",
@@ -27,9 +27,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Attacks on In-Browser Communication Flows";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.UsesPostMessage, ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.UsesPostMessage, ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "Authorization servers MUST send postMessages to trusted client receiver origins",

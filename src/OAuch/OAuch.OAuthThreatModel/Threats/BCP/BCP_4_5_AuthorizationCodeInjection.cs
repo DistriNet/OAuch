@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Code Injection";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped, ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped, ConsequenceTypes.AuthorizationCodeLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
         public override string[] Countermeasures => [
             "The PKCE mechanism specified in RFC7636 can be used as a countermeasure.",
@@ -25,9 +25,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Code Injection";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.AuthorizationCodeLeaked];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation]; // no access token leak, because it's still the benign client that processes the access token
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation]; // no access token leak, because it's still the benign client that processes the access token
 
         public override string[] Countermeasures => [
             "The PKCE mechanism specified in RFC7636 can be used as a countermeasure.",

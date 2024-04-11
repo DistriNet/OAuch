@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtaining Client Secrets From Source Code or Binary";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
         public override string[] Countermeasures => [
             "Don't issue secrets to public clients or clients with inappropriate security policy",
@@ -27,9 +27,9 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtain a Deployment-Specific Secret";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [];
+        public override ConsequenceType[] DependsOn => [];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
         public override string[] Countermeasures => [
             "Web server: Apply standard web server protection measures",

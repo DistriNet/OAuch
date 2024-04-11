@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
 
         public override string Description => "Obtaining Refresh Token by Online Guessing";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasRefreshToken];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasRefreshToken];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.RefreshTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.RefreshTokenLeaked];
 
         public override string[] Countermeasures => [
             "Bind token to client id, because the attacker would guess the matching client id, too",

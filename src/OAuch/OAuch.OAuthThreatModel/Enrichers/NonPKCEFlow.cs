@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "The authorization code flow does not require PKCE";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.SessionAuthenticationSidestepped];
 
         protected override bool? RelevancyResult => false;
     }

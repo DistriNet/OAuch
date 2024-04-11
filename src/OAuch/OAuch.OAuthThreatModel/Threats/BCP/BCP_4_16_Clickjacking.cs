@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Clickjacking";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "Authorization servers SHOULD use Content Security Policy (CSP) level 2 [W3C.CSP-2] or greater",
@@ -26,9 +26,9 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Clickjacking";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "Authorization servers SHOULD use Content Security Policy (CSP) level 2 [W3C.CSP-2] or greater",

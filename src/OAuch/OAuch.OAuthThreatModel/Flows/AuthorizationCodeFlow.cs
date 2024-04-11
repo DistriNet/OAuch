@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Authorization Code Flow";
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasAuthorizationCode];
     }
 }

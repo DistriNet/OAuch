@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.T4_4_ObtainingAuthorization.T4_4_2_Impl
 
         public override string Description => "Token Substitution (OAuth Login)";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "Clients should use an appropriate protocol, such as OpenID or SAML to implement user login"

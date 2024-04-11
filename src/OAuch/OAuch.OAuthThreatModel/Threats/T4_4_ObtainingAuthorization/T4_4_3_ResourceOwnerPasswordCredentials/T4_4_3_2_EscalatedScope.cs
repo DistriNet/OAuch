@@ -11,9 +11,9 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
 
         public override string Description => "Client Obtains Scopes without End-User Authorization";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientHoldsUserPassword];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.PrivilegeEscalation];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.PrivilegeEscalation];
 
         public override string[] Countermeasures => [
             "Use other flows that do not rely on the client's cooperation for resource owner interaction",

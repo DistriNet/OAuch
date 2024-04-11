@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Password Flow";
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.ClientHoldsUserPassword];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientHoldsUserPassword];
     }
 }

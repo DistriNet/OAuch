@@ -11,8 +11,8 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "When using the client credentials grant, if the client authentication can be sidestepped somehow, the attacker gains full access to the resources";
 
-        public override IReadOnlyList<ConsequenceType> DependsOn => [ConsequenceTypes.MachineToMachine, ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.MachineToMachine, ConsequenceTypes.ClientAuthenticationSidestepped];
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
     }
 }

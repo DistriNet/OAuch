@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Client Credentials Flow";
 
-        public override IReadOnlyList<ConsequenceType> Consequences => [ConsequenceTypes.MachineToMachine];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.MachineToMachine];
     }
 }
