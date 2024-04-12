@@ -27,15 +27,6 @@ namespace OAuch.OAuthThreatModel {
         /// <returns>true if the ModelElement is relevant, false if it can be discarded</returns>
         /// <remarks>This must be overridden in subclasses to perform additional relevancy checks.</remarks>
         public abstract bool IsRelevant(IThreatModelContext context);
-        public virtual bool ArePreconditionsMet(IThreatModelContext context) {
-            if (this.DependsOn == null)
-                return true;
-            foreach (var ct in this.DependsOn) {
-                if (!context.CurrentState.Contains(ct))
-                    return false;
-            }
-            return true;
-        }
 
         protected static List<T> FindElements<T>() where T : ModelElement {
             var testType = typeof(T);
@@ -64,9 +55,5 @@ namespace OAuch.OAuthThreatModel {
         /// <param name="id">The testcase id to check</param>
         /// <returns>true if it is fully implemented, false if it is partially or not implemented, null if no information is available</returns>        
         bool? IsTestcaseImplemented(string id);
-        /// <summary>
-        /// The list of ConsequenceTypes that holds the current state of the threat model
-        /// </summary>
-        IEnumerable<ConsequenceType> CurrentState { get; }
     }
 }

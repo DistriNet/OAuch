@@ -215,6 +215,9 @@
                                 <a class="nav-link" id="custom-tabs-three-threats-tab" data-toggle="pill" href="#custom-tabs-three-threats" role="tab" aria-controls="custom-tabs-three-threats" aria-selected="false">Threats</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-three-attacks-tab" onclick="showAttacks();" data-toggle="pill" href="#custom-tabs-three-attacks" role="tab" aria-controls="custom-tabs-three-attacks" aria-selected="false">Attacks</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" id="custom-tabs-three-log-tab" onclick="showLog();" data-toggle="pill" href="#custom-tabs-three-log" role="tab" aria-controls="custom-tabs-three-log" aria-selected="false">Full log</a>
                             </li>
                             <li class="nav-item">
@@ -442,6 +445,9 @@
                                     </div>
                                 }
                             </div>
+                            <div class="tab-pane fade" data-target="@Url.Action("Attacks", "Dashboard", new { id = Model.ResultId })" id="custom-tabs-three-attacks" role="tabpanel" aria-labelledby="custom-tabs-three-attacks-tab">
+                                <p><em>Loading attack scenarios... please wait</em></p>
+                            </div>
                             <div class="tab-pane fade" data-target="@Url.Action("Log", "Dashboard", new { id = Model.ResultId })" id="custom-tabs-three-log" role="tabpanel" aria-labelledby="custom-tabs-three-log-tab">
                                 <p><em>Loading log file... please wait</em></p>
                             </div>
@@ -567,13 +573,20 @@
     <script src="/plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
     <script>
         loadedLog = false;
+        loadedAttacks = false;
         function showLog() {
             if (!loadedLog) {
                 tab = $("#custom-tabs-three-log");
                 tab.load(tab.attr('data-target'));
                 loadedLog = true;
             }
-
+        }
+        function showAttacks() {
+            if (!loadedAttacks) {
+                tab = $("#custom-tabs-three-attacks");
+                tab.load(tab.attr('data-target'));
+                loadedAttacks = true;
+            }
         }
     </script>
     <script>

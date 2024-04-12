@@ -357,10 +357,8 @@ namespace OAuch.Controllers {
                     When = tr.StartedAt
                 })
             };
+
             FillMenu(model, site, PageType.Results);
-
-            var tmr = model.Result.ThreatModelReport;
-
             return View(model);
         }
         public IActionResult DeleteResults(Guid id /* siteId */, Guid did /* ResultId to delete from the database */ , Guid? rid = null /* selected ResultId */) {
@@ -393,7 +391,21 @@ namespace OAuch.Controllers {
             var model = new LogViewModel(formatter.ToHtml(id, testResults));
             return View(model);
         }
+        public IActionResult Attacks(Guid id /* result id */) {
+            var serializedTestRun = Database.SerializedTestRuns.FirstOrDefault(tr => tr.TestResultId == id);
+            if (serializedTestRun == null)
+                return NotFound();
+            var site = GetSite(serializedTestRun.SiteId);
+            if (site == null)
+                return NotFound();
 
+            var testResults = OAuchJsonConvert.Deserialize<List<TestResult>>(serializedTestRun.TestResultsJson);
+            var results = GetSiteResults(serializedTestRun);
+            var model = new AttacksViewModel();
+            model.AttackReport = results.AttackReport;
+            model.ThreatReports = results.ThreatReports.ToDictionary(c => c.Threat.Id);
+            return View(model);
+        }
 
         [NonAction]
         private Site? GetSite(Guid id) {

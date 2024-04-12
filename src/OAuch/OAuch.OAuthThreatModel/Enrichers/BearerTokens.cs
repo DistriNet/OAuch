@@ -9,7 +9,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
     public class BearerTokens : Enricher {
         public override string Id => "OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest";
 
-        public override string Description => "If we have an access token it might be a (usable) bearer token";
+        public override string Description => "If we have an access token it is a (usable) bearer token";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.AccessTokenLeaked];
 
@@ -22,7 +22,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Id => "PublicClientBearerTokens";
 
-        public override string Description => "A public client uses bearer tokens.";
+        public override string Description => "A public client always uses bearer tokens.";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped, ConsequenceTypes.AccessTokenLeaked];
 

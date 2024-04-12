@@ -157,15 +157,15 @@ namespace OAuch.Compliance.Results {
         }
         private ImprovementReport? _improvementReport;
 
-        public ThreatModelReport ThreatModelReport {
+        public AttackReport AttackReport {
             get {
-                if (_threatModelReport == null) {
-                    _threatModelReport = new ThreatModelReport(this.AllResults, this.ThreatReports);
+                if (_attackReport == null) {
+                    _attackReport = new AttackReport(this.AllResults, this.ThreatReports, null);
                 }
-                return _threatModelReport;
+                return _attackReport;
             }
         }
-        private ThreatModelReport? _threatModelReport;
+        private AttackReport? _attackReport;
 
         public List<TestResult> AllResults { get; }
         public TestResult? this[string testId] {
