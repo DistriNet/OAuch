@@ -157,13 +157,8 @@ namespace OAuch.Compliance.Results {
         }
         private ImprovementReport? _improvementReport;
 
-        public AttackReport AttackReport {
-            get {
-                if (_attackReport == null) {
-                    _attackReport = new AttackReport(this.AllResults, this.ThreatReports, null);
-                }
-                return _attackReport;
-            }
+        public AttackReport GetAttackReport(IEnumerable<string>? selectedElements) {
+            return new AttackReport(this.AllResults, this.ThreatReports, selectedElements);
         }
         private AttackReport? _attackReport;
 

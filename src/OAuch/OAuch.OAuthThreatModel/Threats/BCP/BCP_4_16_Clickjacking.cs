@@ -9,7 +9,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
     public class BCP_4_16_ClickjackingAC : Threat {
         public override string Id => "BCP_4_16";
 
-        public override string Description => "Clickjacking";
+        public override string Description => "Clickjacking (authorization code flow)";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
@@ -24,7 +24,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
     public class BCP_4_16_ClickjackingTiFC : Threat {
         public override string Id => "BCP_4_16";
 
-        public override string Description => "Clickjacking";
+        public override string Description => "Clickjacking (implicit flow)";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 

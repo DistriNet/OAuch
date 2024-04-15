@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Newtonsoft.Json;
 using OAuch.Compliance;
 using OAuch.Compliance.Results;
 using OAuch.Compliance.Tests;
+using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Database;
 using OAuch.Database.Entities;
 using OAuch.Helpers;
 using OAuch.Hubs;
+using OAuch.OAuthThreatModel;
+using OAuch.OAuthThreatModel.Flows;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Logging;
@@ -39,18 +43,6 @@ namespace OAuch.Controllers {
         private IHubContext<TestRunHub> HubContext { get; }
         private OAuchDbContext Database { get; }
 
-        //public IActionResult Paper() {
-        //    var model = new DashboardViewModel();
-        //    FillMenu(model);
-
-        //    model.SiteResults = GetSiteResults();
-
-        //    var cftests = model.SiteResults.Select(c => c.Result.AllResults.FirstOrDefault(t => t.TestId == "OAuch.Compliance.Tests.Features.CodeFlowSupportedTest")).Where(r => r != null);
-        //    var jwts = cftests.Select(c => c.TestLog.Children.OfType<LoggedJwt>().FirstOrDefault()).Where(t => t != null).Where(j => j.Content.Contains("\"HS"));
-
-
-        //    return View(model);
-        //}
         public IActionResult Index() {
             var model = new DashboardViewModel();
             FillMenu(model);
@@ -391,21 +383,58 @@ namespace OAuch.Controllers {
             var model = new LogViewModel(formatter.ToHtml(id, testResults));
             return View(model);
         }
-        public IActionResult Attacks(Guid id /* result id */) {
-            var serializedTestRun = Database.SerializedTestRuns.FirstOrDefault(tr => tr.TestResultId == id);
-            if (serializedTestRun == null)
+        public IActionResult Attacks(AttacksViewModel filter) {
+            var model = GetAttacks(filter);
+            if (model == null)
                 return NotFound();
+            return PartialView(model);
+        }
+        public IActionResult AttackList(AttacksViewModel filter) {
+            var model = GetAttacks(filter);
+            if (model == null)
+                return NotFound();
+            return PartialView(model);
+        }
+        [NonAction]
+        private AttacksViewModel? GetAttacks(AttacksViewModel filter) {
+            var serializedTestRun = Database.SerializedTestRuns.FirstOrDefault(tr => tr.TestResultId == filter.Id);
+            if (serializedTestRun == null)
+                return null;
             var site = GetSite(serializedTestRun.SiteId);
             if (site == null)
-                return NotFound();
+                return null;
 
             var testResults = OAuchJsonConvert.Deserialize<List<TestResult>>(serializedTestRun.TestResultsJson);
             var results = GetSiteResults(serializedTestRun);
             var model = new AttacksViewModel();
-            model.AttackReport = results.AttackReport;
+            model.Id = filter.Id;
+
+            model.AttackReport = results.GetAttackReport(filter.SelectedElements);
             model.ThreatReports = results.ThreatReports.ToDictionary(c => c.Threat.Id);
-            return View(model);
+
+            model.AllFlows = Flow.All.Where(c => c.IsRelevant(model.AttackReport.Context)).ToList();
+            var allThreats = OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(model.AttackReport.Context)).ToList();
+            model.AllUnmitigatedThreats = allThreats.Where(c => {
+                if (!model.ThreatReports.TryGetValue(c.Id, out var tr))
+                    return false;
+                return tr.Outcome == TestOutcomes.SpecificationNotImplemented && tr.Threat.AliasOf == null;
+            }).ToList();
+            model.AllPartialThreats = allThreats.Where(c => {
+                if (!model.ThreatReports.TryGetValue(c.Id, out var tr))
+                    return false;
+                return tr.Outcome == TestOutcomes.SpecificationPartiallyImplemented && tr.Threat.AliasOf == null;
+            }).ToList();
+
+            var allSelected = new List<string>();
+            allSelected.AddRange(model.AllFlows.Select(c => c.Id));
+            allSelected.AddRange(model.AllUnmitigatedThreats.Select(c => c.Id));
+            //allSelected.AddRange(model.AllPartialThreats.Select(c => c.Id)); // By default we do not consider partial threats
+            model.SelectedElements = filter.SelectedElements ?? allSelected;
+
+
+            return model;
         }
+        private static int InternalCounter = 0;
 
         [NonAction]
         private Site? GetSite(Guid id) {

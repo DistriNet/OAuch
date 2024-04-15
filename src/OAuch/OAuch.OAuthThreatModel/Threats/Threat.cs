@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using OAuch.OAuthThreatModel.Enrichers;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace OAuch.OAuthThreatModel.Threats {
         /// The description of the countermeasures for the threat
         /// </summary>
         public abstract string[] Countermeasures { get; }
+
+        public virtual AttackerType Attacker { get; }
 
         public override bool IsRelevant(IThreatModelContext context) {
             if (context.IsThreatNotMitigated(this.Id) == true) // if the threat is not fully mitigated, it is relevant

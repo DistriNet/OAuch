@@ -5,62 +5,29 @@
 @{
     Layout = null;
 }
-@if (Model.AttackReport.AttackChains.Count == Model.AttackReport.MaxResults) {
-    <p>Only the first @Model.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and refresh the calculation.</p>
+
+<p><strong>Potential Attack Scenarios</strong></p>
+<p>The attack scenarios listed below are based on the analysis of the threats that are unmitigated or partially mitigated. The attacks described
+    here may or may not be exploitable, depending on implementation details of the OAuth service and the capabilities of the attacker.</p>
+@using (Html.BeginForm("AttackList", "Dashboard", new { id = Model.Id }, FormMethod.Post, null, new { id = "attackForm" })) {
+        <partial name="~/Views/Dashboard/AttackList.cshtml" model="@Model"></partial>
 }
-@for(int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
-    var chain = Model.AttackReport.AttackChains[i];
-    <div class="card collapsed-card">
-        <div class="card-header bg-lightgray">
-            <div class="card-tools leftcardtools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            <h3 class="card-title">
-                <strong>Attack Scenario #@(i + 1)</strong><br />
-                <em>Uses @(chain.Elements.Count(c => c is Threat)) step(s) to attack the @chain.Flow.Description</em>
-            </h3>
-        </div>
-        <div class="card-body" style="display: none;">
-            <div class="timeline">
-                <div class="time-label"><span class="bg-gray">The client uses the @chain.Flow.Description</span></div>
-                @for (int j = 1; j < chain.Elements.Count; j++) {
-                    var el = chain.Elements[j];
-                    if (el is Enricher) {
-                        <div class="tic"><i class="fas fa-info bg-info"></i><div class="timeline-item"><h3 class="timeline-header bg-lightgray">@el.Description</h3></div></div>
-                    } else if (el is Threat) {                        
-                        var bg = "bg-warning"; // default to partially mitigated
-                        var ot = Model.ThreatReports[el.Id];
-                        if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) { // unmitigated threat
-                            bg = "bg-red";
-                        } 
-                        <div class="tic">
-                            <i class="fas fa-unlock @bg"></i>
-                            <div class="timeline-item">
-                                <h3 class="timeline-header bg-lightgray"><strong>@el.Description</strong> @Html.ActionLink($"[{el.Id}]", "Info", "Threats", new { id = el.Id }, new { target = "_blank" })</h3>
-                                <div class="timeline-body">
-                                    <p>@ot.Threat.Description</p>
-                                    @if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) {
-                                        <p>This threat is <strong>NOT</strong> mitigated.</p>
-                                    } else if (ot.Outcome == TestOutcomes.SpecificationPartiallyImplemented) {
-                                        <p>This threat is <strong>PARTIALLY</strong> mitigated.</p>
-                                    }
-                                    <p>If the attacker succeeds in exploiting this threat, they will gain the following advantage:</p>
-                                    <ul>
-                                        @foreach(var c in el.Consequences) {
-                                            <li>@c.Name</li>
-                                        }
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
+<script>
+    $(function () {
+        $('#attackForm').submit(function (event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: '@Url.Action("AttackList", "Dashboard", new { Id = Model.Id })',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    $('#attackForm').html(response);
+                },
+                error: function (xhr, status, error) {
+                    $('#attackForm').html("<p>An unexpected error occurred while processing the request.</p>");
                 }
-                @foreach (var vul in chain.Vulnerabilities) {
-                    <div class="tic"><i class="fas fa-skull-crossbones bg-red"></i><div class="timeline-item"><h3 class="timeline-header bg-red">@vul.Name</h3></div></div>
-                }
-            </div>
-        </div>
-    </div>
-}
+            });
+        });
+    });
+</script>

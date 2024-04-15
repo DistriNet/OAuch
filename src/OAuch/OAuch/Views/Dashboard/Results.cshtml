@@ -385,7 +385,7 @@
                                     <div class="card collapsed-card">
                                         <div class="card-header bg-lightgray">
                                             <h5>
-                                                Threat <strong>`@threatReport.Threat.Title'</strong>
+                                                Threat <strong>'@threatReport.Threat.Title'</strong> [@threatReport.Threat.Id]
                                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">[<i class="fas fa-plus"></i>]</button>
                                             </h5>
                                             <p>@threatReport.Threat.Description</p>
@@ -456,7 +456,7 @@
                                     Click on the button below to generate a report in a new tab/window. The report is optimized to be printed. If you would like the report in electronic form,
                                     you can use the browser to &lsquo;print&rsquo; the report to a PDF file (this is supported in most browsers).
                                 </p>
-                                <p>The report contains a summary of the results, and a detailed description of the failed test cases.</p>
+                                <p>The report contains a summary of the results, and a detailed description of the failed test cases.</p>                             
                                 @using (Html.BeginForm("Generate", "Report", new { id = Model.ResultId }, FormMethod.Get, null, new { target = "_blank" })) {
                                     <p>
                                             <div class="form-check">
@@ -466,6 +466,32 @@
                                                 </label>
                                             </div>
                                     </p>
+
+                                    <p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeDeprecated" name="includeDeprecated" checked="checked">
+                                            <label class="form-check-label" for="includeDeprecated">
+                                                &nbsp;&nbsp;Include deprecated features
+                                            </label>
+                                        </div>
+                                    </p>
+                                    <p>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeThreats" name="includeThreats" checked="checked">
+                                            <label class="form-check-label" for="includeThreats">
+                                                    &nbsp;&nbsp;Include threat overview
+                                                </label>
+                                            </div>
+                                    </p>
+                                    <p>
+                                            <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeAttacks" name="includeAttacks" checked="checked">
+                                            <label class="form-check-label" for="includeAttacks">
+                                                    &nbsp;&nbsp;Include attack scenarios
+                                                </label>
+                                            </div>
+                                    </p>
+
                                     <p>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" data-toggle="toggle" data-size="sm" value="true" id="includeLog" name="includeLog" checked="checked">
@@ -568,9 +594,22 @@
         }
     </style>
     <link href="/plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/plugins/bootstrap-select/css/bootstrap-select.min.css">
+    <style>
+        #ElementsFilter .bootstrap-select .dropdown-menu li a {
+            color: darkgray;
+        }
+        #ElementsFilter .bootstrap-select .dropdown-menu li .selected {
+            color: black;
+        }
+        .od {
+            padding: 5px 0;
+        }
+    </style>
 }
 @section Scripts {
     <script src="/plugins/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+    <script src="/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
     <script>
         loadedLog = false;
         loadedAttacks = false;

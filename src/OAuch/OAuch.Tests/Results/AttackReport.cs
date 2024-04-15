@@ -29,11 +29,14 @@ namespace OAuch.Compliance.Results {
         private const int ConsequenceByteLength = 16; // change this if the Vector type to represent consequences changes
 
 
-        public AttackReport(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string>? ignoreThreats) {
+        public AttackReport(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string>? selectedElements) {
             this.EmptyConsequence = CreateEmptyConsequence();
-            CalculateModelDependencies(allResults, threatReports, ignoreThreats ?? Enumerable.Empty<string>());
+            CalculateModelDependencies(allResults, threatReports, selectedElements);
         }
-        private void CalculateModelDependencies(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string> ignoreThreats) {
+        private void CalculateModelDependencies(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string>? selectedElements) {
+            if (selectedElements != null && selectedElements.Count() == 0)
+                selectedElements = null;
+
             var context = new CalculationContext(allResults, threatReports);
             // Create structures that hold ConsequenceType data
             // Every ConsequenceType receives a corresponding BitId (exponent of 2 number, stored in a bit Vector)
@@ -52,10 +55,11 @@ namespace OAuch.Compliance.Results {
             context.ElementIndices = new Dictionary<ModelElement, int>();
             context.ModelElements =
             [
-                .. Flow.All.Where(c => c.IsRelevant(context)),
-                .. OAuthThreatModel.Threats.Threat.All.Where(c => !ignoreThreats.Contains(c.Id) &&  c.IsRelevant(context)),
+                .. Flow.All.Where(c => c.IsRelevant(context) && (selectedElements?.Contains(c.Id) ?? true)),
+                .. OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(context) && (selectedElements?.Contains(c.Id) ?? true)),
                 .. Enricher.All.Where(c => c.IsRelevant(context)),
             ];
+
             context.ModelElementVectors = new ModelElementVectors[context.ModelElements.Count];
             context.FlowVectors = new LinkedList<ModelElementVectors>();
             context.ThreatVectors = new LinkedList<ModelElementVectors>();
@@ -86,6 +90,7 @@ namespace OAuch.Compliance.Results {
                     chains.Add(c);
             }
             _chains = chains;
+            this.Context = context;
         }
         private AttackChain? CreateAttackChain(CalculationContext context, ElementId currentChain) {
             // reconstruct the elements in a chain
@@ -172,40 +177,11 @@ namespace OAuch.Compliance.Results {
         private IReadOnlyList<AttackChain> _chains;
         public int MaxResults => 50;
 
+        public ThreatModelContext Context { get; private set; }
 
-        private class CalculationContext : IThreatModelContext {
-            public CalculationContext(IList<TestResult> allResults, IList<ThreatReport> threatReports) {
-                // cache the testcase implementation results
-                TestcaseResults = new Dictionary<string, bool>();
-                foreach (var tc in allResults) {
-                    if (tc.Outcome != null) {
-                        switch (tc.Outcome) {
-                            case TestOutcomes.SpecificationFullyImplemented:
-                            case TestOutcomes.SpecificationPartiallyImplemented:
-                                TestcaseResults[tc.TestId] = true;
-                                break;
-                            case TestOutcomes.SpecificationNotImplemented:
-                                TestcaseResults[tc.TestId] = false;
-                                break;
-                        }
-                    }
-                }
 
-                // cache the threat results
-                UnmitigatedThreatResults = new Dictionary<string, bool>();
-                foreach (var tr in threatReports) {
-                    if (tr.Outcome != null) {
-                        switch (tr.Outcome) {
-                            case TestOutcomes.SpecificationNotImplemented:
-                                UnmitigatedThreatResults[tr.Threat.Id] = true;
-                                break;
-                            case TestOutcomes.SpecificationPartiallyImplemented:
-                            case TestOutcomes.SpecificationFullyImplemented:
-                                UnmitigatedThreatResults[tr.Threat.Id] = false;
-                                break;
-                        }
-                    }
-                }
+        private class CalculationContext : ThreatModelContext {
+            public CalculationContext(IList<TestResult> allResults, IList<ThreatReport> threatReports) : base(allResults, threatReports) {
                 ThreatReports = threatReports.ToDictionary(c => c.Threat.Id);
                 Chains = new LinkedList<ElementId>();
             }
@@ -224,20 +200,7 @@ namespace OAuch.Compliance.Results {
             // Results
             public LinkedList<ElementId> Chains;
 
-            public Dictionary<string, bool> TestcaseResults;
-            public Dictionary<string, bool> UnmitigatedThreatResults;
             public Dictionary<string, ThreatReport> ThreatReports;
-
-            public bool? IsTestcaseImplemented(string id) {
-                if (TestcaseResults.TryGetValue(id, out var value))
-                    return value;
-                return null;
-            }
-            public bool? IsThreatNotMitigated(string id) {
-                if (UnmitigatedThreatResults.TryGetValue(id, out var value))
-                    return value;
-                return null;
-            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -297,7 +260,53 @@ namespace OAuch.Compliance.Results {
             public readonly ConsequenceId Consequences;
         }
     }
+    public class ThreatModelContext : IThreatModelContext {
+        public ThreatModelContext(IList<TestResult> allResults, IList<ThreatReport> threatReports) {
+            // cache the testcase implementation results
+            TestcaseResults = new Dictionary<string, bool>();
+            foreach (var tc in allResults) {
+                if (tc.Outcome != null) {
+                    switch (tc.Outcome) {
+                        case TestOutcomes.SpecificationFullyImplemented:
+                        case TestOutcomes.SpecificationPartiallyImplemented:
+                            TestcaseResults[tc.TestId] = true;
+                            break;
+                        case TestOutcomes.SpecificationNotImplemented:
+                            TestcaseResults[tc.TestId] = false;
+                            break;
+                    }
+                }
+            }
 
+            // cache the threat results
+            UnmitigatedThreatResults = new Dictionary<string, bool>();
+            foreach (var tr in threatReports) {
+                if (tr.Outcome != null) {
+                    switch (tr.Outcome) {
+                        case TestOutcomes.SpecificationNotImplemented:
+                        case TestOutcomes.SpecificationPartiallyImplemented:
+                            UnmitigatedThreatResults[tr.Threat.Id] = true;
+                            break;
+                        case TestOutcomes.SpecificationFullyImplemented:
+                            UnmitigatedThreatResults[tr.Threat.Id] = false;
+                            break;
+                    }
+                }
+            }
+        }
+        public bool? IsTestcaseImplemented(string id) {
+            if (TestcaseResults.TryGetValue(id, out var value))
+                return value;
+            return null;
+        }
+        public bool? IsThreatNotMitigated(string id) {
+            if (UnmitigatedThreatResults.TryGetValue(id, out var value))
+                return value;
+            return null;
+        }
+        public Dictionary<string, bool> TestcaseResults;
+        public Dictionary<string, bool> UnmitigatedThreatResults;
+    }
     public class AttackChain {
         public AttackChain(ModelElement flow, IReadOnlyList<ModelElement> elements, IReadOnlyList<ConsequenceType> vulnerabilities) {
             this.Flow = flow;
