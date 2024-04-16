@@ -6,17 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.OAuthThreatModel.Enrichers {
-    public class BearerTokens : Enricher {
-        public override string Id => "OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest";
+    //THIS IS BCP_4_10
+    //public class BearerTokens : Enricher {
+    //    public override string Id => "OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest";
 
-        public override string Description => "If we have an access token it is a (usable) bearer token";
+    //    public override string Description => "The access tokens for this service are bearer tokens (i.e., they do not require client authentication to be used).";
 
-        public override ConsequenceType[] DependsOn => [ConsequenceTypes.AccessTokenLeaked];
+    //    public override ConsequenceType[] DependsOn => [ConsequenceTypes.AccessTokenLeaked];
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
+    //    public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
 
-        protected override bool? RelevancyResult => false;
-    }
+    //    protected override bool? RelevancyResult => false;
+    //}
 
     public class PublicClientBearerTokens : Enricher {
 

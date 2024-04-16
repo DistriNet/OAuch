@@ -413,7 +413,8 @@ namespace OAuch.Controllers {
             model.ThreatReports = results.ThreatReports.ToDictionary(c => c.Threat.Id);
 
             model.AllFlows = Flow.All.Where(c => c.IsRelevant(model.AttackReport.Context)).ToList();
-            var allThreats = OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(model.AttackReport.Context)).ToList();
+            var allThreats = OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(model.AttackReport.Context)).DistinctBy(c => c.Id).ToList();            
+
             model.AllUnmitigatedThreats = allThreats.Where(c => {
                 if (!model.ThreatReports.TryGetValue(c.Id, out var tr))
                     return false;
@@ -428,9 +429,8 @@ namespace OAuch.Controllers {
             var allSelected = new List<string>();
             allSelected.AddRange(model.AllFlows.Select(c => c.Id));
             allSelected.AddRange(model.AllUnmitigatedThreats.Select(c => c.Id));
-            //allSelected.AddRange(model.AllPartialThreats.Select(c => c.Id)); // By default we do not consider partial threats
+            allSelected.AddRange(model.AllPartialThreats.Select(c => c.Id)); // By default we do not consider partial threats
             model.SelectedElements = filter.SelectedElements ?? allSelected;
-
 
             return model;
         }

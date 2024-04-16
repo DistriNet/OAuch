@@ -829,6 +829,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_1_1",
+                            AliasOf = "6819_4_1_5",
                             Title = "Redirect URI Validation Attacks on Authorization Code Grant",
                             Description = "Some authorization servers allow clients to register redirect URI patterns instead of complete redirect URIs. This approach turned out to be more complex to implement and more error prone to manage than exact redirect URI matching. Several successful attacks exploiting flaws in the pattern matching implementation or concrete configurations have been observed in the wild.",
                             Document = Documents["SecBCP"],
@@ -856,6 +857,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_1_2",
+                            AliasOf = "6819_4_1_5",
                             Title = "Redirect URI Validation Attacks on Implicit Grant",
                             Description = "Implicit clients can be subject to an attack that utilizes the fact that user agents re-attach fragments to the destination URL of a redirect if the location header does not contain a fragment. This allows circumvention even of very narrow redirect URI patterns, but not strict URL matching.",
                             Document = Documents["SecBCP"],
@@ -885,7 +887,7 @@ namespace OAuch.Compliance {
                         new Threat {
                             Id = "BCP_4_2_2",
                             Title = "Leakage from the Authorization Server ",
-                            Description = "An attacker can learn 'state' from the authorization request if the authorization endpoint at the authorization server contains links or third-party content.",
+                            Description = "An attacker can learn state from the authorization request if the authorization endpoint at the authorization server contains links or third-party content.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.2.2.",
                             Instances = new List<ThreatInstance> {
@@ -946,6 +948,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_3_2_A",
+                            AliasOf = "6819_4_6_7",
                             Title = "Access Token in Browser History (Leaking API Request)",
                             Description = "An access token may end up in the browser history if a client or a web site that already has a token deliberately navigates to a page like provider.com/get_user_profile?access_token=abcdef.",
                             Document = Documents["SecBCP"],
@@ -1009,6 +1012,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_7",
+                            AliasOf = "6819_4_4_1_8",
                             Title = "Cross Site Request Forgery",
                             Description = "An attacker might attempt to inject a request to the redirect URI of the legitimate client on the victim's device, e.g., to cause the client to access resources under the attacker's control. This is a variant of an attack known as Cross-Site Request Forgery (CSRF).",
                             Document = Documents["SecBCP"],
@@ -1090,6 +1094,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_11_1",
+                            AliasOf = "6819_4_1_5",
                             Title = "Client as Open Redirector",
                             Description = "An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation.  If the authorization server allows the client to register only part of the redirect URI, an attacker can use an open redirector operated by the client to construct a redirect URI that will pass the authorization server validation but will send the authorization 'code' or access token to an endpoint under the control of the attacker.",
                             Document = Documents["SecBCP"],
@@ -1120,6 +1125,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_11_2",
+                            AliasOf = "6819_4_2_4",
                             Title = "Authorization Server as Open Redirector",
                             Description = "An attacker could use the end-user authorization endpoint and the redirect URI parameter to abuse the authorization server as an open redirector. An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation. An attacker could utilize a user's trust in an authorization server to launch a phishing attack.",
                             Document = Documents["SecBCP"],
@@ -1180,6 +1186,7 @@ namespace OAuch.Compliance {
                         },
                         new Threat {
                             Id = "BCP_4_16",
+                            AliasOf = "6819_4_4_1_9",
                             Title = "Clickjacking",
                             Description = "The authorization request is susceptible to clickjacking attacks, also called user interface redressing. An attacker can use this vector to obtain the user's authentication credentials, change the scope of access granted to the client, and potentially access the user's resources.",
                             Document = Documents["SecBCP"],
