@@ -786,120 +786,6 @@
                     The tested site in this document has a failure rate of @((Model.Result.OverallCompliance.OverallScore.FailureRate * 100).ToString("0.0"))%, which is indicated with the red vertical line. Lower failure rates are better.<em></p>
         </div>
 
-        @* threat info *@
-        @if (Model.Result.UnmitigatedThreats > 0 || Model.Result.PartiallyMitigatedThreats > 0) {
-            <h1 id="threats">Threats</h1>
-            <p>
-                The OAuth working group has published a comprehensive threat model shortly after publishing the original OAuth 2.0 standard. This threat model is further refined in the latest Security Best Current Practices
-                document to include additional threats that have been observed in real-world usage of OAuth. The threat model describes for each threat how an implementation may be attacked and which countermeasures can be
-                applied. Some threats are mitigated by a combination of multiple countermeasures, while others can be mitigated by a single countermeasure. In many cases, alternative sets of countermeasures may be used to 
-                address a threat. Some countermeasures may (partially) mitigate multiple threats. The model assumes a powerful attacker that has full access to the network between the OAuth client and the authorization server,
-                and the client and the resource server. The attacker may eavesdrop on any communication between those parties and has unlimited resources to mount attacks. In addition, two of the three parties involved in 
-                the OAuth protocol may collude to mount an attack against the 3rd party.
-            </p>
-            <p>
-                This threat model has been adopted in OAuch and is used to offer precise feedback. OAuch uses test cases to detect which countermeasures are implemented by the authorization server. It then uses 
-                the information from the threat model to determine which threats are mitigated. For every threat, it takes the list of mitigations that are proposed by the threat model and compares it with the mitigations 
-                that have been detected. If the threat is properly mitigated, it is marked as fully mitigated. When no relevant countermeasures are active, the threat is unmitigated. Threats can also be partially mitigated
-                if some countermeasures are present, but not all. When multiple sets of countermeasures can mitigate a threat, it is sufficient that only one set is fully implemented.
-            </p>
-
-            foreach (var threatReport in Model.Result.ThreatReports) {
-                if (threatReport.Outcome != TestOutcomes.SpecificationNotImplemented && threatReport.Outcome != TestOutcomes.SpecificationPartiallyImplemented)
-                    continue;
-
-                <div style="page-break-inside:avoid;">
-                    <h2 class="nobreak">Threat <strong>"@threatReport.Threat.Title"</strong></h2>
-                    <p>@threatReport.Threat.Description</p>
-                    <p>Threat status: <strong>@FormatOutcomeForThreat(threatReport)</strong></p>
-                    @foreach (var ireport in threatReport.InstanceReports) {
-                        if (!ireport.IsRelevant.HasValue || ireport.IsRelevant.Value) {
-                            if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
-                                var mit = ireport.ThreatInstance.MitigatedBy[0];
-                                <p>
-                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
-                                        @ireport.ThreatInstance.ExtraDescription
-                                    }
-                                    This threat can be mitigated if all of the following countermeasures are fully implemented:
-                                </p>
-                                <ul>
-                                    @foreach (var cm in mit) {
-                                        var to = GetTestOutcome(cm.TestId);
-                                        <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
-                                    }
-                                </ul>
-                            } else {
-                                <p>
-                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
-                                        @ireport.ThreatInstance.ExtraDescription
-                                    }
-                                    This threat can be mitigated if any of the following sets of countermeasures are fully implemented:
-                                </p>
-                                <ul>
-                                    @for (int i = 0; i < ireport.ThreatInstance.MitigatedBy.Count; i++) {
-                                        var mit = ireport.ThreatInstance.MitigatedBy[i];
-                                        <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
-                                        foreach (var cm in mit) {
-                                            var to = GetTestOutcome(cm.TestId);
-                                            <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
-                                        }
-                                    }
-                                </ul>
-                            }
-                        }
-                    }
-                </div>
-            }
-        }
-
-
-
-        @* deprecated features info *@
-        @if (Model.Result.OverallCompliance.HasDeprecatedFeaturesEnabled == true) {
-            <h1 id="deprecatedFeatures">Deprecated Features</h1>
-            <p>
-                This section gives an overview of the features that are enabled on the tested site, but have been deprecated in newer specifications. Deprecated features
-                may be enabled for backward compatibility reasons. However, features are typically deprecated because of security concerns. Hence, a careful analysis of the
-                drawbacks must be made before enabling such a feature.
-            </p>
-            <ul class="spacedUl">
-                @foreach (var deprecatedFeature in Model.Result.OverallCompliance.DeprecatedFeatures) {
-                    if (deprecatedFeature.IsCompliant == false) {
-                        if (ComplianceDatabase.Tests.TryGetValue(deprecatedFeature.TestResult?.TestId, out var test)) {
-                            <li>
-                                @(test.Title): <strong>@test.ResultFormatter.Format(deprecatedFeature.TestResult.Outcome)</strong><br />
-                                @{
-                                    string docName = deprecatedFeature.Document.Id;
-                                    switch (docName) {
-                                        case "SecBCP":
-                                            docName = "the <em>Security Best Current Practices</em> document";
-                                            break;
-                                        case "OIDC":
-                                            docName = "the <em>OpenID Connect</em> standard";
-                                            break;
-                                        case "FormPost":
-                                            docName = "the <em>FormPost</em> specification";
-                                            break;
-                                    }
-                                }
-                                @switch (deprecatedFeature.RequirementLevel) {
-                                    case RequirementLevels.Must:
-                                        <text>This has been deprecated by @Html.Raw(docName) and <em>MUST NOT</em> be used anymore.</text>
-                                        break;
-                                    case RequirementLevels.Should:
-                                        <text>This has been deprecated by @Html.Raw(docName) and <em>SHOULD NOT</em> be used anymore.</text>
-                                        break;
-                                    case RequirementLevels.May:
-                                        <text>This has been deprecated by @Html.Raw(docName) and is no longer recommended.</text>
-                                        break;
-                                }
-                            </li>
-                        }
-                    }
-                }
-            </ul>
-        }
-
         @* test settings *@
         @if (Model.IncludeSettings) {
             <h1 id="testsettings">Test Settings</h1>
@@ -1030,71 +916,184 @@
                 </li>
             </ul>
         }
-        @* detailed test info *@
-        <h1 id="testresults">Test Results</h1>
-        <p>
-            The remainder of this document contains the description of the test cases that have failed and a
-            detailed log of the test run. Test cases that succeeded are not included in this
-            document. The results and logs of these omitted test cases can be found on the OAuch website.
-        </p>
-        <p>
-            Note that these logs contain sensitive information such as the client secret. It is recommended to deactivate
-            these values and revoke the appropriate permissions before distributing this document.
-        </p>
 
-        @{
+        @* deprecated features info *@
+        @if (Model.Result.OverallCompliance.HasDeprecatedFeaturesEnabled == true && Model.IncludeDeprecatedFeatures) {
+            <h1 id="deprecatedFeatures">Deprecated Features</h1>
+            <p>
+                This section gives an overview of the features that are enabled on the tested site, but have been deprecated in newer specifications. Deprecated features
+                may be enabled for backward compatibility reasons. However, features are typically deprecated because of security concerns. Hence, a careful analysis of the
+                drawbacks must be made before enabling such a feature.
+            </p>
+            <ul class="spacedUl">
+                @foreach (var deprecatedFeature in Model.Result.OverallCompliance.DeprecatedFeatures) {
+                    if (deprecatedFeature.IsCompliant == false) {
+                        if (ComplianceDatabase.Tests.TryGetValue(deprecatedFeature.TestResult?.TestId, out var test)) {
+                            <li>
+                                @(test.Title): <strong>@test.ResultFormatter.Format(deprecatedFeature.TestResult.Outcome)</strong><br />
+                                @{
+                                    string docName = deprecatedFeature.Document.Id;
+                                    switch (docName) {
+                                        case "SecBCP":
+                                            docName = "the <em>Security Best Current Practices</em> document";
+                                            break;
+                                        case "OIDC":
+                                            docName = "the <em>OpenID Connect</em> standard";
+                                            break;
+                                        case "FormPost":
+                                            docName = "the <em>FormPost</em> specification";
+                                            break;
+                                    }
+                                }
+                                @switch (deprecatedFeature.RequirementLevel) {
+                                    case RequirementLevels.Must:
+                                        <text>This has been deprecated by @Html.Raw(docName) and <em>MUST NOT</em> be used anymore.</text>
+                                        break;
+                                    case RequirementLevels.Should:
+                                        <text>This has been deprecated by @Html.Raw(docName) and <em>SHOULD NOT</em> be used anymore.</text>
+                                        break;
+                                    case RequirementLevels.May:
+                                        <text>This has been deprecated by @Html.Raw(docName) and is no longer recommended.</text>
+                                        break;
+                                }
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        }
+
+        @* threat info *@
+        @if ((Model.Result.UnmitigatedThreats > 0 || Model.Result.PartiallyMitigatedThreats > 0) && Model.IncludeThreats) {
+            <h1 id="threats">Threats</h1>
+            <p>
+                The OAuth working group has published a comprehensive threat model shortly after publishing the original OAuth 2.0 standard. This threat model is further refined in the latest Security Best Current Practices
+                document to include additional threats that have been observed in real-world usage of OAuth. The threat model describes for each threat how an implementation may be attacked and which countermeasures can be
+                applied. Some threats are mitigated by a combination of multiple countermeasures, while others can be mitigated by a single countermeasure. In many cases, alternative sets of countermeasures may be used to 
+                address a threat. Some countermeasures may (partially) mitigate multiple threats. The model assumes a powerful attacker that has full access to the network between the OAuth client and the authorization server,
+                and the client and the resource server. The attacker may eavesdrop on any communication between those parties and has unlimited resources to mount attacks. In addition, two of the three parties involved in 
+                the OAuth protocol may collude to mount an attack against the 3rd party.
+            </p>
+            <p>
+                This threat model has been adopted in OAuch and is used to offer precise feedback. OAuch uses test cases to detect which countermeasures are implemented by the authorization server. It then uses 
+                the information from the threat model to determine which threats are mitigated. For every threat, it takes the list of mitigations that are proposed by the threat model and compares it with the mitigations 
+                that have been detected. If the threat is properly mitigated, it is marked as fully mitigated. When no relevant countermeasures are active, the threat is unmitigated. Threats can also be partially mitigated
+                if some countermeasures are present, but not all. When multiple sets of countermeasures can mitigate a threat, it is sufficient that only one set is fully implemented.
+            </p>
+
+            foreach (var threatReport in Model.Result.ThreatReports) {
+                if (threatReport.Outcome != TestOutcomes.SpecificationNotImplemented && threatReport.Outcome != TestOutcomes.SpecificationPartiallyImplemented)
+                    continue;
+
+                <div style="page-break-inside:avoid;">
+                    <h2 class="nobreak">Threat <strong>"@threatReport.Threat.Title"</strong></h2>
+                    <p>@threatReport.Threat.Description</p>
+                    <p>Threat status: <strong>@FormatOutcomeForThreat(threatReport)</strong></p>
+                    @foreach (var ireport in threatReport.InstanceReports) {
+                        if (!ireport.IsRelevant.HasValue || ireport.IsRelevant.Value) {
+                            if (ireport.ThreatInstance.MitigatedBy.Count == 1) {
+                                var mit = ireport.ThreatInstance.MitigatedBy[0];
+                                <p>
+                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                        @ireport.ThreatInstance.ExtraDescription
+                                    }
+                                    This threat can be mitigated if all of the following countermeasures are fully implemented:
+                                </p>
+                                <ul>
+                                    @foreach (var cm in mit) {
+                                        var to = GetTestOutcome(cm.TestId);
+                                        <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
+                                    }
+                                </ul>
+                            } else {
+                                <p>
+                                    @if (!string.IsNullOrWhiteSpace(ireport.ThreatInstance.ExtraDescription)) {
+                                        @ireport.ThreatInstance.ExtraDescription
+                                    }
+                                    This threat can be mitigated if any of the following sets of countermeasures are fully implemented:
+                                </p>
+                                <ul>
+                                    @for (int i = 0; i < ireport.ThreatInstance.MitigatedBy.Count; i++) {
+                                        var mit = ireport.ThreatInstance.MitigatedBy[i];
+                                        <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
+                                        foreach (var cm in mit) {
+                                            var to = GetTestOutcome(cm.TestId);
+                                            <li><a href="https://oauch.io/Tests/Info/@HelperMethods.ShortenTestId(cm.TestId, true)" target="_blank">@HelperMethods.ShortenTestId(cm.TestId, true)</a> [<span class="@OutcomeClass(to)">@FormatOutcomeForCounterMeasure(to)</span>]</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        }
+                    }
+                </div>
+            }
+        }
+
+        @* detailed test info *@
+        @if (Model.IncludeIndividualTests) {
             int counter = 0;
             var formatter = new HtmlLogFormatter();
-        }
-        @foreach (var test in Model.Result.AllResults) {
-            if (ComplianceDatabase.Tests.TryGetValue(test.TestId, out var testInfo)) {
-                if (!Model.IncludePendingTests && test.Outcome == null)
-                    continue;
-                if (!Model.IncludeSkippedTests && test.Outcome == TestOutcomes.Skipped)
-                    continue;
-                if (!Model.IncludeFailedTests && test.Outcome == TestOutcomes.Failed)
-                    continue;
-                if (!Model.IncludeSucceededTests && test.Outcome == TestOutcomes.SpecificationFullyImplemented || test.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
-                    continue;
+            <h1 id="testresults">Test Results</h1>
+            <p>
+                The remainder of this document contains the description of the test cases that have failed and a
+                detailed log of the test run. Test cases that succeeded are not included in this
+                document. The results and logs of these omitted test cases can be found on the OAuch website.
+            </p>
+            <p>
+                Note that these logs contain sensitive information such as the client secret. It is recommended to deactivate
+                these values and revoke the appropriate permissions before distributing this document.
+            </p>
 
-                var requirementLevels = new Dictionary<OAuthDocument, TestRequirementLevel>();
-                foreach (var doc in documents) {
-                    var trl = doc.Countermeasures.FirstOrDefault(c => c.Test.TestId == test.TestId);
-                    if (trl != null) {
-                        requirementLevels[doc] = trl;
+            foreach (var test in Model.Result.AllResults) {
+                if (ComplianceDatabase.Tests.TryGetValue(test.TestId, out var testInfo)) {
+                    if (!Model.IncludePendingTests && test.Outcome == null)
+                        continue;
+                    if (!Model.IncludeSkippedTests && test.Outcome == TestOutcomes.Skipped)
+                        continue;
+                    if (!Model.IncludeFailedTests && test.Outcome == TestOutcomes.Failed)
+                        continue;
+                    if (!Model.IncludeSucceededTests && test.Outcome == TestOutcomes.SpecificationFullyImplemented || test.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
+                        continue;
+
+                    var requirementLevels = new Dictionary<OAuthDocument, TestRequirementLevel>();
+                    foreach (var doc in documents) {
+                        var trl = doc.Countermeasures.FirstOrDefault(c => c.Test.TestId == test.TestId);
+                        if (trl != null) {
+                            requirementLevels[doc] = trl;
+                        }
                     }
-                }
-                if (requirementLevels.Count == 0)
-                    continue;
+                    if (requirementLevels.Count == 0)
+                        continue;
 
-                counter++;
+                    counter++;
 
-                if (!Model.IncludeLog) {
-                    @:@Html.Raw("<div style=\"page-break-inside:avoid;\">")
-                }
-                <h2 @Html.Raw((counter == 1 || !Model.IncludeLog) ? "class='nobreak'" : "")>TC@(counter) - <em>@HelperMethods.ShortenTestId(test.TestId)</em></h2>
-                @* show a description of the test, if there is one *@
-                <p>
-                    @testInfo.Description
-                </p>
-
-                <h3>Requirement Level(s)</h3>
-                <ul>
-                    @foreach (var rl in requirementLevels) {
-                        <li>@rl.Key.Id: <strong>@rl.Value.RequirementLevel.ToString()</strong></li>
+                    if (!Model.IncludeLog) {
+                        @:@Html.Raw("<div style=\"page-break-inside:avoid;\">")
                     }
-                </ul>
+                    <h2 @Html.Raw((counter == 1 || !Model.IncludeLog) ? "class='nobreak'" : "")>TC@(counter) - <em>@HelperMethods.ShortenTestId(test.TestId)</em></h2>
+                    @* show a description of the test, if there is one *@
+                    <p>
+                        @testInfo.Description
+                    </p>
 
-                <h3>Test result</h3>
-                @Html.Raw(FormatResult(testInfo, test.Outcome));
+                    <h3>Requirement Level(s)</h3>
+                    <ul>
+                        @foreach (var rl in requirementLevels) {
+                            <li>@rl.Key.Id: <strong>@rl.Value.RequirementLevel.ToString()</strong></li>
+                        }
+                    </ul>
 
-                @* print the log *@
-                if (Model.IncludeLog) {
-                    <h3>Test log</h3>
-                    @Html.Raw(formatter.ToHtml(Model.ResultId, test, true))
-                }
-                if (!Model.IncludeLog) {
-                    @:@Html.Raw("</div>")
+                    <h3>Test result</h3>
+                    @Html.Raw(FormatResult(testInfo, test.Outcome));
+
+                    @* print the log *@
+                    if (Model.IncludeLog) {
+                        <h3>Test log</h3>
+                        @Html.Raw(formatter.ToHtml(Model.ResultId, test, true))
+                    }
+                    if (!Model.IncludeLog) {
+                        @:@Html.Raw("</div>")
+                    }
                 }
             }
         }

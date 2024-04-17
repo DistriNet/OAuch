@@ -29,15 +29,16 @@ namespace OAuch.Compliance.Results {
         private const int ConsequenceByteLength = 16; // change this if the Vector type to represent consequences changes
 
 
-        public AttackReport(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string>? selectedElements) {
+        public AttackReport(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string> selectedElements, ThreatModelContext? existingContext = null) {
             this.EmptyConsequence = CreateEmptyConsequence();
-            CalculateModelDependencies(allResults, threatReports, selectedElements);
+            CalculateModelDependencies(allResults, threatReports, selectedElements, existingContext);
         }
-        private void CalculateModelDependencies(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string>? selectedElements) {
-            if (selectedElements != null && selectedElements.Count() == 0)
-                selectedElements = null;
-
-            var context = new CalculationContext(allResults, threatReports);
+        private void CalculateModelDependencies(IList<TestResult> allResults, IList<ThreatReport> threatReports, IEnumerable<string> selectedElements, ThreatModelContext? existingContext = null) {
+            CalculationContext context;
+            if (existingContext == null)
+                context = new CalculationContext(allResults, threatReports);
+            else
+                context = new CalculationContext(existingContext, threatReports);
             // Create structures that hold ConsequenceType data
             // Every ConsequenceType receives a corresponding BitId (exponent of 2 number, stored in a bit Vector)
             context.ConsequenceIndices = new Dictionary<ConsequenceType, int>();
@@ -55,9 +56,9 @@ namespace OAuch.Compliance.Results {
             context.ElementIndices = new Dictionary<ModelElement, int>();
             context.ModelElements =
             [
-                .. Flow.All.Where(c => c.IsRelevant(context) && (selectedElements?.Contains(c.Id) ?? true)),
-                .. OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(context) && (selectedElements?.Contains(c.Id) ?? true)),
-                .. Enricher.All.Where(c => c.IsRelevant(context)),
+                .. Flow.All.Where(c => c.IsRelevant(context) && selectedElements.Contains(c.Id)),
+                .. OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(context) && selectedElements.Contains(c.Id) && c.Attackers.Any(at => selectedElements.Contains(at.Id))),
+                .. Enricher.All.Where(c => c.IsRelevant(context))
             ];
 
             context.ModelElementVectors = new ModelElementVectors[context.ModelElements.Count];
@@ -181,6 +182,11 @@ namespace OAuch.Compliance.Results {
 
 
         private class CalculationContext : ThreatModelContext {
+            
+            public CalculationContext(ThreatModelContext existingContext, IList<ThreatReport> threatReports) : base(existingContext) {
+                ThreatReports = threatReports.ToDictionary(c => c.Threat.Id);
+                Chains = new LinkedList<ElementId>();
+            }
             public CalculationContext(IList<TestResult> allResults, IList<ThreatReport> threatReports) : base(allResults, threatReports) {
                 ThreatReports = threatReports.ToDictionary(c => c.Threat.Id);
                 Chains = new LinkedList<ElementId>();
@@ -261,6 +267,10 @@ namespace OAuch.Compliance.Results {
         }
     }
     public class ThreatModelContext : IThreatModelContext {
+        public ThreatModelContext(ThreatModelContext existingContext) {
+            this.TestcaseResults = existingContext.TestcaseResults;
+            this.UnmitigatedThreatResults = existingContext.UnmitigatedThreatResults;
+        }
         public ThreatModelContext(IList<TestResult> allResults, IList<ThreatReport> threatReports) {
             // cache the testcase implementation results
             TestcaseResults = new Dictionary<string, bool>();

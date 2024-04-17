@@ -23,7 +23,7 @@ namespace OAuch.Controllers {
         }
         private OAuchDbContext Database { get; }
 
-        public IActionResult Generate(Guid id /* resultid */, bool includeLog = false, bool includeSettings = false, bool allTests = false) {
+        public IActionResult Generate(Guid id /* resultid */, bool includeLog = false, bool includeSettings = false, bool includeIndividualTests = false, bool allTests = false, bool includeDeprecated = false, bool includeThreats = false) {
             var serializedTestRun = Database.SerializedTestRuns.Where(str => str.TestResultId == id).SingleOrDefault();
             if (serializedTestRun == null)
                 return NotFound();
@@ -34,7 +34,10 @@ namespace OAuch.Controllers {
             var model = new ReportingViewModel {    
                 IncludeLog = includeLog,
                 IncludeSettings = includeSettings,
+                IncludeIndividualTests = includeIndividualTests,
                 IncludeSucceededTests = allTests,
+                IncludeDeprecatedFeatures = includeDeprecated,
+                IncludeThreats = includeThreats,
                 SiteId = site.SiteId,
                 ResultId = id,
                 SiteName = site.Name,

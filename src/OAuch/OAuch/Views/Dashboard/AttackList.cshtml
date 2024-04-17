@@ -1,21 +1,41 @@
-﻿@using OAuch.OAuthThreatModel.Enrichers
+﻿@using OAuch.OAuthThreatModel.Attackers
+@using OAuch.OAuthThreatModel.Enrichers
 @using OAuch.OAuthThreatModel.Threats
 @using OAuch.Shared.Enumerations
 @using Microsoft.AspNetCore.Html
 @using OAuch.OAuthThreatModel
+@using System.Text
 @model AttacksViewModel
 @{
     Layout = null;
 
+    IHtmlContent CreateAttackerOption(AttackerType attacker) {
+        var isSelected = Model.SelectedFilter?.Any(c => c == attacker.Id) ?? false;
+        string dataContent = $"<div class='od'><strong>{attacker.Name}</strong></div>";
+        return new HtmlString($"<option value=\"{attacker.Id}\" title=\"{attacker.Id}\" data-content=\"{dataContent}\"{(isSelected ? " selected" : "")}></option>");
+    }
     IHtmlContent CreateFlowOption(ModelElement flow) {
-        var isSelected = Model.SelectedElements?.Any(c => c == flow.Id) ?? false;
+        var isSelected = Model.SelectedFilter?.Any(c => c == flow.Id) ?? false;
         string dataContent = $"<div class='od'><strong>{flow.Description}</strong></div>";
         return new HtmlString($"<option value=\"{flow.Id}\" title=\"{flow.Id}\" data-content=\"{dataContent}\"{(isSelected ? " selected" : "")}></option>");
     }
     IHtmlContent CreateThreatOption(ModelElement threat) {
-        var isSelected = Model.SelectedElements?.Any(c => c == threat.Id) ?? false;
+        var isSelected = Model.SelectedFilter?.Any(c => c == threat.Id) ?? false;
         string dataContent = $"<div class='od'><strong>{threat.Id}</strong><br/><em>{threat.Description}</em></div>";
         return new HtmlString($"<option value=\"{threat.Id}\" title=\"{threat.Id}\" data-content=\"{dataContent}\"{(isSelected ? " selected" : "")}></option>");
+    }
+    string GetAttackerTypes(Threat t) {
+        var sb = new StringBuilder();
+        sb.Append("A vulnerability can be exploited by ");
+        for(int i = 0; i < t.Attackers.Length; i++) {
+            if (i == t.Attackers.Length - 1)
+                sb.Append("and ");
+            sb.Append(t.Attackers[i].Name);
+            if (i < t.Attackers.Length - 1)
+                sb.Append(", ");
+        }
+        sb.Append('.');
+        return sb.ToString();
     }
 }
 @if (Model.AttackReport.AttackChains.Count == 0) {
@@ -24,10 +44,15 @@
     <p>Only the first @Model.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
 }
 <div id="ElementsFilter" class="form-group">
-    <select id="SelectedElements" name="SelectedElements" class="selectpicker show-tick" data-width="100%" multiple="multiple">
+    <select id="SelectedFilter" name="SelectedFilter" class="selectpicker show-tick" data-width="100%" multiple="multiple">
         <optgroup label="Authorization Grants">
             @foreach (var f in Model.AllFlows) {
                 <text>@CreateFlowOption(f)</text>
+            }
+        </optgroup>
+        <optgroup label="Attacker Types">
+            @foreach (var at in Model.AttackerTypes) {
+                <text>@CreateAttackerOption(at)</text>
             }
         </optgroup>
         <optgroup label="Unmitigated Threats">
@@ -44,7 +69,7 @@
 </div>
 <button class="btn btn-secondary" type="submit">Apply Filter</button>
 <script>
-    $('#SelectedElements').selectpicker(
+    $('#SelectedFilter').selectpicker(
         {
             tickIcon: 'fa-check',
             iconBase: 'fas',
@@ -87,11 +112,16 @@
                                 <h3 class="timeline-header bg-lightgray"><strong>@el.Description</strong> @Html.ActionLink($"[{el.Id}]", "Info", "Threats", new { id = el.Id }, new { target = "_blank" })</h3>
                                 <div class="timeline-body">
                                     <p>@ot.Threat.Description</p>
+                                    <p>
                                     @if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) {
-                                        <p>This threat is <strong>NOT</strong> mitigated.</p>
+                                        <text>This threat is <strong>NOT</strong> mitigated.</text>
                                     } else if (ot.Outcome == TestOutcomes.SpecificationPartiallyImplemented) {
-                                        <p>This threat is <strong>PARTIALLY</strong> mitigated.</p>
+                                        <text>This threat is <strong>PARTIALLY</strong> mitigated.</text>
                                     }
+                                    @if (el is Threat) {
+                                        <text> @GetAttackerTypes((Threat)el)</text>
+                                    }
+                                    </p>
                                     <p>If the attacker succeeds in exploiting this threat, they will gain the following advantage:</p>
                                     <ul>
                                         @foreach (var c in el.Consequences) {

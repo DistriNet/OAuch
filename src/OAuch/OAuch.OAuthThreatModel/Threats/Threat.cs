@@ -14,7 +14,10 @@ namespace OAuch.OAuthThreatModel.Threats {
         /// </summary>
         public abstract string[] Countermeasures { get; }
 
-        public virtual AttackerType Attacker { get; }
+        /// <summary>
+        /// The attacker types that can carry out the attack
+        /// </summary>
+        public virtual AttackerType[] Attackers => [AttackerTypes.NetworkAttacker, AttackerTypes.WebAttacker]; //{ get; }
 
         public override bool IsRelevant(IThreatModelContext context) {
             if (context.IsThreatNotMitigated(this.Id) == true) // if the threat is not fully mitigated, it is relevant

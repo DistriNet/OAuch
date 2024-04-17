@@ -16,6 +16,7 @@ using OAuch.Database.Entities;
 using OAuch.Helpers;
 using OAuch.Hubs;
 using OAuch.OAuthThreatModel;
+using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Flows;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared.Enumerations;
@@ -406,14 +407,16 @@ namespace OAuch.Controllers {
 
             var testResults = OAuchJsonConvert.Deserialize<List<TestResult>>(serializedTestRun.TestResultsJson);
             var results = GetSiteResults(serializedTestRun);
+            var context = new ThreatModelContext(testResults, results.ThreatReports);
             var model = new AttacksViewModel();
             model.Id = filter.Id;
-
-            model.AttackReport = results.GetAttackReport(filter.SelectedElements);
             model.ThreatReports = results.ThreatReports.ToDictionary(c => c.Threat.Id);
-
-            model.AllFlows = Flow.All.Where(c => c.IsRelevant(model.AttackReport.Context)).ToList();
-            var allThreats = OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(model.AttackReport.Context)).DistinctBy(c => c.Id).ToList();            
+            model.AllFlows = Flow.All.Where(c => c.IsRelevant(context)).ToList();
+            model.AttackerTypes = AttackerTypes.All;
+            var allThreats = OAuthThreatModel.Threats.Threat.All.Where(c => c.IsRelevant(context)).DistinctBy(c => c.Id).ToList();
+            IEnumerable<string>? selectedAttackers = filter?.SelectedFilter;
+            if (selectedAttackers == null)
+                selectedAttackers = model.AttackerTypes.Select(c => c.Id);
 
             model.AllUnmitigatedThreats = allThreats.Where(c => {
                 if (!model.ThreatReports.TryGetValue(c.Id, out var tr))
@@ -426,11 +429,18 @@ namespace OAuch.Controllers {
                 return tr.Outcome == TestOutcomes.SpecificationPartiallyImplemented && tr.Threat.AliasOf == null;
             }).ToList();
 
-            var allSelected = new List<string>();
-            allSelected.AddRange(model.AllFlows.Select(c => c.Id));
-            allSelected.AddRange(model.AllUnmitigatedThreats.Select(c => c.Id));
-            allSelected.AddRange(model.AllPartialThreats.Select(c => c.Id)); // By default we do not consider partial threats
-            model.SelectedElements = filter.SelectedElements ?? allSelected;
+            if (filter?.SelectedFilter != null) {
+                model.SelectedFilter = filter.SelectedFilter;
+            } else {
+                var allSelected = new List<string>();
+                allSelected.AddRange(model.AllFlows.Select(c => c.Id));
+                allSelected.AddRange(model.AllUnmitigatedThreats.Select(c => c.Id));
+                allSelected.AddRange(model.AllPartialThreats.Select(c => c.Id)); // By default we do not consider partial threats
+                allSelected.AddRange(model.AttackerTypes.Select(c => c.Id));
+                model.SelectedFilter = allSelected;
+            }
+
+            model.AttackReport = results.GetAttackReport(model.SelectedFilter, context);
 
             return model;
         }

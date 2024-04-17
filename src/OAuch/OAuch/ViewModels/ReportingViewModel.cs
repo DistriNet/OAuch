@@ -9,6 +9,10 @@ namespace OAuch.ViewModels {
         public bool IncludeSettings { get; set; }
         public bool IncludeLog { get; set; }
         public bool IncludeSucceededTests { get; set; }
+        public bool IncludeDeprecatedFeatures { get; set; }
+        public bool IncludeThreats { get; set; }
+        public bool IncludeIndividualTests { get; set; }
+
         public bool IncludeSkippedTests { get; set; }
         public bool IncludeFailedTests { get; set; }
         public bool IncludePendingTests { get; set; }

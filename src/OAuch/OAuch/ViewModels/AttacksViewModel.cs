@@ -1,5 +1,6 @@
 ﻿using OAuch.Compliance.Results;
 using OAuch.OAuthThreatModel;
+using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Flows;
 using OAuch.OAuthThreatModel.Threats;
 using System;
@@ -15,6 +16,7 @@ namespace OAuch.ViewModels {
         public IList<Flow> AllFlows { get; set; }
         public IList<Threat> AllUnmitigatedThreats { get; set; }
         public IList<Threat> AllPartialThreats { get; set; }
-        public IList<string>? SelectedElements { get; set; }
+        public IList<string>? SelectedFilter { get; set; }
+        public IEnumerable<AttackerType> AttackerTypes { get; set; }
     }
 }
