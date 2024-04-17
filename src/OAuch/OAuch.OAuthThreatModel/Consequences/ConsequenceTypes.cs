@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OAuch.OAuthThreatModel.Enrichers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,11 @@ namespace OAuch.OAuthThreatModel.Consequences {
             UsableAccessTokenLeaked = ConsequenceType.CreateVulnerability("Usable Access Token leaked", "An access token that is usable by the attacker (e.g., a bearer token or an access token for which the attacker is authorized to use it) is leaked");
             DenialOfService = ConsequenceType.CreateConsequence("Denial of Service", "The authorization server cannot process more requests");
             StateLeaked = ConsequenceType.CreateConsequence("State leaked", "The value of the 'state' parameter is leaked");
+
+            IsPublicClient = ConsequenceType.CreateConsequence("The client is a public client (i.e., it does not use client authentication).", "");
+            IsConfidentialClient = ConsequenceType.CreateConsequence("The client is a confidential client (i.e., it uses client authentication).", "");
+            UsesAuthorizationServer = ConsequenceType.CreateConsequence("The authorization grant involves sending the user to the authorization server.", "");
+            NoSessionAuthentication = ConsequenceType.CreateConsequence("The authorization grant does not authenticate the session on the server side.", "");
 
             HasAuthorizationCode = ConsequenceType.CreateConsequence("Has authorizaton code", "The authorization code flow is used");
             HasTokenInFrontChannel = ConsequenceType.CreateConsequence("Has token in front-channel", "The access token is sent directly to the user's browser");
@@ -50,6 +56,7 @@ namespace OAuch.OAuthThreatModel.Consequences {
         public static ConsequenceType AccessTokenLeaked { get; }
         public static ConsequenceType AuthorizationCodeLeaked { get; }
         public static ConsequenceType ClientAuthenticationSidestepped { get; }
+        public static ConsequenceType NoSessionAuthentication { get; }
         public static ConsequenceType DataInterception { get; }
         public static ConsequenceType PasswordLeaked { get; }
         public static ConsequenceType Phishing { get; }
@@ -61,6 +68,9 @@ namespace OAuch.OAuthThreatModel.Consequences {
         public static ConsequenceType StateLeaked { get; }
 
         // Flow consequences
+        public static ConsequenceType IsPublicClient { get; }
+        public static ConsequenceType IsConfidentialClient { get; }
+        public static ConsequenceType UsesAuthorizationServer { get; }
         public static ConsequenceType HasAuthorizationCode { get; }
         public static ConsequenceType HasTokenInFrontChannel { get; }
         public static ConsequenceType ClientHoldsUserPassword { get; }

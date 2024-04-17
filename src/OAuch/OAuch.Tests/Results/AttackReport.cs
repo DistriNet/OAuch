@@ -101,6 +101,7 @@ namespace OAuch.Compliance.Results {
                     elements.Add(mev.Element);
                 }
             }
+            elements = elements.OrderBy(c => (c is Enricher) ? 1 : 2).ToList(); // make sure the enrichers are first in the list; we want to use them as soon as possible in the chain
             // reconstruct the order of the chain
             var state = new List<ConsequenceType>();
             var flow = elements.First(c => c is Flow);
@@ -120,7 +121,6 @@ namespace OAuch.Compliance.Results {
             }
             return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray());
         }
-
         private bool BuildChain(CalculationContext context, ElementId currentChain, ConsequenceId state, LinkedList<ModelElementVectors> remainingElements, int depth) {
             var node = remainingElements.First;
             while (node != null) {

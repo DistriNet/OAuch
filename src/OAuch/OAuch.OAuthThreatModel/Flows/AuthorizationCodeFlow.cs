@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Authorization Code Grant";
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasAuthorizationCode];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasAuthorizationCode, ConsequenceTypes.UsesAuthorizationServer];
     }
 }

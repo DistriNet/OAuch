@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace OAuch.OAuthThreatModel.Threats {
     public abstract class Threat : ModelElement {
         /// <summary>
-        /// The description of the countermeasures for the threat
+        /// The description of the countermeasures for the threat; OAuch doesn't use this - it is here simply for completeness
         /// </summary>
         public abstract string[] Countermeasures { get; }
 
         /// <summary>
         /// The attacker types that can carry out the attack
         /// </summary>
-        public virtual AttackerType[] Attackers => [AttackerTypes.NetworkAttacker, AttackerTypes.WebAttacker]; //{ get; }
+        public abstract AttackerType[] Attackers { get; }
 
         public override bool IsRelevant(IThreatModelContext context) {
             if (context.IsThreatNotMitigated(this.Id) == true) // if the threat is not fully mitigated, it is relevant

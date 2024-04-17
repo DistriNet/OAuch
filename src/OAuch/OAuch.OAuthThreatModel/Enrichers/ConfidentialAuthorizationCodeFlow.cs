@@ -6,15 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.OAuthThreatModel.Enrichers {
-    public class PublicAuthorizationCodeFlow : Enricher {
+    public class ConfidentialAuthorizationCodeFlow : Enricher {
         public override string Id => "OAuch.Compliance.Tests.TokenEndpoint.IsClientAuthenticationRequiredTest";
 
-        public override string Description => "The client is a public client because it does not use a client secret.";
+        public override string Description => "The client is a confidential client because it uses a client secret.";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.IsConfidentialClient];
 
-        protected override bool? RelevancyResult => false;
+        protected override bool? RelevancyResult => true;
     }
 }
