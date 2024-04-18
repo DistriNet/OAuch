@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Keep access tokens in private memory or apply same protection means as for refresh tokens",
             "Keep access token lifetime short"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

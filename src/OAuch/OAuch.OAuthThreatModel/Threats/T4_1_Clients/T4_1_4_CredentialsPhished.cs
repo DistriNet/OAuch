@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Client applications could be validated prior to publication in an application market for users to access",
             "Client developers should not write client applications that collect authentication information directly from users and should instead delegate this task to a trusted system component, e.g., the system browser"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

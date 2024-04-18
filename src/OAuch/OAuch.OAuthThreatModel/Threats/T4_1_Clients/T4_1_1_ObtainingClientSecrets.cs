@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
 
         public override string Description => "Obtaining Client Secrets From Source Code or Binary";
 
-        public override ConsequenceType[] DependsOn => [];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.IsConfidentialClient];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
@@ -21,13 +22,15 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Use deployment-specific client secrets",
             "Revoke client secrets"
             ];
+
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
     public class T4_1_1_ObtainingDeploymentSecrets : Threat {
         public override string Id => "6819_4_1_1";
 
         public override string Description => "Obtain a Deployment-Specific Secret";
 
-        public override ConsequenceType[] DependsOn => [];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.IsConfidentialClient];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
@@ -36,5 +39,6 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Native application: Store secrets in secure local storage",
             "Revoke client secrets"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

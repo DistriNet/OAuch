@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
 
         public override string Id => "6819_4_2_3";
 
-        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.IsPublicClient];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 
@@ -22,9 +23,10 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Authorization servers should not automatically process repeat authorizations to public clients unless the client is validated using a pre-registered redirect URI",
             "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     /// <summary>
-    /// If the client is confidential, it can be impersonated to get the authorization code
+    /// If the client uses the authorization code grant, it can be impersonated to get the authorization code
     /// </summary>
     public class T4_2_3B_AuthorizationByFraud : Threat {
         public override string Description => "Malicious Client Obtains Existing Authorization by Fraud";
@@ -39,5 +41,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Authorization servers should not automatically process repeat authorizations to public clients unless the client is validated using a pre-registered redirect URI",
             "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

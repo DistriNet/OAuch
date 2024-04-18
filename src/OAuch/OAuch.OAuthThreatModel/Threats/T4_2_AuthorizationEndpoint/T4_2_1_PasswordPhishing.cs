@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint
             "Authorization servers should require the use of transport-layer security for any requests where the authenticity of the authorization server or of request responses is an issue",
             "Authorization servers should educate users about the risks posed by phishing attacks and should provide mechanisms that make it easy for users to confirm the authenticity of their sites."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
     }
 }
