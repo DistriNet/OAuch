@@ -11,6 +11,6 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public override string Description => "Implicit Grant";
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasTokenInFrontChannel, ConsequenceTypes.IsPublicClient, ConsequenceTypes.UsesAuthorizationServer];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.HasTokenInFrontChannel, ConsequenceTypes.UsesAuthorizationServer];
     }
 }

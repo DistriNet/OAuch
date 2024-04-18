@@ -25,7 +25,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Description => "A public client always uses bearer tokens.";
 
-        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped, ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.IsPublicClient, ConsequenceTypes.AccessTokenLeaked];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.UsableAccessTokenLeaked];
     }

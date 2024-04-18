@@ -13,6 +13,6 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasTokenInFrontChannel];
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.IsPublicClient];
     }
 }

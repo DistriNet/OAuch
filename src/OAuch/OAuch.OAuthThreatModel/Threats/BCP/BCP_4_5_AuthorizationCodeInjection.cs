@@ -11,7 +11,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
 
         public override string Description => "Authorization Code Injection";
 
-        public override ConsequenceType[] DependsOn => [ConsequenceTypes.ClientAuthenticationSidestepped, ConsequenceTypes.AuthorizationCodeLeaked];
+        public override ConsequenceType[] DependsOn => [ConsequenceTypes.AuthorizationCodeLeaked];
 
         public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
 

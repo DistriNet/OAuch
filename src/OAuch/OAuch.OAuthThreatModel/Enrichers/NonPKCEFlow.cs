@@ -9,7 +9,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
     public class NonPKCEFlow : Enricher {
         public override string Id => "OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest";
 
-        public override string Description => "The authorization code flow does not require PKCE";
+        public override string Description => "The authorization code flow does not require PKCE. PKCE is the only server-side countermeasure against CSRF and code injection attacks.";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.HasAuthorizationCode];
 
