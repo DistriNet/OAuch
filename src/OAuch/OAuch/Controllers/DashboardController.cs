@@ -122,7 +122,7 @@ namespace OAuch.Controllers {
             return View(model);
         }
         [HttpPost]
-        public IActionResult Import(EmptyViewModel model, IFormFile file) {
+        public IActionResult Import(IFormFile file) {
             if (file != null && file.Length > 0) {
                 byte[] blob;
                 using (var s = file.OpenReadStream()) {
@@ -179,6 +179,7 @@ namespace OAuch.Controllers {
                     ModelState.AddModelError("DeserializeError", "Could not deserialize the input file.");
                 }                
             }
+            var model = new EmptyViewModel();
             FillMenu(model, pageType: PageType.Import);
             return View(model);
         }
