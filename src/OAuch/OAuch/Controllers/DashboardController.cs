@@ -19,6 +19,7 @@ using OAuch.OAuthThreatModel;
 using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Flows;
 using OAuch.Protocols.OAuth2;
+using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Logging;
 using OAuch.Shared.Settings;
@@ -28,9 +29,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -113,6 +116,138 @@ namespace OAuch.Controllers {
             return RedirectToAction("Index", "Dashboard");
         }
 
+        public IActionResult Import() {
+            var model = new EmptyViewModel();
+            FillMenu(model, pageType: PageType.Import);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Import(EmptyViewModel model, IFormFile file) {
+            if (file != null && file.Length > 0) {
+                byte[] blob;
+                using (var s = file.OpenReadStream()) {
+                    blob = s.ReadFully();
+                }
+                var json = Encoding.UTF8.GetString(blob);
+                var o = OAuchJsonConvert.Deserialize<SiteData[]>(json);
+                if (o != null) {
+                    foreach (var s in o) {
+                        // add the certificate
+                        if (s.Certificate != null) {
+                            var cer = new SavedCertificate() {
+                                OwnerId = this.OAuchInternalId!.Value,
+                                Name = s.Certificate.Name,
+                                Password = s.Certificate.Password,
+                                Blob = s.Certificate.Blob
+                            };
+                            Database.Certificates.Add(cer);
+                            Database.SaveChanges(); // get the CertificateId
+                            s.CurrentConfiguration.CertificateId = cer.SavedCertificateId;
+                        }
+                        // add the site
+                        var site = new Site() {
+                            Name = s.Name,
+                            OwnerId = this.OAuchInternalId!.Value,
+                            CurrentConfigurationJson = OAuchJsonConvert.Serialize(s.CurrentConfiguration),
+                            LatestResultId = null
+                        };
+                        Database.Sites.Add(site);
+                        Database.SaveChanges(); // save to get a SiteId
+                        // add the serialized tests
+                        SerializedTestRun? mostRecent = null;
+                        foreach (var tr in s.TestRuns) {
+                            var str = new SerializedTestRun {
+                                SiteId = site.SiteId,
+                                StartedAt = tr.StartedAt,
+                                ConfigurationJson = OAuchJsonConvert.Serialize(tr.Configuration),
+                                SelectedDocumentIdsJson = OAuchJsonConvert.Serialize(tr.SelectedDocumentIds),
+                                TestResultsJson = OAuchJsonConvert.Serialize(tr.TestResults),
+                                StateCollectionJson = OAuchJsonConvert.Serialize(tr.StateCollection)
+                            };
+                            if (mostRecent == null || mostRecent.StartedAt < str.StartedAt)
+                                mostRecent = str;
+                            Database.SerializedTestRuns.Add(str);
+                        }
+                        Database.SaveChanges(); // get the Id of the most recent test run
+                        if (mostRecent != null ) {
+                            site.LatestResultId = mostRecent.TestResultId;
+                            Database.SaveChanges();
+                        }
+                    }
+                    return RedirectToAction("Index");
+                } else {
+                    ModelState.AddModelError("DeserializeError", "Could not deserialize the input file.");
+                }                
+            }
+            FillMenu(model, pageType: PageType.Import);
+            return View(model);
+        }
+        public IActionResult Export(Guid id) {
+            var site = GetSite(id);
+            if (site == null)
+                return NotFound();
+            var model = new EmptyViewModel();
+            FillMenu(model, site, PageType.Export);
+            return View(model);
+        }
+        public IActionResult ExportData(Guid id) {
+            var site = GetSite(id);
+            if (site == null)
+                return NotFound();
+            var data = GetSiteData(site);
+            var jsonData = Encoding.UTF8.GetBytes(OAuchJsonConvert.Serialize(data, Formatting.Indented));
+            return File(jsonData, "application/json", "export.json");
+        }
+        [NonAction]
+        private SiteData[] GetSiteData(Site site) {
+            var currentConfig = JsonConvert.DeserializeObject<SiteSettings>(site.CurrentConfigurationJson);
+            CertificateInfo? certificate = null;
+            if (currentConfig?.CertificateId != null) {
+                var c = Database.Certificates.FirstOrDefault(c => c.SavedCertificateId == currentConfig.CertificateId);
+                if (c != null) {
+                    certificate = new CertificateInfo {
+                        Name = c.Name,
+                        Password = c.Password,
+                        Blob = c.Blob
+                    };
+                }
+            }
+            var runs = Database.SerializedTestRuns.Where(c => c.SiteId == site.SiteId).Select(c => new TestRunData {
+                StartedAt = c.StartedAt,
+                SelectedDocumentIds = OAuchJsonConvert.Deserialize<List<string>>(c.SelectedDocumentIdsJson)!,
+                Configuration = OAuchJsonConvert.Deserialize<SiteSettings>(c.ConfigurationJson)!,
+                TestResults = OAuchJsonConvert.Deserialize<List<TestResult>>(c.TestResultsJson)!,
+                StateCollection = OAuchJsonConvert.Deserialize<StateCollection>(c.StateCollectionJson)!
+            }).ToList();
+
+            return [
+                new SiteData {
+                    Name = site.Name,
+                    CurrentConfiguration = currentConfig!,
+                    Certificate = certificate,
+                    TestRuns = runs
+                }
+                ];
+        }
+
+        private class SiteData {
+            public string Name { get; set; }
+            public SiteSettings CurrentConfiguration { get; set; }
+            public CertificateInfo? Certificate {get;set;}
+            public List<TestRunData> TestRuns { get; set; }
+        }
+        private class TestRunData {
+            public DateTime StartedAt { get; set; }
+            public List<string> SelectedDocumentIds { get; set; }
+            public SiteSettings Configuration { get; set; }
+            public List<TestResult> TestResults { get; set; }
+            public StateCollection StateCollection { get; set; }
+        }
+        private class CertificateInfo { 
+            public string Name { get; set; }
+            public string? Password { get; set; }
+            public byte[] Blob { get; set; }
+        }
 
         public IActionResult AddSite() {
             var model = new AddSiteViewModel();

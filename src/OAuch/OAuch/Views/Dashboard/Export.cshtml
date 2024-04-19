@@ -1,0 +1,18 @@
+﻿@model OAuch.ViewModels.EmptyViewModel
+@using OAuch.Helpers
+@using Microsoft.AspNetCore.Html
+@using OAuch.Database.Entities
+@using OAuch.ViewModels
+
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="display-4">Export site data</h1>       
+        <p>
+            OAuch enables you to export the data of “@Model.ActiveSite!.Name” in JSON format for backup and automation purposes. This includes
+            site settings, any optionally associated client certificates, and the complete test result history.
+            Be aware that exported data may contain sensitive information such as client secrets, passwords, and
+            private keys.</p>
+        <p>To export the site's data, please click the button below.</p>
+        @Html.ActionLink("Export data", "ExportData", "Dashboard", new { id = Model.ActiveSite.SiteId }, new { @class = "btn btn-success", style = "margin-left: 10px;" })
+    </div>
+</div>

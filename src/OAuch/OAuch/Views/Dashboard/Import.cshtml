@@ -1,0 +1,36 @@
+﻿@model OAuch.ViewModels.EmptyViewModel
+@using OAuch.Helpers
+@using Microsoft.AspNetCore.Html
+@using OAuch.Database.Entities
+@using OAuch.ViewModels
+
+<div class="row">
+    <div class="col-12 col-lg-10 col-xl-8">
+        <h1 class="display-4">Import site data</h1>
+        <p>
+            Import data that has previously been exported by OAuch. The site(s) in the input file will be imported into
+            the database and shown on the dashboard.
+        </p>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @using (Html.BeginForm("Import", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            <div class="form-group">
+                <label for="file">Import file</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        @Html.TextBox("file", "", new { type = "file", @class = "custom-file-input" })
+                        <label class="custom-file-label" for="file">Choose file</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Import data</button>
+        }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}

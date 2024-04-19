@@ -28,7 +28,7 @@
         var sb = new StringBuilder();
         sb.Append("A vulnerability can be exploited by ");
         for(int i = 0; i < t.Attackers.Length; i++) {
-            if (i == t.Attackers.Length - 1)
+            if (i == t.Attackers.Length - 1 && t.Attackers.Length > 1)
                 sb.Append("and ");
             sb.Append(t.Attackers[i].Name);
             if (i < t.Attackers.Length - 1)
@@ -40,6 +40,25 @@
 }
 @if (Model.AttackReport.AttackChains.Count == 0) {
     <p>No potential attack scenarios could be found.</p>
+    var hasFlows = Model.AllFlows.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    var hasUnmitigatedThreats = Model.AllUnmitigatedThreats.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    var hasPartialThreats = Model.AllPartialThreats.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    var hasThreats = hasUnmitigatedThreats || hasPartialThreats;
+    var hasAttackers = Model.AttackerTypes.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    if (!hasFlows || !hasThreats || !hasAttackers) {
+        <ul class="text-danger">
+            @if (!hasFlows) {
+                <li>You have not selected any authorization grant.</li>            
+            }
+            @if (!hasAttackers) {
+                <li>You have not selected any attacker type.</li>
+            }
+            @if (!hasThreats) {
+                <li>You have not selected any threat.</li>
+            }
+        </ul>
+    }
+
 } else if (Model.AttackReport.AttackChains.Count == Model.AttackReport.MaxResults) {
     <p>Only the first @Model.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
 }

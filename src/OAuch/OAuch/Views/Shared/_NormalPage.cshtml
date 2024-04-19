@@ -144,6 +144,12 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Export", "Dashboard", new { id = menuInfo.ActiveSite.SiteId })" class="nav-link@(GetActiveClass(menuInfo.ActiveSite, PageType.Export))">
+                                        <i class="nav-icon fas fa-file-export"></i>
+                                        <p>Export data</p>
+                                    </a>
+                                </li>
                             }
 
                             <li class="nav-header">Site tools</li>
@@ -157,7 +163,7 @@
                             </li>
                             @if (Debugger.IsAttached) {
                                 <li class="nav-item">
-                                    <a href="@Url.Action("AddDemoSite", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.AddSite))">
+                                    <a href="@Url.Action("AddDemoSite", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Other))">
                                         <i class="nav-icon fas fa-plus-circle"></i>
                                         <p>
                                             Add demo site
@@ -165,11 +171,16 @@
                                     </a>
                                 </li>
                             }
-
                             <li class="nav-item">
                                 <a href="@Url.Action("Certificates", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Certificates))">
                                     <i class="nav-icon fas fa-file-signature"></i>
-                                    <p>Client certificates</p>
+                                    <p>Manage certificates</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Import", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Import))">
+                                    <i class="nav-icon fas fa-file-import"></i>
+                                    <p>Import data</p>
                                 </a>
                             </li>
                             @if (menuInfo?.Sites?.Count > 0) {
