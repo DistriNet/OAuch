@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
         public override string[] Countermeasures => [
             "the redirect URI of the client should point to an HTTPS protected endpoint"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
     }
 }

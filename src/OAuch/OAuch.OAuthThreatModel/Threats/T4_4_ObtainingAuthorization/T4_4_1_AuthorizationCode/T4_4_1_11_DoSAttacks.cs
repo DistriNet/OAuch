@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The authorization server should consider limiting the number of access tokens granted per user",
             "The authorization server should include a nontrivial amount of entropy in authorization \"codes\""
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker, AttackerTypes.WebAttacker];
     }
 }

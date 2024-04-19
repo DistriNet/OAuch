@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The authorization server MUST ensure that if there was no code_challenge in the authorization request, a request to the token endpoint containing a code_verifier is rejected",
             "Authorization servers that mandate the use of PKCE in general or for particular clients implicitly implement this security measure"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,12 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint
 
         public override ConsequenceType[] DependsOn => [];
 
-        public override ConsequenceType[] Consequences => [ConsequenceTypes.AccessTokenLeaked];
+        public override ConsequenceType[] Consequences => [ConsequenceTypes.ClientAuthenticationSidestepped];
 
         public override string[] Countermeasures => [
             "The transmission of client credentials must be protected using transport-layer mechanisms such as TLS",
             "Use alternative authentication means that do not require the sending of plaintext credentials over the wire"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
     }
 }

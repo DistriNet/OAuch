@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "Make use of CAPTCHAs",
             "Use one-time secrets sent out of band to the resource owner",
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

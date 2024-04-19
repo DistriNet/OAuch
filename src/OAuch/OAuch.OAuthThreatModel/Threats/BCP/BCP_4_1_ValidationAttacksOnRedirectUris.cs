@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP4_1_RedirectUriValidation {
             "Web servers on which redirect URIs are hosted MUST NOT expose open redirectors",
             "Servers MAY prevent browsers from reattaching fragments to redirection URLs by attaching an arbitrary fragment identifier, for example #_, to URLs in Location headers"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_1_2_ValidationAttacksOnImplicitGrant : Threat {
         public override string Id => "BCP_4_1_2";
@@ -34,6 +36,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP4_1_RedirectUriValidation {
             "Servers MAY prevent browsers from reattaching fragments to redirection URLs by attaching an arbitrary fragment identifier, for example #_, to URLs in Location headers",
             "Clients SHOULD use the authorization code response type instead of response types causing access token issuance at the authorization endpoint"
             ];
-
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

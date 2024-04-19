@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint
             "Enforce standard SQL injection countermeasures",
             "Ensure proper handling of credentials"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

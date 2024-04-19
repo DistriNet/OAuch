@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Mix-Up Defense via Issuer Identification",
             "Mix-Up Defense via Distinct Redirect URIs"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

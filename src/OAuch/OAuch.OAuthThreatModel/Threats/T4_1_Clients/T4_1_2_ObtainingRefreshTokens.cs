@@ -20,7 +20,7 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Standard web server protection measures",
             "Use strong client authentication (e.g., client_assertion/client_token) so the attacker cannot obtain the client secret required to exchange the tokens"
             ];
-        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
     public class T4_1_2_ObtainingRefreshTokensFromNativeClient : Threat {
         public override string Id => "6819_4_1_2";

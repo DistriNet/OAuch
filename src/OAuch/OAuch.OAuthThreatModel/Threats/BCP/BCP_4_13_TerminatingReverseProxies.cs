@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
         public override string[] Countermeasures => [
             "A reverse proxy MUST therefore sanitize any inbound requests to ensure the authenticity and integrity of all header values relevant for the security of the application servers."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

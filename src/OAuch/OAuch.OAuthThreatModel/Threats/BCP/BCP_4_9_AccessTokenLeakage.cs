@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Audience restriction SHOULD be used to prevent replay of captured access tokens on other resource servers",
             "The resource server MUST treat access tokens like other sensitive secrets and not store or transfer them in plain text"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

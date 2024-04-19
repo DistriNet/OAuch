@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Use of PKCE is recommended",
             "The OpenID Connect 'nonce' parameter can also be used"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

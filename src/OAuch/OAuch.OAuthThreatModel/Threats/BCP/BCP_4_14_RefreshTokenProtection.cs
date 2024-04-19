@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The authorization server issues a new refresh token with every access token refresh response",
             "Refresh tokens SHOULD expire if the client has been inactive for some time"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker, AttackerTypes.NetworkAttacker];
     }
 }

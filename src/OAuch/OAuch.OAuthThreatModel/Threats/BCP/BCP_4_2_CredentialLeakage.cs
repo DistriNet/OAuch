@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The state value SHOULD be invalidated by the client after its first use at the redirection endpoint",
             "Use the form post response mode instead of a redirect for the authorization response"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_2_1_CredentialLeakageFromClientViaRefererImp : Threat {
         public override string Id => "BCP_4_2_1";
@@ -40,6 +42,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The state value SHOULD be invalidated by the client after its first use at the redirection endpoint",
             "Use the form post response mode instead of a redirect for the authorization response"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 
 
@@ -61,6 +64,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The state value SHOULD be invalidated by the client after its first use at the redirection endpoint",
             "Use the form post response mode instead of a redirect for the authorization response"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_2_2_CredentialLeakageFromAuthServerViaRefererImp : Threat {
         public override string Id => "BCP_4_2_2";
@@ -80,5 +84,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The state value SHOULD be invalidated by the client after its first use at the redirection endpoint",
             "Use the form post response mode instead of a redirect for the authorization response"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

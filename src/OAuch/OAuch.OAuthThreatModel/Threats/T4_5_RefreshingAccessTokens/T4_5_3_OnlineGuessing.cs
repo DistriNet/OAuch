@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
             "Bind token to client id, because the attacker would guess the matching client id, too",
             "Authenticate the client; this adds another element that the attacker has to guess"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

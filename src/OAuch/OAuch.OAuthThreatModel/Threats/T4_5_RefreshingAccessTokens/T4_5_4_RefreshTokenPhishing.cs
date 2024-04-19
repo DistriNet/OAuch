@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
         public override string[] Countermeasures => [
             "Utilize server authentication"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
     }
 }

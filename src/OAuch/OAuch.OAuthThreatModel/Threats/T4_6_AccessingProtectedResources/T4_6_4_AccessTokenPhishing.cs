@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Associate an access token with a client and authenticate the client with resource server requests",
             "Restrict the token scope and/or limit the token to a certain resource server"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

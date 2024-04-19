@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "In the absence of these countermeasures, reducing scope and expiry time  for access tokens can be used to reduce the damage in case of leaks.",
             "The client server may reload the target page of the redirect URI in order to automatically clean up the browser cache."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker, AttackerTypes.WebAttacker];
     }
 }

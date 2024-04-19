@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
             "Consider not using the grant type \"password\"",
             "Client authentication will provide another authentication factor and thus hinder the attack."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

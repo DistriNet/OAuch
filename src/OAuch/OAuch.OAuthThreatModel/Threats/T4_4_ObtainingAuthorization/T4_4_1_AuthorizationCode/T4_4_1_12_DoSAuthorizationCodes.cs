@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The client should suspend the access by a user account if the number of invalid authorization \"codes\" submitted by this user exceeds a certain threshold",
             "The authorization server should send an error response to the client reporting an invalid authorization \"code\" and rate-limit or disallow connections from clients whose number of invalid requests exceeds a threshold."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.NetworkAttacker];
     }
 }

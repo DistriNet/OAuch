@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint
             "The authorization servers must ensure that transmissions are protected using transport-layer mechanisms such as TLS",
             "If end-to-end confidentiality cannot be guaranteed, reducing scope and expiry time for access tokens can be used to reduce the damage in case of leaks."
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
     }
 }

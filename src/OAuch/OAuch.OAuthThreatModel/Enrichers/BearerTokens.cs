@@ -23,7 +23,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public override string Id => "PublicClientBearerTokens";
 
-        public override string Description => "A public client always uses bearer tokens.";
+        public override string Description => "A public client cannot authenticate access tokens, so they are bearer tokens.";
 
         public override ConsequenceType[] DependsOn => [ConsequenceTypes.IsPublicClient, ConsequenceTypes.AccessTokenLeaked];
 

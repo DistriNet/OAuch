@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
         public override string[] Countermeasures => [
             "The authorization server SHOULD NOT allow clients to influence their client_id or any claim that could cause confusion with a genuine resource owner",
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

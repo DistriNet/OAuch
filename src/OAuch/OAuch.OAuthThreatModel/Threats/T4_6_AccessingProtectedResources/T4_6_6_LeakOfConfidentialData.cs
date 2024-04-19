@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Clients and resource servers not using an OAuth HTTP authentication scheme should take care to use Cache-Control headers to minimize the risk that authenticated content is not protected",
             "Reducing scope and expiry time for access tokens can be used to reduce the damage in case of leaks"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

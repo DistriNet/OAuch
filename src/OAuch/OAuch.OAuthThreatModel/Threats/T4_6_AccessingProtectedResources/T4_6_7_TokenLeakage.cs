@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Abuse of leaked access tokens can be prevented by enforcing authenticated requests",
             "The impact of token leakage may be reduced by limiting scope and duration and by enforcing one-time token usage",
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker];
     }
 }

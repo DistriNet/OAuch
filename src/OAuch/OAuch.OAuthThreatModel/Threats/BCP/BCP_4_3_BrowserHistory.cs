@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Authorization code replay prevention",
             "Use form post response mode instead of redirect for the authorization response"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
     public class BCP_4_3_2_TokenInApiUri : Threat {
         public override string Id => "BCP_4_3_2_A";
@@ -32,6 +34,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
         public override string[] Countermeasures => [
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
     public class BCP_4_3_2_TokenInBrowserHistory : Threat {
         public override string Id => "BCP_4_3_2_B";
@@ -45,5 +48,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
         public override string[] Countermeasures => [
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
     }
 }

@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Avoidance of iFrames during authorization can be enforced on the server side by using the X-FRAME-OPTIONS header",
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_16_ClickjackingTiFC : Threat {
         public override string Id => "BCP_4_16";
@@ -35,5 +37,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Avoidance of iFrames during authorization can be enforced on the server side by using the X-FRAME-OPTIONS header",
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

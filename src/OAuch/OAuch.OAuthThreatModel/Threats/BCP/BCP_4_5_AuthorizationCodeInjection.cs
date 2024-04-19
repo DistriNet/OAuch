@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The PKCE mechanism specified in RFC7636 can be used as a countermeasure.",
             "OpenID Connect's existing nonce parameter can protect against authorization code injection attacks"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_5_AuthorizationCodeInjectionConfidential : Threat {
         public override string Id => "BCP_4_5";
@@ -33,5 +35,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The PKCE mechanism specified in RFC7636 can be used as a countermeasure.",
             "OpenID Connect's existing nonce parameter can protect against authorization code injection attacks"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }

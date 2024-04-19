@@ -1,4 +1,5 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
+﻿using OAuch.OAuthThreatModel.Attackers;
+using OAuch.OAuthThreatModel.Consequences;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Clients MUST prevent injection of in-browser messages on the client receiver endpoint",
             "Clients MUST utilize exact string matching to compare the initiator origin of an in-browser message with the authorization server origin"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
     public class BCP_4_18_PostMessageTiFC : Threat {
         public override string Id => "BCP_4_18";
@@ -37,5 +39,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Clients MUST prevent injection of in-browser messages on the client receiver endpoint",
             "Clients MUST utilize exact string matching to compare the initiator origin of an in-browser message with the authorization server origin"
             ];
+        public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
     }
 }
