@@ -36,6 +36,9 @@ namespace OAuch.Compliance {
                 return false;
             return this.GetType().Equals(t.GetType());
         }
+        public override int GetHashCode() {
+            return this.GetType().GetHashCode();
+        }
 
         public abstract Type ResultType { get; }
         public virtual TestResult CreateEmptyResult() {
