@@ -580,7 +580,6 @@ namespace OAuch.Controllers {
 
             return model;
         }
-        private static int InternalCounter = 0;
 
         [NonAction]
         private Site? GetSite(Guid id) {

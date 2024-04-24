@@ -23,11 +23,11 @@
             return "ok";
         return "nok";
     }
-    string Capitalize(string str) {
-        if (str.Length > 1)
-            return char.ToUpper(str[0]) + str.Substring(1);
-        return str.ToUpper();
-    }
+    // string Capitalize(string str) {
+    //     if (str.Length > 1)
+    //         return char.ToUpper(str[0]) + str.Substring(1);
+    //     return str.ToUpper();
+    // }
     string FormatOutcomeForThreat(ThreatReport report) {
         if (report.Outcome == null || report.Outcome == TestOutcomes.Failed)
             return "UNDETERMINED";

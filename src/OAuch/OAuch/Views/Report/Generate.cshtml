@@ -197,11 +197,11 @@
         var keyString = Format(key.ToString(), true);
         return new HtmlString(keyString.Value + "<br/><em>(the key data has been removed from this report)</em>");
     }
-    HtmlString FormatPassword(string? pass) {
-        if (pass == null)
-            return Format(null);
-        return new HtmlString("********");
-    }
+    // HtmlString FormatPassword(string? pass) {
+    //     if (pass == null)
+    //         return Format(null);
+    //     return new HtmlString("********");
+    // }
     HtmlString FormatResultValue(int value, float pct) {
         if (value == 0)
             return new HtmlString("-");
