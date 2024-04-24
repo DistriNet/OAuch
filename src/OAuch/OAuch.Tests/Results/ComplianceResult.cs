@@ -160,7 +160,6 @@ namespace OAuch.Compliance.Results {
         public AttackReport GetAttackReport(IEnumerable<string> selectedElements, ThreatModelContext? existingContext = null) {
             return new AttackReport(this.AllResults, this.ThreatReports, selectedElements, existingContext);
         }
-        private AttackReport? _attackReport;
 
         public List<TestResult> AllResults { get; }
         public TestResult? this[string testId] {

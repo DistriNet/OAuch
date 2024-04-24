@@ -25,6 +25,9 @@ namespace OAuch.Compliance {
                 return false;
             return doc.Id == this.Id;
         }
+        public override int GetHashCode() {
+            return this.Id.GetHashCode();
+        }
     }
     public enum DocumentCategories : int { 
         OAuth2,
