@@ -28,7 +28,11 @@ namespace OAuch.Protocols.Http {
         NotCached = CacheControlNoStore | PragmaNoCache
     }
     public class CertificateReport {
-        public CertificateReport() { }
+        public CertificateReport() {
+            this.IssuedBy = string.Empty;
+            this.IssuedTo = string.Empty;
+            this.Thumbprint = string.Empty;
+        }
         public CertificateReport(X509Certificate certificate, bool isValid) {
             this.IsValid = isValid;
             var c2 = certificate as X509Certificate2;

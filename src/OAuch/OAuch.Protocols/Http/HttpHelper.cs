@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Reflection;
@@ -43,7 +44,7 @@ namespace OAuch.Protocols.Http {
         //    //password = EncodingHelper.UrlEncode(password);
         //    return $"Basic { EncodingHelper.Base64Encode(username + ":" + password) }";
         //}
-
+        
         public async Task<HttpResponse> SendRequest(HttpRequest req) {
             var mule = new ParameterMule {
                 Request = req
@@ -51,7 +52,7 @@ namespace OAuch.Protocols.Http {
             var cookieContainer = new CookieContainer();
             RemoteCertificateValidationCallback certificateCallback = (sender, cert, chain, errors) => {
                 mule.IsHttpsUsed = true;
-                mule.ServerCertificate = new CertificateReport(cert, errors == SslPolicyErrors.None);
+                mule.ServerCertificate = cert != null ? new CertificateReport(cert, errors == SslPolicyErrors.None) : null;
                 if (req.ServerCertificateValidationCallback != null)
                     return req.ServerCertificateValidationCallback(sender, cert, chain, errors);
                 return true;
@@ -150,7 +151,9 @@ namespace OAuch.Protocols.Http {
                 return null;
             }
             async Task<HttpWebRequest> CreateRequest(string url, HttpMethods method, CookieContainer cookies, X509CertificateCollection certificates, Dictionary<HttpRequestHeaders, string> headers, byte[] content, RemoteCertificateValidationCallback certificateValidation) {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
                 var request = WebRequest.Create(url) as HttpWebRequest;
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
                 if (request == null)
                     throw new NotSupportedException("The specified protocol is not supported; only HTTP(S) is supported.");
                 request.Method = method.Name;
@@ -312,6 +315,8 @@ namespace OAuch.Protocols.Http {
         //private static StateKey<Dictionary<string, ResponseSecurityReport>> _securityReportsKey = new StateKey<Dictionary<string, ResponseSecurityReport>>();
         //private static StateKey<Dictionary<string, string>> _securityReportUrlsKey = new StateKey<Dictionary<string, string>>();
 
+#pragma warning disable SYSLIB0039
+#pragma warning disable CS0618
         public async Task<IEnumerable<SslProtocols>> TryDowngradeConnection(string url) {
             // do not cache the result, because it is only used in one test
             if (!Uri.TryCreate(url, UriKind.Absolute ,out var uri))
@@ -325,6 +330,8 @@ namespace OAuch.Protocols.Http {
             var result = await sniffer.Sniff(uri, options);
             return result.AcceptedProtocols;
         }
+#pragma warning restore SYSLIB0039
+#pragma warning restore CS0618
 
         public async Task<IEnumerable<SslProtocols>> TryModernConnection(string url) {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))

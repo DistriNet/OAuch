@@ -14,12 +14,7 @@ using System.Web;
 
 namespace OAuch.Protocols.OAuth2 {
     public static class OAuthHelper {
-        public static string GenerateCodeVerifier() {
-            var bytes = new byte[32];
-            var rng = new RNGCryptoServiceProvider();
-            rng.GetBytes(bytes);
-            return EncodingHelper.Base64UrlEncode(bytes);
-        }
+        public static string GenerateCodeVerifier() => EncodingHelper.Base64UrlEncode(RandomNumberGenerator.GetBytes(32));
         public static string S256(string? input) {
             byte[] bytes;
             if (input == null)

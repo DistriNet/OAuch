@@ -117,7 +117,7 @@ namespace OAuch.Protocols.JWK {
                 var rsa = RSA.Create(rsap);
                 return TokenKey.FromRsa(rsa);
             }
-            TokenKey ParseEC() {
+            TokenKey? ParseEC() {
                 var ecp = new ECParameters();
                 var rc = key["crv"]?.ToObject<string>();
                 int expectedSize;
@@ -178,10 +178,13 @@ namespace OAuch.Protocols.JWK {
         }
     }
     public class JwtAlgorithmConverter : JsonConverter<JwtAlgorithm> {
-        public override void WriteJson(JsonWriter writer, JwtAlgorithm value, JsonSerializer serializer) {
-            writer.WriteValue(value.Name);
+        public override void WriteJson(JsonWriter writer, JwtAlgorithm? value, JsonSerializer serializer) {
+            if (value == null)
+                writer.WriteNull();
+            else
+                writer.WriteValue(value.Name);
         }
-        public override JwtAlgorithm ReadJson(JsonReader reader, Type objectType, JwtAlgorithm existingValue, bool hasExistingValue, JsonSerializer serializer) {
+        public override JwtAlgorithm ReadJson(JsonReader reader, Type objectType, JwtAlgorithm? existingValue, bool hasExistingValue, JsonSerializer serializer) {
             return JwtAlgorithm.CreateFromString((reader.Value as string) ?? "unknown");
         }
     }

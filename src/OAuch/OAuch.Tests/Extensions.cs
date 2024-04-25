@@ -26,6 +26,8 @@ namespace OAuch.Compliance {
             }
         }
         public static string ToName(this SslProtocols p) {
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0039 // Type or member is obsolete
             switch (p) {
                 case SslProtocols.Ssl2:
                     return "SSL 2.0";
@@ -42,6 +44,8 @@ namespace OAuch.Compliance {
                 default:
                     return "(unknown)";
             }
+#pragma warning restore SYSLIB0039 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
     }

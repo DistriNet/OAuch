@@ -39,6 +39,8 @@ namespace OAuch.Protocols.Tls {
             return ret;
         }
 
+#pragma warning disable SYSLIB0039
+#pragma warning disable CS0618
         public static void WriteProtocol(this MemoryStream ms, SslProtocols protocol, bool isExtension = false) {
             ms.WriteByte(0x03);
             if (isExtension && protocol == SslProtocols.Tls13) {
@@ -82,6 +84,7 @@ namespace OAuch.Protocols.Tls {
                     throw new NotSupportedException();
             }
         }
-        
+#pragma warning restore SYSLIB0039
+#pragma warning restore CS0618
     }
 }

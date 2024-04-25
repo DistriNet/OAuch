@@ -438,8 +438,10 @@ namespace OAuch.Protocols.Tls {
         }
         public const int ExtensionId = 0x0;
         public string? Hostname { get; }
-        public override int Length => Hostname.Length + 9;
+        public override int Length => Hostname != null ? Hostname.Length + 9 : 0;
         public override void WriteBytes(MemoryStream ms) {
+            if (Hostname == null)
+                return;
             var hostBytes = Encoding.ASCII.GetBytes(Hostname);
             ms.WriteInt(ExtensionId, 2);
             ms.WriteInt(hostBytes.Length + 5, 2);

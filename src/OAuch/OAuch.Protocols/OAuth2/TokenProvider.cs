@@ -330,8 +330,12 @@ namespace OAuch.Protocols.OAuth2 {
     }
 
     public class TokenProviderSettings {
-        public string Name { get; init; }
-        public string FlowType { get; init; }
+        public TokenProviderSettings(string name, string flowType) {
+            this.Name = name;
+            this.FlowType = flowType;
+        }
+        public string Name { get; }
+        public string FlowType { get; }
     }
     public class TokenProviderInfo {
         public TokenProviderSettings? Settings { get; set; }
@@ -349,8 +353,8 @@ namespace OAuch.Protocols.OAuth2 {
             this.Info = providerInfo;
         }
         public TokenProviderInfo Info { get; }
-        public string Name => Info.Settings!.Name;
-        public string FlowType => Info.Settings!.FlowType;
+        public string Name => Info.Settings?.Name ?? string.Empty;
+        public string FlowType => Info.Settings?.FlowType ?? string.Empty;
 
         public bool HasAccessTokens => Info.HasAccessTokens;
         public bool HasJwtAccessTokens => Info.HasJwtAccessTokens;
@@ -359,6 +363,8 @@ namespace OAuch.Protocols.OAuth2 {
         public bool HasRefreshTokens => Info.HasRefreshTokens;
 
         public TokenProvider CreateProvider(TestRunContext context) {
+            if (Info.Settings == null)
+                throw new ArgumentNullException("Settings cannot be null.");
             switch (FlowType) {
                 case OAuthHelper.TOKEN_FLOW_TYPE:
                 case OAuthHelper.IDTOKEN_TOKEN_FLOW_TYPE:

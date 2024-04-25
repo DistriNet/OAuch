@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Newtonsoft.Json;
 using OAuch.Protocols.Http;
@@ -107,7 +108,7 @@ namespace OAuch.Protocols.OAuth2 {
         [JsonProperty("request_parameter_supported")]
         public bool? RequestParameterSupported { get; set; }
 
-        public string MetadataUri { get; set; }
+        public string MetadataUri { get; set; } = string.Empty;
 
         public bool IsValid() {
             return !string.IsNullOrWhiteSpace(this.Issuer) && this.ResponseTypesSupported != null && this.GrantTypesSupported != null;
@@ -153,9 +154,7 @@ namespace OAuch.Protocols.OAuth2 {
                     result.MetadataUri = url;
                     return result;
                 }
-            } catch (Exception e) {
-                //Debug.WriteLine(e.ToString());
-            }
+            } catch { /* eat */ }
             return null;
         }
     }

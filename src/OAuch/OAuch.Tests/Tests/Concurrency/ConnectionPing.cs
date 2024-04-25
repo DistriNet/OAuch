@@ -17,7 +17,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
                     var stop = PreciseTime.Now;
                     return (int)stop.Subtract(start).TotalMilliseconds / 2;
                 }
-            } catch (Exception e) {
+            } catch {
                 return -1;
             }
         }

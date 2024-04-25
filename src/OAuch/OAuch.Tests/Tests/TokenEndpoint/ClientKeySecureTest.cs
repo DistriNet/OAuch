@@ -29,6 +29,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class ClientKeySecureTestImplementation : TestImplementation {
         public ClientKeySecureTestImplementation(TestRunContext context, ClientKeySecureTestResult result, IsAsymmetricClientAuthenticationUsedTestResult usesAsym) : base(context, result, usesAsym) { }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async override Task Run() {
             if (HasFailed<IsAsymmetricClientAuthenticationUsedTestResult>()) {
                 Result.Outcome = TestOutcomes.Skipped;
@@ -98,5 +99,6 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 }
             }
         }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 }

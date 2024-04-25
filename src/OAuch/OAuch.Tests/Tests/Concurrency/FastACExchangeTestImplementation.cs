@@ -20,7 +20,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace OAuch.Compliance.Tests.Concurrency {

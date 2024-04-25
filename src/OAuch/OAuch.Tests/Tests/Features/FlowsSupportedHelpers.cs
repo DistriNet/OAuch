@@ -48,10 +48,7 @@ namespace OAuch.Compliance.Tests.Features {
                     return;
                 }
 
-                var settings = new TokenProviderSettings {
-                    Name = this.Name,
-                    FlowType = this.FlowType
-                };
+                var settings = new TokenProviderSettings(this.Name, this.FlowType);
                 var provider = CreateProvider(settings, this.Context);
                 provider.OnSendingRedirect += Provider_OnSendingRedirect;
                 var response = await provider.GetToken();

@@ -51,10 +51,10 @@ namespace OAuch.Protocols.Http {
         public static string GetName(this SslProtocols? protocol) {
             if (protocol == null)
                 return "unknown";
+#pragma warning disable SYSLIB0039
+#pragma warning disable CS0618
             switch (protocol.Value) {
-#pragma warning disable CS0618 // Type or member is obsolete
                 case SslProtocols.Ssl3:
-#pragma warning restore CS0618 // Type or member is obsolete
                     return "SSL 3.0";
                 case SslProtocols.Tls:
                     return "TLS 1.0";
@@ -67,6 +67,8 @@ namespace OAuch.Protocols.Http {
                 default:
                     return "unknown";
             }
+#pragma warning restore SYSLIB0039
+#pragma warning restore CS0618
         }
     }
 }

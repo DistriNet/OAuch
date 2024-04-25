@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace OAuch.Shared.Logging {
     public class LoggedCallback : LoggedItem {
+        public LoggedCallback() {
+            this.Url = string.Empty;
+            this.FormData = string.Empty;
+        }
         public string Url { get; set; }
         public string FormData { get; set; }
 

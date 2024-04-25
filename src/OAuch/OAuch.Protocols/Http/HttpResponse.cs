@@ -8,6 +8,7 @@ using static OAuch.Protocols.Http.HttpHelper;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Security;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OAuch.Protocols.Http {
     public class HttpResponse {
@@ -108,6 +109,11 @@ namespace OAuch.Protocols.Http {
         internal HttpResponse(HttpRequest? request, HttpStatusCode statusCode, WebHeaderCollection headers, byte[] content, ISecurityReport securityReport) {
             Initialize(request, statusCode, headers, content, securityReport);
         }
+
+        [MemberNotNull(nameof(Headers))]
+        [MemberNotNull(nameof(StatusCode))]
+        [MemberNotNull(nameof(Content))]
+        [MemberNotNull(nameof(SecurityReport))]
         private void Initialize(HttpRequest? request, HttpStatusCode statusCode, WebHeaderCollection headers, byte[] content, ISecurityReport securityReport) {
             this.Request = request;
             this.StatusCode = statusCode;
@@ -212,7 +218,9 @@ namespace OAuch.Protocols.Http {
                                     return Encoding.UTF32;
                                 case "utf-7":
                                 case "csutf7":
+#pragma warning disable SYSLIB0001 // Type or member is obsolete
                                     return Encoding.UTF7;
+#pragma warning restore SYSLIB0001 // Type or member is obsolete
                             }
                             try {
                                 var enc = Encoding.GetEncoding(charsetValue);
