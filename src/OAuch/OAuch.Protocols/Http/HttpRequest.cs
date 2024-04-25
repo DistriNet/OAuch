@@ -8,7 +8,7 @@ namespace OAuch.Protocols.Http {
     public class HttpRequest {
         private HttpRequest(HttpMethods method, string url) {
             this.Headers = new Dictionary<HttpRequestHeaders, string>();
-            this.Headers[HttpRequestHeaders.AcceptEncoding] = "gzip, deflate, br";
+            //this.Headers[HttpRequestHeaders.AcceptEncoding] = "gzip, deflate, br";
             this.Method = method;
             this.Url = url;
             this.AllowAutoRedirect = false;

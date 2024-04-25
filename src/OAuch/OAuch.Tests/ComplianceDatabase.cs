@@ -58,7 +58,7 @@ namespace OAuch.Compliance {
         public static IReadOnlyList<Threat> AllThreats {
             get {
                 if (_threats == null) {
-                    _threats = new List<Threat> {
+                    _threats = new List<Threat> {                         
                         new Threat {
                             Id = "6819_4_1_1",
                             Title = "Obtaining Client Secrets",
@@ -1384,7 +1384,33 @@ namespace OAuch.Compliance {
                                       }
                                 }
                             }
-                        }
+                        },
+                        new Threat {
+                            Id = "MultiACConc",
+                            Title = "Multiple authorization codes concurrency bugs",
+                            Description = "Concurrency issues can result in an authorization code being used multiple times.",
+                            Document = AllDocuments[0],
+                            LocationInDocument = "",
+                            Instances = new List<ThreatInstance> {
+                                new ThreatInstance {
+                                      ExtraDescription = "A malicious client can exchange an authorization code multiple times.",
+                                      DependsOnFeatures = new List<Test>{
+                                          Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"]
+                                      },
+                                      MitigatedBy = new List<TestCombination> {
+                                          new TestCombination {
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
+                                              Tests["OAuch.Compliance.Tests.Concurrency.SingleFastACExchangeTest"],
+                                              Tests["OAuch.Compliance.Tests.Concurrency.MultiFastACExchangeTest"],
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenRevokedAfterUseTest"],
+                                              Tests["OAuch.Compliance.Tests.Concurrency.SingleFastRefreshTest"],
+                                              Tests["OAuch.Compliance.Tests.Concurrency.MultiFastRefreshTest"],
+                                              Tests["OAuch.Compliance.Tests.Concurrency.ConcurrentTokensRevokedTest"]
+                                          }
+                                      }
+                                }
+                            }
+                         } 
                     };
                 }
                 return _threats;
@@ -2837,8 +2863,6 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "8.5. TLS considerations"
                                 },
-
-
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AreStrongCiphersEnabledTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2880,6 +2904,51 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = ""
                                  },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Concurrency.SingleFastACExchangeTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Concurrency.MultiFastACExchangeTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenRevokedAfterUseTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Concurrency.SingleFastRefreshTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Concurrency.MultiFastRefreshTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Concurrency.ConcurrentTokensRevokedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.CanAccessTokensBeRevokedTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.Revocation.CanRefreshTokensBeRevokedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 }
                              }
                         }
                     };

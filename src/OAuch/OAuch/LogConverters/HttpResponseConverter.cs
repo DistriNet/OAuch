@@ -10,7 +10,8 @@ namespace OAuch.LogConverters {
         public LoggedItem Convert(HttpResponse item) {
             return new LoggedHttpResponse() {
                  Response = item.ToString(false),
-                 StatusCode = (int)item.StatusCode
+                 StatusCode = (int)item.StatusCode,
+                 Origin = item.Origin
             };
         }
     }

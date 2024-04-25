@@ -103,7 +103,7 @@ namespace OAuch.Protocols.Http {
                             }
                         }
                     }
-                            
+
                     //try {
                     //    cookieContainer.SetCookies(request.RequestUri, response.Headers.Get(i));
                     //} catch (Exception e) {
@@ -149,7 +149,7 @@ namespace OAuch.Protocols.Http {
                     return newUri.ToString();
                 return null;
             }
-            async Task<HttpWebRequest> CreateRequest(string url, HttpMethods method, CookieContainer cookies ,X509CertificateCollection certificates, Dictionary<HttpRequestHeaders, string> headers, byte[] content, RemoteCertificateValidationCallback certificateValidation) {
+            async Task<HttpWebRequest> CreateRequest(string url, HttpMethods method, CookieContainer cookies, X509CertificateCollection certificates, Dictionary<HttpRequestHeaders, string> headers, byte[] content, RemoteCertificateValidationCallback certificateValidation) {
                 var request = WebRequest.Create(url) as HttpWebRequest;
                 if (request == null)
                     throw new NotSupportedException("The specified protocol is not supported; only HTTP(S) is supported.");
@@ -216,13 +216,13 @@ namespace OAuch.Protocols.Http {
                     return null;
                 }
             }
-            CacheSettings IsCached(WebHeaderCollection headers ) {
-                var cache = CacheSettings.None;
-                if (headers.HasCacheControlNoStore()) cache = cache | CacheSettings.CacheControlNoStore;
-                if (headers.HasPragmaNoCache()) cache = cache | CacheSettings.PragmaNoCache;
-                return cache;
-            }
         }
+        public static CacheSettings IsCached(WebHeaderCollection headers) {
+            var cache = CacheSettings.None;
+            if (headers.HasCacheControlNoStore()) cache = cache | CacheSettings.CacheControlNoStore;
+            if (headers.HasPragmaNoCache()) cache = cache | CacheSettings.PragmaNoCache;
+            return cache;
+        }    
 
         /// <summary>
         /// Registers a full URL

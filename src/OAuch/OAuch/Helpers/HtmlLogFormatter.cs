@@ -53,8 +53,8 @@ namespace OAuch.Helpers {
             //public static string CreateSmallBox(string titleText, string messageHtml, string background = "bg-info", string icon = "fas fa-phone-volume") {
             //    return $"<div class=\"row justify-content-center\"><div class=\"col-12 col-md-11\"><div class=\"small-box { background }\"><div class=\"inner\"><h3>{ titleText }</h3>{ messageHtml }</div><div class=\"icon\"><i class=\"{ icon }\"></i></div></div></div></div>";
             //}
-            public static string CreateTimelineItem(string titleText, string messageHtml, string background, string icon) {
-                return $"<div class=\"tic\"><i class=\"{ icon } { background }\"></i><div class=\"timeline-item\"><h3 class=\"timeline-header { background }\">{ EncodingHelper.HtmlEncode(titleText) }</h3><div class=\"timeline-body\">{ messageHtml }</div></div></div>";
+            public static string CreateTimelineItem(string titleText, string messageHtml, string background, string icon, string? subtitle = "") {
+                return $"<div class=\"tic\"><i class=\"{ icon } { background }\"></i><div class=\"timeline-item\"><h3 class=\"timeline-header { background }\">{ EncodingHelper.HtmlEncode(titleText) }{subtitle}</h3><div class=\"timeline-body\">{ messageHtml }</div></div></div>";
             }
             public static string CreateTimelineItem(string titleText, string background, string icon) {
                 return $"<div class=\"tic\"><i class=\"{ icon } { background }\"></i><div class=\"timeline-item\"><h3 class=\"timeline-header { background }\">{ EncodingHelper.HtmlEncode(titleText) }</h3></div></div>";
@@ -123,7 +123,11 @@ namespace OAuch.Helpers {
                 if (response.Length > 16384 /*&& _printVersion*/) {
                     response = response.Substring(0, 16384) + "… HTTP RESPONSE CLIPPED …";
                 }
-                _output.Append(CreateTimelineItem($"HTTP { e.StatusCode } { Enum.GetName(typeof(HttpStatusCode), statusCode) }", "<pre>" + EncodingHelper.HtmlEncode(response) + "</pre>", statusCode.IsError() ? "bg-red" : "bg-green", "fas fa-download"));
+                string? st = null;
+                if (e.Origin != null) {
+                    st = $" <small><em>(from {e.Origin})</em></small>";
+                }
+                _output.Append(CreateTimelineItem($"HTTP {e.StatusCode} {Enum.GetName(typeof(HttpStatusCode), statusCode)}", "<pre>" + EncodingHelper.HtmlEncode(response) + "</pre>", statusCode.IsError() ? "bg-red" : "bg-green", "fas fa-download", st));
             }
 
             public void Visit(LoggedString e) {

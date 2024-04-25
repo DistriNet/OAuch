@@ -91,7 +91,7 @@ namespace OAuch.Controllers {
                         }
                     }
                 },
-                SelectedStandards = ComplianceDatabase.AllDocuments.Where(d => d.DocumentCategory != DocumentCategories.Other).Select(d => d.Id).ToList(),
+                SelectedStandards = ComplianceDatabase.AllDocuments.Select(d => d.Id).ToList(), //.Where(d => d.DocumentCategory != DocumentCategories.Other)
                 ExcludedFlows = new List<string> {
                     OAuthHelper.TOKEN_FLOW_TYPE,
                     OAuthHelper.IDTOKEN_TOKEN_FLOW_TYPE,
@@ -275,7 +275,7 @@ namespace OAuch.Controllers {
                     if (ModelState.ErrorCount == 0) {
                         var settings = new SiteSettings();
                         settings.CallbackUri = OAuchHelper.CallbackUri;
-                        settings.SelectedStandards = ComplianceDatabase.AllDocuments.Where(d => d.DocumentCategory != DocumentCategories.Other).Select(d => d.Id).ToList();
+                        settings.SelectedStandards = ComplianceDatabase.AllDocuments.Select(d => d.Id).ToList(); //.Where(d => d.DocumentCategory != DocumentCategories.Other)
                         if (metadata != null) { // != null implies that it's valid
                             string? scope = null;
                             if (metadata.ScopesSupported != null) {

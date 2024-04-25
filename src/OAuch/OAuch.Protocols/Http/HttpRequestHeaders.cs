@@ -11,6 +11,7 @@ namespace OAuch.Protocols.Http {
         public static HttpRequestHeaders ContentLength = new HttpRequestHeaders(3, "Content-Length");
         public static HttpRequestHeaders CacheControl = new HttpRequestHeaders(4, "Cache-Control");
         public static HttpRequestHeaders AcceptEncoding = new HttpRequestHeaders(5, "Accept-Encoding");
+        public static HttpRequestHeaders UserAgent = new HttpRequestHeaders(6, "User-Agent");
 
         private HttpRequestHeaders(int id, string name) : base(id, name) { }
 
@@ -21,6 +22,7 @@ namespace OAuch.Protocols.Http {
             _headers.Add(ContentLength);
             _headers.Add(CacheControl);
             _headers.Add(AcceptEncoding);
+            _headers.Add(UserAgent);
         }
 
         public static HttpRequestHeaders Create(string name) { 
