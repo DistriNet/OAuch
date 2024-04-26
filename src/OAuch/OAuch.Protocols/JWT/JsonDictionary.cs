@@ -11,8 +11,7 @@ namespace OAuch.Protocols.JWT {
             var value = this[key];
             if (value == null)
                 return default;
-            var jvalue = value as JToken;
-            if (jvalue != null) {
+            if (value is JToken jvalue) {
                 return jvalue.ToObject<T>();
             } else {
                 return (T)value;

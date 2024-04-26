@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OAuch.Protocols.OAuth2.Pipeline {
     public class StageList : IEnumerable<PipelineStage> {
         public StageList(PipelineStage initial) {
-            this.Stages = new List<PipelineStage>();
+            this.Stages = [];
             AddStage(initial);
         }
         internal void AddStage(PipelineStage stage) {
@@ -17,8 +17,7 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
 
         public bool HasProcessor<T>() where T : Processor {
             foreach (var s in this) {
-                var ps = s as IHasProcessor;
-                if (ps != null) {
+                if (s is IHasProcessor ps) {
                     if (ps.Processor is T)
                         return true;
                 }
@@ -28,8 +27,7 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
 
         public void Replace<T>(Processor newProcessor) where T : Processor {
             foreach (var stage in this) {
-                var processorStage = stage as IHasProcessor;
-                if (processorStage != null) {
+                if (stage is IHasProcessor processorStage) {
                     if (processorStage.Processor is T)
                         processorStage.Processor = newProcessor;
                 }
@@ -41,8 +39,7 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
         public void Remove<T, TPIn>() where T : Processor<TPIn, TPIn> => Replace<T, TPIn, TPIn>(input => input);
         public void AddBefore<T, TPIn, TPOut>(Processor<TPIn, TPIn> beforeProcessor) where T : Processor<TPIn, TPOut> {
             foreach (var stage in this) {
-                var processorStage = stage as PipelineStage<TPOut, TPIn>;
-                if (processorStage != null) {
+                if (stage is PipelineStage<TPOut, TPIn> processorStage) {
                     if (processorStage.Processor is T)
                         processorStage.Processor = new MultiProcessor<TPIn, TPIn, TPOut>(beforeProcessor, processorStage.Processor);
                 }
@@ -50,8 +47,7 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
         }
         public void AddAfter<T, TPIn, TPOut>(Processor<TPOut, TPOut> afterProcessor) where T : Processor<TPIn, TPOut> {
             foreach (var stage in this) {
-                var processorStage = stage as PipelineStage<TPOut, TPIn>;
-                if (processorStage != null) {
+                if (stage is PipelineStage<TPOut, TPIn> processorStage) {
                     if (processorStage.Processor is T)
                         processorStage.Processor = new MultiProcessor<TPIn, TPOut, TPOut>(processorStage.Processor, afterProcessor);
                 }
@@ -59,10 +55,9 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
         }
         public T? FindProcessor<T>() where T : Processor {
             foreach (var stage in this) {
-                var processorStage = stage as IHasProcessor;
-                if (processorStage != null) {
-                    if (processorStage.Processor is T)
-                        return (T)processorStage.Processor;
+                if (stage is IHasProcessor processorStage) {
+                    if (processorStage.Processor is T t)
+                        return t;
                 }
             }
             return null;

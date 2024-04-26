@@ -13,7 +13,7 @@ namespace OAuch.LogConverters {
         }
 
         public class RedirectInfo {
-            public string Url { get; set; }
+            public required string Url { get; set; }
         }
     }
 }

@@ -33,8 +33,7 @@ namespace OAuch.OAuthThreatModel {
             var types = Assembly.GetExecutingAssembly().GetExportedTypes().Where(c => !c.IsAbstract && testType.IsAssignableFrom(c)).ToList();
             var l = new List<T>();
             foreach (var t in types) {
-                var i = Activator.CreateInstance(t) as T;
-                if (i != null) {
+                if (Activator.CreateInstance(t) is T i) {
                     l.Add(i);
                 }
             }

@@ -38,13 +38,13 @@
         return sb.ToString();
     }
 }
-@if (Model.AttackReport.AttackChains.Count == 0) {
+@if (Model.AttackReport != null && Model.AttackReport.AttackChains.Count == 0) {
     <p>No potential attack scenarios could be found.</p>
-    var hasFlows = Model.AllFlows.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
-    var hasUnmitigatedThreats = Model.AllUnmitigatedThreats.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
-    var hasPartialThreats = Model.AllPartialThreats.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    var hasFlows = Model.AllFlows?.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false) ?? false;
+    var hasUnmitigatedThreats = Model.AllUnmitigatedThreats?.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false) ?? false;
+    var hasPartialThreats = Model.AllPartialThreats?.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false) ?? false;
     var hasThreats = hasUnmitigatedThreats || hasPartialThreats;
-    var hasAttackers = Model.AttackerTypes.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false);
+    var hasAttackers = Model.AttackerTypes?.Any(c => Model.SelectedFilter?.Contains(c.Id) ?? false) ?? false;
     if (!hasFlows || !hasThreats || !hasAttackers) {
         <ul class="text-danger">
             @if (!hasFlows) {
@@ -59,31 +59,39 @@
         </ul>
     }
 
-} else if (Model.AttackReport.AttackChains.Count == Model.AttackReport.MaxResults) {
-    <p>Only the first @Model.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
+} else if (Model.AttackReport != null && Model.AttackReport.AttackChains.Count == OAuch.Compliance.Results.AttackReport.MaxResults) {
+    <p>Only the first @OAuch.Compliance.Results.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
 }
 <div id="ElementsFilter" class="form-group">
     <select id="SelectedFilter" name="SelectedFilter" class="selectpicker show-tick" data-width="100%" multiple="multiple">
+        @if(Model.AllFlows != null) {
         <optgroup label="Authorization Grants">
             @foreach (var f in Model.AllFlows) {
                 <text>@CreateFlowOption(f)</text>
             }
         </optgroup>
+        }
+        @if(Model.AttackerTypes != null) {
         <optgroup label="Attacker Types">
             @foreach (var at in Model.AttackerTypes) {
                 <text>@CreateAttackerOption(at)</text>
             }
         </optgroup>
+        }
+        @if(Model.AllUnmitigatedThreats != null) {
         <optgroup label="Unmitigated Threats">
             @foreach (var t in Model.AllUnmitigatedThreats) {
                 <text>@CreateThreatOption(t)</text>
             }
         </optgroup>
+        }
+        @if(Model.AllPartialThreats != null) {
         <optgroup label="Partially Mitigated Threats">
             @foreach (var t in Model.AllPartialThreats) {
                 <text>@CreateThreatOption(t)</text>
             }
         </optgroup>
+        }
     </select>
 </div>
 <button class="btn btn-secondary" type="submit">Apply Filter</button>
@@ -97,8 +105,9 @@
 </script>
 
 <p>&nbsp;</p>
-<p>@Model.AttackReport.AttackChains.Count attack scenarios have been found.</p>
-@for (int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
+<p>@(Model.AttackReport?.AttackChains.Count ?? 0) attack scenarios have been found.</p>
+@if (Model.AttackReport != null) {
+for (int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
     var chain = Model.AttackReport.AttackChains[i];
     <div class="card collapsed-card">
         <div class="card-header bg-lightgray">
@@ -121,7 +130,8 @@
                         <div class="tic"><i class="fas fa-info bg-info"></i><div class="timeline-item"><h3 class="timeline-header bg-lightgray">@el.Description</h3></div></div>
                     } else if (el is Threat) {
                         var bg = "bg-warning"; // default to partially mitigated
-                        var ot = Model.ThreatReports[el.Id];
+                        var ot = Model.ThreatReports?[el.Id];
+                        if (ot != null) {
                         if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) { // unmitigated threat
                             bg = "bg-red";
                         }
@@ -150,6 +160,7 @@
                                 </div>
                             </div>
                         </div>
+                        }
                     }
                 }
                 @foreach (var vul in chain.Vulnerabilities) {
@@ -158,4 +169,5 @@
             </div>
         </div>
     </div>
+}
 }

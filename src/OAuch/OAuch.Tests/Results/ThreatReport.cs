@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Results {
     public class InstanceReport { 
-        public ThreatInstance ThreatInstance { get; init; }
+        public required ThreatInstance ThreatInstance { get; init; }
         public TestOutcomes? Outcome { get; init; }
         public bool? IsRelevant { get; init; }
     }

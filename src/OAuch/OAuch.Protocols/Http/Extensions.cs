@@ -51,24 +51,14 @@ namespace OAuch.Protocols.Http {
         public static string GetName(this SslProtocols? protocol) {
             if (protocol == null)
                 return "unknown";
-#pragma warning disable SYSLIB0039
-#pragma warning disable CS0618
-            switch (protocol.Value) {
-                case SslProtocols.Ssl3:
-                    return "SSL 3.0";
-                case SslProtocols.Tls:
-                    return "TLS 1.0";
-                case SslProtocols.Tls11:
-                    return "TLS 1.1";
-                case SslProtocols.Tls12:
-                    return "TLS 1.2";
-                case SslProtocols.Tls13:
-                    return "TLS 1.3";
-                default:
-                    return "unknown";
-            }
-#pragma warning restore SYSLIB0039
-#pragma warning restore CS0618
+            return protocol.Value switch {
+                SslProtocols.Ssl3 => "SSL 3.0",
+                SslProtocols.Tls => "TLS 1.0",
+                SslProtocols.Tls11 => "TLS 1.1",
+                SslProtocols.Tls12 => "TLS 1.2",
+                SslProtocols.Tls13 => "TLS 1.3",
+                _ => "unknown",
+            };
         }
     }
 }

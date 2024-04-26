@@ -7,7 +7,7 @@
     if (ViewData["Title"] == null)
         title = "OAuch";
     else
-        title = ViewData["Title"].ToString() + " - OAuch";
+        title = (ViewData["Title"]?.ToString() ?? "<Selected Site>") + " - OAuch";
 
     bool isAuthenticated = this.User?.Identity?.IsAuthenticated ?? false;
     var menuInfo = this.Model as IMenuInformation;

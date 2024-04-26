@@ -48,8 +48,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 // ... check every certificate in the client authentication chain
                 var certs = this.Context.SiteSettings.Certificates;
                 foreach(var cert in certs) {
-                    var x509 = cert as X509Certificate2;
-                    if (x509 != null) {
+                    if (cert is X509Certificate2 x509) {
                         var rsa = x509.PublicKey.GetRSAPublicKey();
                         if (rsa != null) {
                             if (rsa.KeySize < 2048) {

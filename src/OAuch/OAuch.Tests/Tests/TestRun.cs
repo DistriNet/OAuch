@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests {
     public class TestRun {
-        public bool IsCompleted { get; set; }
-        public IList<OAuthDocument> SelectedDocuments { get; set; }
-        public IList<TestResult> TestResults { get; set; }
-        public TestRunContext Context { get; set; }
+        public required bool IsCompleted { get; set; }
+        public required IList<OAuthDocument> SelectedDocuments { get; set; }
+        public required IList<TestResult> TestResults { get; set; }
+        public required TestRunContext Context { get; set; }
     }
 }

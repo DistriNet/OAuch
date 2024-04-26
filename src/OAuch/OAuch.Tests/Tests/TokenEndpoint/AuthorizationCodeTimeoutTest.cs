@@ -38,8 +38,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return;
             }
 
-            var provider = flows.CreateProvider(Context, (f, p) => f.HasAuthorizationCodes) as AuthorizationCodeTokenProvider;
-            if (provider == null) {
+            if (flows.CreateProvider(Context, (f, p) => f.HasAuthorizationCodes) is not AuthorizationCodeTokenProvider provider) {
                 Result.Outcome = TestOutcomes.Skipped;
                 return;
             }

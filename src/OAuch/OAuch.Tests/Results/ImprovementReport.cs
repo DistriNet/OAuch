@@ -23,7 +23,7 @@ namespace OAuch.Compliance.Results {
             if (_improvements.Count > 0) {
                 var max = _improvements.Values.Max(v => v.Score);
                 foreach (var v in _improvements.Values) {
-                    v.Score = v.Score / max;
+                    v.Score /= max;
                 }
             }
 
@@ -55,8 +55,7 @@ namespace OAuch.Compliance.Results {
 
         public MitigationImprovement this[string? testId] {
             get {
-                if (testId == null)
-                    testId = "";
+                testId ??= "";
                 if (_improvements.TryGetValue(testId, out var value))
                     return value;
                 var newMi = new MitigationImprovement(testId);

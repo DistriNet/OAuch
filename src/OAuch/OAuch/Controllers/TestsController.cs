@@ -20,12 +20,11 @@ namespace OAuch.Controllers {
                 return NotFound();
             var model = new TestViewModel() {
                 Test = test,
-                Requirements = new Dictionary<OAuthDocument, TestRequirementLevel>()
+                Requirements = []
             };
             foreach(var document in ComplianceDatabase.AllDocuments) {
                 var req = document.Countermeasures.Where(c => c.Test.TestId == id).FirstOrDefault();
-                if (req == null)
-                    req = document.DeprecatedFeatures.Where(c => c.Test.TestId == id).FirstOrDefault();
+                req ??= document.DeprecatedFeatures.Where(c => c.Test.TestId == id).FirstOrDefault();
                 if (req != null)
                     model.Requirements[document] = req;
             }

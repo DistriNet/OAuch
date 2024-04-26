@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace OAuch.ViewModels {
     public class TestInfoViewModel {
-        private static Dictionary<string, string> CategoryDescriptions = new Dictionary<string, string> {
+        private static readonly Dictionary<string, string> CategoryDescriptions = new() {
             ["DocumentSupport"] = "Document Support",
             ["Features"] = "Feature Support",
             ["AuthEndpoint"] = "Authorization Endpoint",
@@ -25,7 +25,7 @@ namespace OAuch.ViewModels {
             this.Category = HelperMethods.GetTestCategory(this.ShortId);
         }
         public string ShortId { get; set; }
-        public string TestName => ShortId.Substring(Category.Length + 1);
+        public string TestName => ShortId[(Category.Length + 1)..];
         public string Category { get; set; }
         public string CategoryDescription {
             get {
@@ -45,8 +45,8 @@ namespace OAuch.ViewModels {
 
         private class CategoryComparer : IComparer<string> {
             public CategoryComparer() {
-                _values = TestInfoViewModel.CategoryDescriptions.Values.ToList();
-                _notFound = new List<string>();
+                _values = [.. TestInfoViewModel.CategoryDescriptions.Values];
+                _notFound = [];
             }
             public int Compare(string? x, string? y) {
                 if (x is null && y is null)
@@ -73,8 +73,8 @@ namespace OAuch.ViewModels {
                 _notFound.Add(cat);
                 return _values.Count + _notFound.Count - 1;
             }
-            private List<string> _values;
-            private List<string> _notFound;
+            private readonly List<string> _values;
+            private readonly List<string> _notFound;
         }
     }
 }

@@ -7,8 +7,8 @@
     ViewData["Title"] = "Site overview";
 
     //var latest = Model.LatestResult;
-    var layoutClass = "";
-    var layoutResult = "";
+    // var layoutClass = "";
+    // var layoutResult = "";
 
     //if (latest != null && latest.Rating.Overall.Label != ResultLabels.Unknown) {
     //    layoutClass = latest.Rating.Overall.Label.ToClassType();
@@ -28,13 +28,13 @@
             return missingText;
         return emptyText;
     }
-    IHtmlContent ToText(SettingsStatus status) {
-        if (status == SettingsStatus.Incomplete)
-            return incompleteText;
-        else if (status == SettingsStatus.Disabled)
-            return disabledText;
-        return emptyText;
-    }
+    // IHtmlContent ToText(SettingsStatus status) {
+    //     if (status == SettingsStatus.Incomplete)
+    //         return incompleteText;
+    //     else if (status == SettingsStatus.Disabled)
+    //         return disabledText;
+    //     return emptyText;
+    // }
 }
 
 <h1 class="display-4">Site overview</h1>

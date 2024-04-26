@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace OAuch.ViewModels {
     public class TestsViewModel {
-        public IReadOnlyList<Test> Tests { get; set; }
+        public required IReadOnlyList<Test> Tests { get; set; }
     }
 }

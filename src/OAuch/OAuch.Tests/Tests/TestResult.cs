@@ -32,8 +32,8 @@ namespace OAuch.Compliance.Tests {
             get {
                 if (_constructorParameters == null) {
                     var implementationType = ImplementationType;
-                    var contextType = typeof(TestRunContext);
-                    var testResultType = typeof(TestResult);
+                    //var contextType = typeof(TestRunContext);
+                    //var testResultType = typeof(TestResult);
                     var consts = implementationType.GetConstructors();
                     if (consts.Length != 1) {
                         Debugger.Break(); // this should never happen!
@@ -74,9 +74,7 @@ namespace OAuch.Compliance.Tests {
                     }
                 }
             var result = Activator.CreateInstance(implementationType, objects) as TestImplementation;
-            if (result == null)
-                throw new MethodAccessException("Could not initialize " + implementationType.FullName);
-            return result;
+            return result ?? throw new MethodAccessException("Could not initialize " + implementationType.FullName); ;
         }
         [JsonIgnore]
         public IEnumerable<Type> Dependencies {

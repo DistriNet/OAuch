@@ -27,9 +27,7 @@ namespace OAuch.OAuthThreatModel.Threats {
 
         public static List<Threat> All {
             get {
-                if (_allThreats == null) {
-                    _allThreats = FindElements<Threat>();
-                }
+                _allThreats ??= FindElements<Threat>();
                 return _allThreats;
             }
         }

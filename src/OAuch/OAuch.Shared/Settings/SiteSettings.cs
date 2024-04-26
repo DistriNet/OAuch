@@ -19,12 +19,12 @@ namespace OAuch.Shared.Settings {
         public string? Scope { get; set; }
     }
     public record GrantOverride { 
-        public string? FlowType { get; set; }
+        public required string FlowType { get; set; }
         public ClientSettings? OverrideSettings { get; set; }
     }
     public record SiteSettings {
         public SiteSettings() {
-            this.SelectedStandards = new List<string>();
+            this.SelectedStandards = [];
             this.DefaultClient = new ClientSettings();
             this.AlternativeClient = new ClientSettings();
         }
@@ -59,7 +59,7 @@ namespace OAuch.Shared.Settings {
             }
             return defs;
 
-            string? Fix(string? def, string? ovr) {
+            static string? Fix(string? def, string? ovr) {
                 if (string.IsNullOrWhiteSpace(ovr))
                     return def;
                 return ovr;
@@ -106,9 +106,7 @@ namespace OAuch.Shared.Settings {
                         if (_certificates == null)
                             this.CertificateId = null; // certificate doesn't exist anymore (deleted?)
                     }
-                    if (_certificates == null) {
-                        _certificates = new X509CertificateCollection();
-                    }
+                    _certificates ??= [];
                 }
                 return _certificates;
             }

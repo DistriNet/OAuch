@@ -29,6 +29,7 @@
                 return "Other";
         }
     }
+    #pragma warning disable CS8602
 }
 <div class="row">
     <div class="col-12 col-lg-10 col-xl-8">
@@ -389,6 +390,9 @@
         }
     </div>
 </div>
+@{
+        #pragma warning restore CS8602
+}
 @section Styles {
     <link href="/plugins/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/plugins/ion-rangeslider/css/ion.rangeSlider.min.css">

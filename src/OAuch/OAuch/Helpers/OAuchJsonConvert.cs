@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OAuch.Helpers {
     public static class OAuchJsonConvert {
-        public static T Deserialize<T>(string json) {
+        public static T? Deserialize<T>(string json) {
             return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto,
@@ -25,7 +25,7 @@ namespace OAuch.Helpers {
         }
     }
     public class ForgivingSerializationBinder : ISerializationBinder {
-        DefaultSerializationBinder defaultBinder = new DefaultSerializationBinder();
+        private readonly DefaultSerializationBinder defaultBinder = new();
 
         void ISerializationBinder.BindToName(Type serializedType, out string? assemblyName, out string? typeName) {
             defaultBinder.BindToName(serializedType, out assemblyName, out typeName);

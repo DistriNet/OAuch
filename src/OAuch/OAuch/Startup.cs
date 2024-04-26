@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Rewrite;
 using OAuch.Shared.Interfaces;
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OAuch {
     public class Startup {
@@ -33,6 +34,7 @@ namespace OAuch {
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         public void ConfigureServices(IServiceCollection services) {
             var builder = services.AddControllersWithViews();
             services.AddDbContext<OAuchDbContext>();
@@ -94,6 +96,7 @@ namespace OAuch {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
@@ -103,10 +106,10 @@ namespace OAuch {
             }
             app.Use(async (context, next) => {
                 /* Do not add Strict-Transport-Security */
-                context.Response.Headers["X-Frame-Options"] = "DENY";
-                context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
-                context.Response.Headers["X-Content-Type-Options"] = "nosniff";
-                context.Response.Headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline' www.google.com www.gstatic.com; style-src 'self' 'unsafe-inline' code.ionicframework.com fonts.googleapis.com; font-src 'self' code.ionicframework.com fonts.gstatic.com; frame-src www.google.com; frame-ancestors 'none'; navigate-to *; img-src 'self' www.gstatic.com;";
+                context.Response.Headers.XXSSProtection = "1; mode=block";
+                context.Response.Headers.XFrameOptions = "DENY";
+                context.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self' 'unsafe-inline' www.google.com www.gstatic.com; style-src 'self' 'unsafe-inline' code.ionicframework.com fonts.googleapis.com; font-src 'self' code.ionicframework.com fonts.gstatic.com; frame-src www.google.com; frame-ancestors 'none'; navigate-to *; img-src 'self' www.gstatic.com;";
+                context.Response.Headers.XContentTypeOptions = "nosniff";
                 context.Response.Headers["Referrer-Policy"] = "no-referrer";
                 context.Response.Headers["Feature-Policy"] = "geolocation 'none';midi 'none';notifications 'none';push 'none';sync-xhr 'none';microphone 'none';camera 'none';magnetometer 'none';gyroscope 'none';speaker 'self';vibrate 'none';fullscreen 'self';payment 'none';accelerometer 'none';ambient-light-sensor 'none';autoplay 'none';document-write 'none';usb 'none'";
                 context.Response.Headers["Permissions-Policy"] = "geolocation=();midi=();notifications=();push=();sync-xhr=();microphone=();camera=();magnetometer=();gyroscope=();speaker=(self);vibrate=();fullscreen=(self);payment=();accelerometer=();ambient-light-sensor=();autoplay=();document-write=();usb=()";

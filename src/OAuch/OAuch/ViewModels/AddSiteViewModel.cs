@@ -10,7 +10,7 @@ namespace OAuch.ViewModels {
     public class AddSiteViewModel : IMenuInformation {
         [Required]
         [StringLength(35)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [DisplayName("Metadata URL")]
         public string? MetadataUrl { get; set; }
 

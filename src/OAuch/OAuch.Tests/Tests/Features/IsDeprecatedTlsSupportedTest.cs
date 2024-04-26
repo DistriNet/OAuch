@@ -67,7 +67,7 @@ namespace OAuch.Compliance.Tests.Features {
                 return null;
             testedHosts.Add(host);
 
-            var result = await Http.TryDowngradeConnection(url);
+            var result = await HttpHelper.TryDowngradeConnection(url);
             if (result.Count() > 0) {
                 foreach (var sslProt in result) {
                     if (!supportedProtocols.Contains(sslProt))

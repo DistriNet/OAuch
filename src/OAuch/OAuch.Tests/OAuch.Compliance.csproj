@@ -4,9 +4,10 @@
 	  <TargetFramework>net8.0</TargetFramework>
 	  <Nullable>enable</Nullable>
 	  <LangVersion>latest</LangVersion>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <Compile Remove="Tests\MutualTls\**" />
     <EmbeddedResource Remove="Tests\MutualTls\**" />
     <None Remove="Tests\MutualTls\**" />

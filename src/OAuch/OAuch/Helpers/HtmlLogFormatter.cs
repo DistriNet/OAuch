@@ -19,7 +19,7 @@ namespace OAuch.Helpers {
             //
         }
 
-        public string ToHtml(Guid resultId, IEnumerable<TestResult> testResults, bool printVersion = false) {
+        public static string ToHtml(Guid resultId, IEnumerable<TestResult> testResults, bool printVersion = false) {
             var sb = new StringBuilder();
             var visitor = new HtmlVisitor(resultId, sb, printVersion);
             foreach (var e in testResults) {
@@ -27,7 +27,7 @@ namespace OAuch.Helpers {
             }
             return sb.ToString();
         }
-        public string ToHtml(Guid resultId, TestResult result, bool printVersion = false) {
+        public static string ToHtml(Guid resultId, TestResult result, bool printVersion = false) {
             var sb = new StringBuilder();
             var visitor = new HtmlVisitor(resultId, sb, printVersion);
             result.TestLog.Accept(visitor);
@@ -40,9 +40,9 @@ namespace OAuch.Helpers {
                 _printVersion = printVersion;
                 _resultId = resultId;
             }
-            private StringBuilder _output;
-            private bool _printVersion;
-            private Guid _resultId;
+            private readonly StringBuilder _output;
+            private readonly bool _printVersion;
+            private readonly Guid _resultId;
 
             public static string CreateInfoBox(string titleText, string messageHtml, string background = "bg-warning", string icon = "fas fa-exclamation-triangle") {
                 return $"<div class=\"row justify-content-center\"><div class=\"col-12 col-md-10\"><div class=\"info-box { background }\"><span class=\"info-box-icon\"><i class=\"{ icon }\"></i></span><div class=\"info-box-content\"><p class=\"infotitle\">{ EncodingHelper.HtmlEncode(titleText) }</p><span>{ messageHtml }</span></div></div></div></div>";
@@ -85,10 +85,10 @@ namespace OAuch.Helpers {
             public void Visit(LoggedException e) {
                 _output.Append(CreateInfoBox("Unexpected error...", GetExceptionDescription(e)));
             }
-            private string GetExceptionDescription(LoggedException e) {
+            private static string GetExceptionDescription(LoggedException e) {
                 var desc = $"An unexpected error occurred while performing the test. The system returned the message: <em>`{ EncodingHelper.HtmlEncode(e.Message ?? "(none)") }'</em>. The final result of the test may not be correctly determined.";
                 if (e.InnerException != null) {
-                    StringBuilder messageTrace = new StringBuilder();
+                    var messageTrace = new StringBuilder();
                     messageTrace.Append("<br/>");
                     LoggedException? ex = e;
                     var spaces = 0;
@@ -104,7 +104,7 @@ namespace OAuch.Helpers {
                         ex = ex.InnerException;
                         spaces += 2;
                     }
-                    desc = desc + messageTrace.ToString();
+                    desc += messageTrace.ToString();
                 }
                 return desc;
             }
@@ -112,7 +112,7 @@ namespace OAuch.Helpers {
             public  void Visit(LoggedHttpRequest e) {
                 var url = e.Url;
                 if (url.Length > 90) {
-                    url = url.Substring(0, 90) + "…";
+                    url = url[..90] + "…";
                 }
                 _output.Append(CreateTimelineItem($"HTTP { e.Method } { url }", "<pre>" + EncodingHelper.HtmlEncode(e.Request) + "</pre>", "bg-blue", "fas fa-upload"));
             }
@@ -121,7 +121,7 @@ namespace OAuch.Helpers {
                 var statusCode = (HttpStatusCode)e.StatusCode;
                 var response = e.Response;
                 if (response.Length > 16384 /*&& _printVersion*/) {
-                    response = response.Substring(0, 16384) + "… HTTP RESPONSE CLIPPED …";
+                    response = response[..16384] + "… HTTP RESPONSE CLIPPED …";
                 }
                 string? st = null;
                 if (e.Origin != null) {

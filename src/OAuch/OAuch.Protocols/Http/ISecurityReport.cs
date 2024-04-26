@@ -35,8 +35,7 @@ namespace OAuch.Protocols.Http {
         }
         public CertificateReport(X509Certificate certificate, bool isValid) {
             this.IsValid = isValid;
-            var c2 = certificate as X509Certificate2;
-            if (c2 != null) {
+            if (certificate is X509Certificate2 c2) {
                 this.IssuedTo = c2.Subject;
                 this.IssuedBy = c2.Issuer;
                 this.ValidFrom = c2.NotBefore;
@@ -58,7 +57,7 @@ namespace OAuch.Protocols.Http {
         public string Thumbprint { get; set; }
 
         public override string ToString() {
-            return $"Issued to: { IssuedTo }\r\nIssued by: { IssuedBy }\r\nThumbprint: { Thumbprint }\r\nValid from { ValidFrom.ToString("d MMM yyyy") } to { ValidTo.ToString("d MMM yyyy") }\r\n\r\nTrusted certificate: { (IsValid ? "YES" : "NO") }";
+            return $"Issued to: { IssuedTo }\r\nIssued by: { IssuedBy }\r\nThumbprint: { Thumbprint }\r\nValid from {ValidFrom:d MMM yyyy} to {ValidTo:d MMM yyyy}\r\n\r\nTrusted certificate: { (IsValid ? "YES" : "NO") }";
         }
     }
 }

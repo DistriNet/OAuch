@@ -12,7 +12,7 @@ namespace OAuch.Protocols.JWK {
    public class JwkSet : ICollection<JsonWebKey> {
         [JsonConstructor]
         private JwkSet() {
-            this.Keys = new List<JsonWebKey>();
+            this.Keys = [];
         }
         private JwkSet(List<JsonWebKey> keys) {
             this.Keys = keys;
@@ -49,8 +49,7 @@ namespace OAuch.Protocols.JWK {
         public static JwkSet? Create(string json, LogContext logger) {
             try {
                 var set = JObject.Parse(json);
-                var keys = set["keys"] as JArray;
-                if (keys == null)
+                if (set["keys"] is not JArray keys)
                     return null;
                 var keyList = new List<JsonWebKey>();
                 foreach (var jo in keys) {

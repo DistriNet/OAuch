@@ -9,7 +9,7 @@
 @using OAuch.Shared
 @{
     Layout = null;
-    var documents = Model.Result.TestSettings.SelectedStandards?.Select(did => ComplianceDatabase.AllDocuments.FirstOrDefault(d => d.Id == did)).Where(d => d != null).ToList() ?? new List<OAuthDocument?>();
+    var documents = Model.Result.TestSettings.SelectedStandards?.Select(did => ComplianceDatabase.AllDocuments.FirstOrDefault(d => d.Id == did)).Where(d => d != null).Cast<OAuthDocument>().ToList() ?? new List<OAuthDocument>();
     if (documents.Count == 0)
         documents = ComplianceDatabase.AllDocuments.ToList();
 
@@ -713,7 +713,7 @@
         <ul>
             @foreach (var flow in Model.Result.SupportedFlows) {
                 <li>
-                    <strong>@flow.Settings.Name</strong> (@FormatFlow(flow))
+                    <strong>@(flow.Settings?.Name ?? "Unknown Grant")</strong> (@FormatFlow(flow))
                 </li>
             }
         </ul>
@@ -783,7 +783,7 @@
             <p class="text-center">
                 Figure 1: <em>
                     The normal distribution corresponds to the failure rates observed in the OAuth ecosystem (more info on <a href="https://lirias.kuleuven.be/3765111?limo=0" target="_blank">https://lirias.kuleuven.be/3765111?limo=0</a>).
-                    The tested site in this document has a failure rate of @((Model.Result.OverallCompliance.OverallScore.FailureRate * 100).ToString("0.0"))%, which is indicated with the red vertical line. Lower failure rates are better.<em></p>
+                    The tested site in this document has a failure rate of @((Model.Result.OverallCompliance.OverallScore.FailureRate * 100).ToString("0.0"))%, which is indicated with the red vertical line. Lower failure rates are better.</em></p>
         </div>
 
         @* test settings *@
@@ -928,7 +928,7 @@
             <ul class="spacedUl">
                 @foreach (var deprecatedFeature in Model.Result.OverallCompliance.DeprecatedFeatures) {
                     if (deprecatedFeature.IsCompliant == false) {
-                        if (ComplianceDatabase.Tests.TryGetValue(deprecatedFeature.TestResult?.TestId, out var test)) {
+                        if (deprecatedFeature.TestResult != null && ComplianceDatabase.Tests.TryGetValue(deprecatedFeature.TestResult.TestId, out var test)) {
                             <li>
                                 @(test.Title): <strong>@test.ResultFormatter.Format(deprecatedFeature.TestResult.Outcome)</strong><br />
                                 @{
@@ -1046,12 +1046,6 @@
 
             foreach (var test in Model.Result.AllResults) {
                 if (ComplianceDatabase.Tests.TryGetValue(test.TestId, out var testInfo)) {
-                    if (!Model.IncludePendingTests && test.Outcome == null)
-                        continue;
-                    if (!Model.IncludeSkippedTests && test.Outcome == TestOutcomes.Skipped)
-                        continue;
-                    if (!Model.IncludeFailedTests && test.Outcome == TestOutcomes.Failed)
-                        continue;
                     if (!Model.IncludeSucceededTests && test.Outcome == TestOutcomes.SpecificationFullyImplemented || test.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
                         continue;
 
@@ -1089,7 +1083,7 @@
                     @* print the log *@
                     if (Model.IncludeLog) {
                         <h3>Test log</h3>
-                        @Html.Raw(formatter.ToHtml(Model.ResultId, test, true))
+                        @Html.Raw(HtmlLogFormatter.ToHtml(Model.ResultId, test, true))
                     }
                     if (!Model.IncludeLog) {
                         @:@Html.Raw("</div>")

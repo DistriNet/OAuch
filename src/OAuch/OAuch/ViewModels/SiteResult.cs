@@ -3,8 +3,8 @@ using System;
 
 namespace OAuch.ViewModels {
     public class SiteResult {
-        public Guid SiteId { get; set; }
-        public string SiteName { get; set; }
-        public ComplianceResult Result { get; set; }
+        public required Guid SiteId { get; init; }
+        public required string SiteName { get; init; }
+        public required ComplianceResult Result { get; init; }
     }
 }

@@ -14,8 +14,7 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
         public PKCESupportTypes PKCEUsage { get; }
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
             if (this.PKCEUsage != PKCESupportTypes.None) {
-                var acprov = tokenProvider as AuthorizationCodeTokenProvider;
-                if (acprov != null) {
+                if (tokenProvider is AuthorizationCodeTokenProvider acprov) {
                     if (this.PKCEUsage == PKCESupportTypes.Hash) {
                         value["code_challenge"] = OAuthHelper.S256(acprov.CodeVerifier);
                         value["code_challenge_method"] = "S256";

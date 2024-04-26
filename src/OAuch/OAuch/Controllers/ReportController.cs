@@ -12,6 +12,7 @@ using OAuch.Shared.Settings;
 using OAuch.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,11 +48,13 @@ namespace OAuch.Controllers {
             return View(model);
         }
         [NonAction]
-        private ComplianceResult GetSiteResults(SerializedTestRun serializedTestRun) {
+        private static ComplianceResult GetSiteResults(SerializedTestRun serializedTestRun) {
             var settings = OAuchJsonConvert.Deserialize<SiteSettings>(serializedTestRun.ConfigurationJson);
             var docIds = OAuchJsonConvert.Deserialize<List<string>>(serializedTestRun.SelectedDocumentIdsJson);
-            var documents = docIds.Select(did => ComplianceDatabase.AllDocuments.FirstOrDefault(d => d.Id == did)).Where(c => c != null).Select(c => c!);
             var testResults = OAuchJsonConvert.Deserialize<List<TestResult>>(serializedTestRun.TestResultsJson);
+            if (settings == null || docIds == null || testResults == null)
+                throw new InvalidDataException("Could not deserialize the test run.");
+            var documents = docIds.Select(did => ComplianceDatabase.AllDocuments.FirstOrDefault(d => d.Id == did)).Where(c => c != null).Select(c => c!);
             return new ComplianceResult(serializedTestRun.StartedAt, settings, documents, testResults);
         }
     }

@@ -51,8 +51,7 @@ namespace OAuch.Compliance.Tests.Pkce {
                 }
             };
 
-            var provider = flows.CreateProvider(pkceContext, (fact, prov) => prov.FlowType == OAuthHelper.CODE_FLOW_TYPE) as AuthorizationCodeTokenProvider;
-            if (provider == null) {
+            if (flows.CreateProvider(pkceContext, (fact, prov) => prov.FlowType == OAuthHelper.CODE_FLOW_TYPE) is not AuthorizationCodeTokenProvider provider) {
                 Result.Outcome = TestOutcomes.Skipped;
                 LogInfo("The authorization code grant is not working");
                 return;

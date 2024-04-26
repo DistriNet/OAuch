@@ -7,7 +7,7 @@ using Unity;
 namespace OAuch.Shared.Logging {
     public class LogContext : LoggedItem {
         public LogContext() {
-            this.Children = new List<LoggedItem>();
+            this.Children = [];
         }
 
         public virtual IList<LoggedItem> Children { get; set; }
@@ -38,7 +38,7 @@ namespace OAuch.Shared.Logging {
         public static LogContext NullLogger => new NullLogContext();
 
         private class NullLogContext : LogContext {
-            public override IList<LoggedItem> Children => new List<LoggedItem>();
+            public override IList<LoggedItem> Children => [];
             public override void Log(string? message, LoggedStringTypes type = LoggedStringTypes.Info) {}
             public override void Log<T>(T item) {}
         }

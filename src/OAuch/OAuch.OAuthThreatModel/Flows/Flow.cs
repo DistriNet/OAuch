@@ -22,9 +22,7 @@ namespace OAuch.OAuthThreatModel.Flows {
 
         public static List<Flow> All {
             get {
-                if (_allFlows == null) {
-                    _allFlows = FindElements<Flow>();
-                }
+                _allFlows ??= FindElements<Flow>();
                 return _allFlows;
             }
         }

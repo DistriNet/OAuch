@@ -6,13 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {
-    public static class PreciseTime {
-        [DllImport("Kernel32.dll", CallingConvention = CallingConvention.Winapi)]
-        private static extern void GetSystemTimePreciseAsFileTime(out long filetime);
+    public static partial class PreciseTime {
+        [LibraryImport("Kernel32.dll")]
+        private static partial void GetSystemTimePreciseAsFileTime(out long filetime);
         public static DateTimeOffset Now {
             get {
-                long fileTime;
-                GetSystemTimePreciseAsFileTime(out fileTime);
+                GetSystemTimePreciseAsFileTime(out long fileTime);
                 return DateTimeOffset.FromFileTime(fileTime);
             }
         }

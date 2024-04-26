@@ -17,9 +17,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
         public string CodeVerifier {
             get {
-                if (_codeVerifier == null) {
-                    _codeVerifier = OAuthHelper.GenerateCodeVerifier();
-                }
+                _codeVerifier ??= OAuthHelper.GenerateCodeVerifier();
                 return _codeVerifier;
             }
             set {

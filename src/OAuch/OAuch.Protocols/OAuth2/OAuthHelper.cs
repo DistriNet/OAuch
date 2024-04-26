@@ -18,11 +18,10 @@ namespace OAuch.Protocols.OAuth2 {
         public static string S256(string? input) {
             byte[] bytes;
             if (input == null)
-                bytes = new byte[0];
+                bytes = [];
             else
                 bytes = Encoding.ASCII.GetBytes(input);
-            var sha = SHA256.Create();
-            var hash = sha.ComputeHash(bytes);
+            var hash = SHA256.HashData(bytes);
             return EncodingHelper.Base64UrlEncode(hash);
         }
         public static string BuildUrl(string baseUrl, Dictionary<string, string?> properties) {
@@ -70,17 +69,11 @@ namespace OAuch.Protocols.OAuth2 {
         }
 
         public static bool IsOpenIdFlow(string flowType) {
-            switch (flowType) {
+            return flowType switch {
                 // these flows are defined by OpenId
-                case IDTOKEN_FLOW_TYPE:
-                case IDTOKEN_TOKEN_FLOW_TYPE:
-                case CODE_IDTOKEN_FLOW_TYPE:
-                case CODE_IDTOKEN_TOKEN_FLOW_TYPE:
-                case CODE_TOKEN_FLOW_TYPE:
-                    return true;
-                default:
-                    return false;
-            }
+                IDTOKEN_FLOW_TYPE or IDTOKEN_TOKEN_FLOW_TYPE or CODE_IDTOKEN_FLOW_TYPE or CODE_IDTOKEN_TOKEN_FLOW_TYPE or CODE_TOKEN_FLOW_TYPE => true,
+                _ => false,
+            };
         }
         public static bool HasOpenIdScope(string? scope) {
             var hasOpenIdScope = false;
@@ -136,13 +129,13 @@ namespace OAuch.Protocols.OAuth2 {
             keys["request"] = token;
 
             void Copy(string key) {
-                if (keys.ContainsKey(key) && keys[key] != null) {
-                    builder.Claims.Add(key, keys[key]);
+                if (keys.TryGetValue(key, out string? value) && value != null) {
+                    builder.Claims.Add(key, value);
                 }
             }
             void Move(string key) {
-                if (keys.ContainsKey(key) && keys[key] != null) {
-                    builder.Claims.Add(key, keys[key]);
+                if (keys.TryGetValue(key, out string? value) && value != null) {
+                    builder.Claims.Add(key, value);
                     keys.Remove(key);
                 }
             }
@@ -206,32 +199,21 @@ namespace OAuch.Protocols.OAuth2 {
         public const string CLIENT_CREDENTIALS_FLOW_TYPE = "client_credentials";
         public const string PASSWORD_FLOW_TYPE = "password";
 
-        public static string[] AllFlows => new string[] { CODE_FLOW_TYPE, CLIENT_CREDENTIALS_FLOW_TYPE, TOKEN_FLOW_TYPE, PASSWORD_FLOW_TYPE, DEVICE_FLOW_TYPE, IDTOKEN_FLOW_TYPE, IDTOKEN_TOKEN_FLOW_TYPE, CODE_IDTOKEN_FLOW_TYPE, CODE_TOKEN_FLOW_TYPE, CODE_IDTOKEN_TOKEN_FLOW_TYPE};
+        public static string[] AllFlows => [CODE_FLOW_TYPE, CLIENT_CREDENTIALS_FLOW_TYPE, TOKEN_FLOW_TYPE, PASSWORD_FLOW_TYPE, DEVICE_FLOW_TYPE, IDTOKEN_FLOW_TYPE, IDTOKEN_TOKEN_FLOW_TYPE, CODE_IDTOKEN_FLOW_TYPE, CODE_TOKEN_FLOW_TYPE, CODE_IDTOKEN_TOKEN_FLOW_TYPE];
         public static string GetFlowName(string? flow) {
-            switch (flow) {
-                case CODE_FLOW_TYPE:
-                    return "Authorization Code grant";
-                case CLIENT_CREDENTIALS_FLOW_TYPE:
-                    return "Client Credentials grant";
-                case TOKEN_FLOW_TYPE:
-                    return "Implicit grant";
-                case PASSWORD_FLOW_TYPE:
-                    return "Password grant";
-                case DEVICE_FLOW_TYPE:
-                    return "Device Code grant";
-                case IDTOKEN_FLOW_TYPE:
-                    return "Implicit grant (id_token)";
-                case IDTOKEN_TOKEN_FLOW_TYPE:
-                    return "Implicit grant (id_token token)";
-                case CODE_IDTOKEN_FLOW_TYPE:
-                    return "Hybrid grant (code id_token)";
-                case CODE_TOKEN_FLOW_TYPE:
-                    return "Hybrid grant (code token)";
-                case CODE_IDTOKEN_TOKEN_FLOW_TYPE:
-                    return "Hybrid grant (code id_token token)";
-                default:
-                    return "Unknown flow";
-            }
+            return flow switch {
+                CODE_FLOW_TYPE => "Authorization Code grant",
+                CLIENT_CREDENTIALS_FLOW_TYPE => "Client Credentials grant",
+                TOKEN_FLOW_TYPE => "Implicit grant",
+                PASSWORD_FLOW_TYPE => "Password grant",
+                DEVICE_FLOW_TYPE => "Device Code grant",
+                IDTOKEN_FLOW_TYPE => "Implicit grant (id_token)",
+                IDTOKEN_TOKEN_FLOW_TYPE => "Implicit grant (id_token token)",
+                CODE_IDTOKEN_FLOW_TYPE => "Hybrid grant (code id_token)",
+                CODE_TOKEN_FLOW_TYPE => "Hybrid grant (code token)",
+                CODE_IDTOKEN_TOKEN_FLOW_TYPE => "Hybrid grant (code id_token token)",
+                _ => "Unknown flow",
+            };
         }
     }
 }

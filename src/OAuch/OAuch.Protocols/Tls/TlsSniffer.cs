@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -27,13 +28,12 @@ namespace OAuch.Protocols.Tls {
             return Sniff(url.Host, url.Port, options);
         }
         public async Task<SniffResult> Sniff(string host, int port, SniffOptions? options = null) {
-            if (options == null)
-                options = _defaultOptions;
+            options ??= _defaultOptions;
 
             var hellos = new List<ClientHelloMessage>();
             if (options.SniffProtocols) {
                 foreach (var prot in options.Protocols) {
-                    hellos.Add(new ClientHelloMessage(host, new SslProtocols[] { prot }, options.CipherSuites));
+                    hellos.Add(new ClientHelloMessage(host, [prot], options.CipherSuites));
                 }
             } else {
                 hellos.Add(new ClientHelloMessage(host, options.Protocols, options.CipherSuites));
@@ -51,15 +51,15 @@ namespace OAuch.Protocols.Tls {
                 // add TLS 1.3 ciphers (if the protocol is supported)
                 if (protocolList.Contains(SslProtocols.Tls13)) {
                     foreach (var cs in options.CipherSuites.Where(c => c.IsTls13Cipher)) {
-                        hellos.Add(new ClientHelloMessage(host, new SslProtocols[] { SslProtocols.Tls13 }, new CipherSuite[] { cs }));
+                        hellos.Add(new ClientHelloMessage(host, [SslProtocols.Tls13], [cs]));
                     }
                 }
                 // add non-TLS 1.3 ciphers (if a non-TLS1.3-protocol is supported)
                 var oldProtocols = protocolList.Where(c => c != SslProtocols.Tls13).OrderByDescending(c => c);
-                if (oldProtocols.Count() > 0) {
+                if (oldProtocols.Any()) {
                     var prot = oldProtocols.First();
                     foreach (var cs in options.CipherSuites.Where(c => !c.IsTls13Cipher)) {
-                        hellos.Add(new ClientHelloMessage(host, new SslProtocols[] { prot }, new CipherSuite[] { cs }));
+                        hellos.Add(new ClientHelloMessage(host, [prot], [cs]));
                     }
                 }
                 // start sniffing algorithms
@@ -85,47 +85,46 @@ namespace OAuch.Protocols.Tls {
 
         private async Task Sniff(string hostname, int port, RecordLayer rl, ClientHelloMessage hello, List<SslProtocols> protocols, List<CipherSuite> ciphers, CancellationToken cancellationToken) {
             try {
-                using (var client = new TcpClient()) {
-                    await client.ConnectAsync(hostname, port);
-                    var stream = client.GetStream();
+                using var client = new TcpClient();
+                await client.ConnectAsync(hostname, port);
+                var stream = client.GetStream();
 
-                    hello.SessionId = new byte[0];
-                    var helloBytes = rl.Wrap(hello);
-                    await stream.WriteAsync(helloBytes, 0, helloBytes.Length, cancellationToken);
+                hello.SessionId = [];
+                var helloBytes = rl.Wrap(hello);
+                await stream.WriteAsync(helloBytes, cancellationToken);
 
-                    var buffer = new byte[1024];
-                    var ms = new MemoryStream();
+                var buffer = new byte[1024];
+                var ms = new MemoryStream();
 
-                    var status = DecodeState.NeedMoreData;
-                    ServerHelloMessage? serverHello = null;
-                    while (status == DecodeState.NeedMoreData) {
-                        int read = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
-                        if (read == 0)
-                            return; // need more data, but the server doesn't send anything
+                var status = DecodeState.NeedMoreData;
+                ServerHelloMessage? serverHello = null;
+                while (status == DecodeState.NeedMoreData) {
+                    int read = await stream.ReadAsync(buffer, cancellationToken);
+                    if (read == 0)
+                        return; // need more data, but the server doesn't send anything
 
-                        ms.Position = ms.Length;
-                        ms.Write(buffer, 0, read);
-                        ms.Position = 0;
-                        status = rl.Unwrap(ms, ref serverHello);
-                        if (status == DecodeState.InvalidMessage)
-                            return;
+                    ms.Position = ms.Length;
+                    ms.Write(buffer, 0, read);
+                    ms.Position = 0;
+                    status = RecordLayer.Unwrap(ms, ref serverHello);
+                    if (status == DecodeState.InvalidMessage)
+                        return;
+                }
+                if (serverHello != null && hello.AllowedProtocols.Contains(serverHello.Protocol)) {
+                    lock (_syncRoot) {
+                        if (!protocols.Contains(serverHello.Protocol))
+                            protocols.Add(serverHello.Protocol);
+                        if (!ciphers.Contains(serverHello.CipherSuite))
+                            ciphers.Add(serverHello.CipherSuite);
                     }
-                    if (serverHello != null && hello.AllowedProtocols.Contains(serverHello.Protocol)) {
-                        lock (_syncRoot) {
-                            if (!protocols.Contains(serverHello.Protocol))
-                                protocols.Add(serverHello.Protocol);
-                            if (!ciphers.Contains(serverHello.CipherSuite))
-                                ciphers.Add(serverHello.CipherSuite);
-                        }
-                    }                    
-                }               
+                }
             } catch {
                 // nothing to do
             }
         }
 
-        private SniffOptions _defaultOptions;
-        private object _syncRoot = new object();
+        private readonly SniffOptions _defaultOptions;
+        private readonly object _syncRoot = new();
     }
 
     public enum DecodeState { 
@@ -152,7 +151,7 @@ namespace OAuch.Protocols.Tls {
             return ms.ToArray();
         }
 
-        public DecodeState Unwrap(MemoryStream ms, ref ServerHelloMessage? result) {
+        public static DecodeState Unwrap(MemoryStream ms, ref ServerHelloMessage? result) {
             if (ms.ReadByte() != 0x16) // handshake record
                 return DecodeState.InvalidMessage;
             if (ms.ReadByte() != 0x03) // protocol version major
@@ -185,8 +184,7 @@ namespace OAuch.Protocols.Tls {
 
             int cipherId = bytes.ReadInt(2);
             CipherSuite? cs = CipherSuite.All.FirstOrDefault(c => c.Id == cipherId);
-            if (cs == null)
-                cs = CipherSuite.UNKNOWN;
+            cs ??= CipherSuite.UNKNOWN;
 
             bytes.Position++; //compression algorithm
 
@@ -199,8 +197,7 @@ namespace OAuch.Protocols.Tls {
                     var ext = TlsExtension.Create(bytes, ref size);
                     processed += size;
 
-                    var sve = ext as SupportedVersionsExtension;
-                    if (sve != null) { // TLS 1.3 is supported
+                    if (ext is SupportedVersionsExtension sve) { // TLS 1.3 is supported
                         protocol = sve.Protocols[0];
                         break;
                     }
@@ -231,11 +228,12 @@ namespace OAuch.Protocols.Tls {
             this.SessionId = new byte[32];
             rnd.NextBytes(this.SessionId);
 
-            var extensions = new List<TlsExtension>();
-            extensions.Add(new ServerNameExtension(host));
-            extensions.Add(new SignatureAlgorithmsExtension());
-            extensions.Add(new SupportedGroupsExtension());
-            extensions.Add(new KeyShareExtension());
+            var extensions = new List<TlsExtension> {
+                new ServerNameExtension(host),
+                new SignatureAlgorithmsExtension(),
+                new SupportedGroupsExtension(),
+                new KeyShareExtension()
+            };
 
             if (this.MaxProtocol == SslProtocols.Tls13) {
                 extensions.Add(new SupportedVersionsExtension(protocols));
@@ -317,25 +315,27 @@ namespace OAuch.Protocols.Tls {
             }
             size = length + 4;
             if (size <= 0)
-                throw new ArgumentException(); // weird stuff
+                throw new ArgumentException("Invalid parameter", nameof(size)); // weird stuff
             ms.Position = startPos + size;
             return ext;
         }
     }
     internal class SupportedVersionsExtension : TlsExtension {
         public SupportedVersionsExtension(SslProtocols protocol) {
-            this.Protocols = new List<SslProtocols>() { protocol };
+            this.Protocols = [protocol];
         }
         public SupportedVersionsExtension(IEnumerable<SslProtocols> protocols) {
             var p = new List<SslProtocols>();
             p.AddRange(protocols);
             this.Protocols = p;
         }
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SupportedVersionsExtension(MemoryStream contents, int length) {
             // if we receive this extension from the server, the contents is not a vector, so we do not need to read that single byte anymore
-            var p = new List<SslProtocols>();
-            //for (int i = 0; i < length; i += 2) {
-                p.Add(contents.ReadProtocol());
+            var p = new List<SslProtocols> {
+                //for (int i = 0; i < length; i += 2) {
+                contents.ReadProtocol()
+            };
             //}
             this.Protocols = p;
         }
@@ -352,6 +352,7 @@ namespace OAuch.Protocols.Tls {
         }
     }
     internal class SupportedGroupsExtension : TlsExtension {
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SupportedGroupsExtension(MemoryStream contents, int totalLength) {
             var p = new List<int>();
             int length = contents.ReadInt(2);
@@ -361,10 +362,10 @@ namespace OAuch.Protocols.Tls {
             this.GroupIds = p;
         }
         public SupportedGroupsExtension() {
-            this.GroupIds = new List<int>() { 
+            this.GroupIds = [
                 0x0017, 0x0018, 0x0019, 0x001d, 0x001e, /* Elliptic Curve Groups (ECDHE) */
                 0x0100, 0x0101, 0x0102, 0x0103, 0x0104 /* Finite Field Groups (DHE) */
-            };
+            ];
         }
         public const int ExtensionId = 0x0a;
         public IReadOnlyList<int> GroupIds;
@@ -395,6 +396,7 @@ namespace OAuch.Protocols.Tls {
         }
     }
     internal class SignatureAlgorithmsExtension : TlsExtension {
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SignatureAlgorithmsExtension(MemoryStream contents, int totalLength) {
             var p = new List<int>();
             int length = contents.ReadInt(2);
@@ -404,11 +406,11 @@ namespace OAuch.Protocols.Tls {
             this.SignatureIds = p;
         }
         public SignatureAlgorithmsExtension() {
-            this.SignatureIds = new List<int>() {
+            this.SignatureIds = [
                 0x0401, 0x0501, 0x0601, 0x0403, 0x0503, 0x0603, 
                 0x0804, 0x0805, 0x0806, 0x0807, 0x0808, 0x0809, 0x080a, 0x080b, 
                 0x0201, 0x0203
-            };
+            ];
         }
         public const int ExtensionId = 0x0d;
         public IReadOnlyList<int> SignatureIds;
@@ -426,8 +428,8 @@ namespace OAuch.Protocols.Tls {
         public ServerNameExtension(MemoryStream contents, int totalLength) {
             if (totalLength < 5)
                 return;
-            int length = contents.ReadInt(2);
-            int type = contents.ReadByte();
+            contents.ReadInt(2); // length
+            contents.ReadByte(); // type
             int hostLength = contents.ReadInt(2);
             var buffer = new byte[hostLength];
             contents.Read(buffer, 0, buffer.Length);

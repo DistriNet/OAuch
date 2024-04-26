@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace OAuch.TestRuns {
     public class Browser : IBrowser {
         public Browser(LogContext logger, TestRunConnection connection, StateCollection state) {
-            _waitingCallbacks = new List<CallbackInfo>();
+            _waitingCallbacks = [];
             this.Logger = logger;
             this.Connection = connection;
             this.State = state;
@@ -53,7 +53,7 @@ namespace OAuch.TestRuns {
                 lock (_waitingCallbacks) {
                     if (_waitingCallbacks.Count == 0)
                         return null; // no callbacks
-                    return _waitingCallbacks[_waitingCallbacks.Count - 1].RedirectUri;
+                    return _waitingCallbacks[^1].RedirectUri;
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace OAuch.TestRuns {
             await Connection.SendFeatureDetected(connectionId, name, available);
         }
 
-        private List<CallbackInfo> _waitingCallbacks;
+        private readonly List<CallbackInfo> _waitingCallbacks;
 
         private class CallbackInfo {
             public CallbackInfo(string? redirectUri, TaskCompletionSource<ICallbackResult?> completionSource) {

@@ -10,9 +10,7 @@ namespace OAuch.Helpers {
         public static string BuildVersion {
             get {
                 if (_buildVersion == null) {
-                    var v = Assembly.GetExecutingAssembly().GetName().Version;
-                    if (v == null)
-                        v = new Version("1.0");
+                    var v = Assembly.GetExecutingAssembly().GetName().Version ?? new Version("1.0");
                     var bd = new DateTime(Builtin.CompileTime, DateTimeKind.Utc);
                     _buildVersion = bd.ToString("yyyy.MM.dd"); // $"{ v.Major }.{ v.Minor }.{ bd.ToString("yyyy.MM.dd") }";
 #if DEBUG
@@ -25,22 +23,18 @@ namespace OAuch.Helpers {
         }
         private static string? _buildVersion;
 
-        private static string GetOS() { 
-            switch (Environment.OSVersion.Platform) {
-                case PlatformID.Win32NT:
-                    return "Win";
-                case PlatformID.Unix:
-                    return "Unix";
-                default:
-                    return "Unk.";
-            }            
+        private static string GetOS() {
+            return Environment.OSVersion.Platform switch {
+                PlatformID.Win32NT => "Win",
+                PlatformID.Unix => "Unix",
+                _ => "Unk.",
+            };
         }
 
         private static string? _copyright;
         public static string Copyright {
             get {
-                if (_copyright == null)
-                    _copyright = $"Copyright © { DateTime.Now.Year.ToString() }";
+                _copyright ??= $"Copyright © {DateTime.Now.Year}";
                 return _copyright;
             }
         }

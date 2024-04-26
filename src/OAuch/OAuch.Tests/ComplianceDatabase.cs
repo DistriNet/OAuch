@@ -21,8 +21,7 @@ namespace OAuch.Compliance {
                     var testType = typeof(Test);
                     var types = Assembly.GetExecutingAssembly().GetExportedTypes().Where(c => !c.IsAbstract && testType.IsAssignableFrom(c)).ToList();
                     foreach (var t in types) {
-                        var i = Activator.CreateInstance(t) as Test;
-                        if (i != null) {
+                        if (Activator.CreateInstance(t) is Test i) {
                             l.Add(i);
                         }
                     }
@@ -57,8 +56,7 @@ namespace OAuch.Compliance {
         private static List<Threat>? _threats;
         public static IReadOnlyList<Threat> AllThreats {
             get {
-                if (_threats == null) {
-                    _threats = new List<Threat> {                         
+                _threats ??= new List<Threat> {                         
                         new Threat {
                             Id = "6819_4_1_1",
                             Title = "Obtaining Client Secrets",
@@ -1412,7 +1410,6 @@ namespace OAuch.Compliance {
                             }
                          } 
                     };
-                }
                 return _threats;
             }
         }
@@ -1433,8 +1430,7 @@ namespace OAuch.Compliance {
         private static List<OAuthDocument>? _documents;
         public static IReadOnlyList<OAuthDocument> AllDocuments {
             get {
-                if (_documents == null) {
-                    _documents = new List<OAuthDocument> {
+                _documents ??= new List<OAuthDocument> {
                         new OAuthDocument {
                              Id = "RFC6749",
                              Name = "The OAuth 2.0 Authorization Framework",
@@ -2952,7 +2948,6 @@ namespace OAuch.Compliance {
                              }
                         }
                     };
-                }
                 return _documents;
             }
         }

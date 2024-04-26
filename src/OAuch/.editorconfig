@@ -1,0 +1,19 @@
+root = true
+
+[*.{cs,vb}]
+dotnet_diagnostic.SYSLIB0039.severity=silent
+
+[*.{cs,vb}]
+dotnet_diagnostic.CS0618.severity=silent
+
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0290.severity=silent
+
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0056.severity=silent
+
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0230.severity=silent
+
+[*.{cs,vb}]
+dotnet_diagnostic.IDE0079.severity=silent

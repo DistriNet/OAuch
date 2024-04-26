@@ -68,7 +68,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 if (AddOfflineAccess) {
                     var scope = this.Scope;
                     if (scope != null && scope.Length > 0)
-                        scope = scope + " ";
+                        scope += " ";
 
                     value["scope"] = scope + "offline_access";
                 }

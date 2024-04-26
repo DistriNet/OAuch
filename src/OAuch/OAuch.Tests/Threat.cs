@@ -10,13 +10,13 @@ using System.Xml;
 
 namespace OAuch.Compliance {
     public class Threat {
-        public string Id { get; init; }
-        public string Title { get; init; }
-        public string Description { get; init; }
+        public required string Id { get; init; }
+        public required string Title { get; init; }
+        public required string Description { get; init; }
         // what are the assumptions for the vulnerability
-        public OAuthDocument Document { get; init; }
-        public string LocationInDocument { get; init; }
-        public List<ThreatInstance> Instances { get; init; }
+        public required OAuthDocument Document { get; init; }
+        public required string LocationInDocument { get; init; }
+        public required List<ThreatInstance> Instances { get; init; }
         public string? AliasOf { get; init; } //used for BCP threats that are an alias of threats in RFC6819
     }
     public class TestCombination : List<Test> {
@@ -25,7 +25,7 @@ namespace OAuch.Compliance {
     }
     public class  ThreatInstance {
         public string? ExtraDescription { get; init; }
-        public List<Test> DependsOnFeatures { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered relevant
-        public List<TestCombination> MitigatedBy { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered (partially) mitigated
+        public required List<Test> DependsOnFeatures { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered relevant
+        public required List<TestCombination> MitigatedBy { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered (partially) mitigated
     }
 }

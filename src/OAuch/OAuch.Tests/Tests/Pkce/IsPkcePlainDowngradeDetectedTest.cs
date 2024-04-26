@@ -68,8 +68,7 @@ namespace OAuch.Compliance.Tests.Pkce {
         }
         public class PlainVerifier : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
             public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
-                var acprov = tokenProvider as AuthorizationCodeTokenProvider;
-                if (acprov != null) {
+                if (tokenProvider is AuthorizationCodeTokenProvider acprov) {
                     value["code_verifier"] = OAuthHelper.S256(acprov.CodeVerifier);
                 } // else: we tried adding PKCE support for non AC-flows
                 return Task.FromResult<Dictionary<string, string?>?>(value);

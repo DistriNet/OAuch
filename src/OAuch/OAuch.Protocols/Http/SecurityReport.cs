@@ -48,18 +48,18 @@ namespace OAuch.Protocols.Http {
 
 
         public static SecurityReport CreateReportFromResponse(HttpResponse response) {
-            var validCert = response.SecurityReport.IsHttpsUsed && response.SecurityReport.ServerCertificate != null && response.SecurityReport.ServerCertificate.IsValid;
+            //var validCert = response.SecurityReport.IsHttpsUsed && response.SecurityReport.ServerCertificate != null && response.SecurityReport.ServerCertificate.IsValid;
             var hasFrameOptions = response.Headers.HasFrameOptions();
             var hasCsp = response.Headers.HasCsp();
             var cache = CacheSettings.None;
-            if (response.Headers.HasCacheControlNoStore()) cache = cache | CacheSettings.CacheControlNoStore;
-            if (response.Headers.HasPragmaNoCache()) cache = cache | CacheSettings.PragmaNoCache;
+            if (response.Headers.HasCacheControlNoStore()) cache |= CacheSettings.CacheControlNoStore;
+            if (response.Headers.HasPragmaNoCache()) cache |= CacheSettings.PragmaNoCache;
             if (!hasCsp) {
                 // see if it is embedded in the HTML
                 // <meta http-equiv="Content-Security-Policy" content="...">
                 try {
                     var html = response.ToString(true);
-                    hasCsp = html.IndexOf("Content-Security-Policy") >= 0; // not the best test to see if it is correctly embedded, but good enough for us
+                    hasCsp = html.Contains("Content-Security-Policy", StringComparison.CurrentCulture); // not the best test to see if it is correctly embedded, but good enough for us
                 } catch { 
                     // ok, guess it's not a UTF-8 string
                 }

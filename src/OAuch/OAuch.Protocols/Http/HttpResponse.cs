@@ -22,8 +22,7 @@ namespace OAuch.Protocols.Http {
             this.Origin = origin;
 
             var securityReport = new ParameterMule();
-            var sslStream = responseStream as SslStream;
-            if (sslStream != null) {
+            if (responseStream is SslStream sslStream) {
                 securityReport.IsHttpsUsed = true;
                 securityReport.NegotiatedTlsVersion = sslStream.SslProtocol;
                 if (sslStream.RemoteCertificate != null)
@@ -50,10 +49,8 @@ namespace OAuch.Protocols.Http {
                 throw new InvalidDataException("The received data did not include a HTTP header section.");
 
             // parse the header and find the content length
-            HttpStatusCode statusCode;
-            var headers = ParseHeader(rawHead, out statusCode);
-            int contentLength;
-            if (!int.TryParse(headers[HttpRequestHeader.ContentLength], out contentLength))
+            var headers = ParseHeader(rawHead, out HttpStatusCode statusCode);
+            if (!int.TryParse(headers[HttpRequestHeader.ContentLength], out int contentLength))
                 contentLength = -1;
 
             // download the (rest of) the content
@@ -82,7 +79,7 @@ namespace OAuch.Protocols.Http {
                 for (int i = 1; i < lines.Length; i++) {
                     var colon = lines[i].IndexOf(':');
                     if (colon > 0) {
-                        headers.Add(lines[i].Substring(0, colon), lines[i].Substring(colon + 1));
+                        headers.Add(lines[i][..colon], lines[i][(colon + 1)..]);
                     }
                 }
                 return headers;
@@ -146,7 +143,7 @@ namespace OAuch.Protocols.Http {
                 }
             }
         }
-        private HttpResponse(HttpStatusCode code) : this(null, code, new WebHeaderCollection(), new byte[0], new ParameterMule()) { }
+        private HttpResponse(HttpStatusCode code) : this(null, code, [], [], new ParameterMule()) { }
         public HttpStatusCode StatusCode { get; private set; }
         public WebHeaderCollection Headers { get; private set; }
         public ISecurityReport SecurityReport { get; private set; }
@@ -184,7 +181,7 @@ namespace OAuch.Protocols.Http {
                     if (charset != null) {
                         int index = charset.IndexOf('=');
                         if (index > 0) {
-                            var charsetValue = charset.Substring(index + 1).Trim();
+                            var charsetValue = charset[(index + 1)..].Trim();
                             switch (charsetValue.ToLower()) {
                                 case "utf-8":
                                 case "csutf8":

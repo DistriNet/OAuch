@@ -31,8 +31,7 @@ namespace OAuch.Compliance {
         public abstract string Description { get; }
         public abstract TestResultFormatter ResultFormatter { get; }
         public override bool Equals(object? obj) {
-            Test? t = obj as Test;
-            if (t == null)
+            if (obj is not Test t)
                 return false;
             return this.GetType().Equals(t.GetType());
         }
@@ -60,8 +59,7 @@ namespace OAuch.Compliance {
                 throw new MethodAccessException("Invalid constructors for type " + resultType.FullName);
             }
 
-            var result = Activator.CreateInstance(resultType, new object[] { this.TestId }) as TestResult;
-            if (result == null)
+            if (Activator.CreateInstance(resultType, [this.TestId]) is not TestResult result)
                 throw new MethodAccessException("Could not initialize " + resultType.FullName);
             return result;
         }

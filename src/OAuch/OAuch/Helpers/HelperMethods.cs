@@ -11,9 +11,9 @@ namespace OAuch.Helpers {
                 return "?";
             string test = id;
             if (id.StartsWith("OAuch.Compliance.Tests."))
-                test = id.Substring(23);
+                test = id[23..];
             if (trimEnd && test.EndsWith("Test"))
-                test = test.Substring(0, test.Length - 4);
+                test = test[..^4];
             return test;
         }
         public static string LengthenTestId(string id) {
@@ -21,7 +21,7 @@ namespace OAuch.Helpers {
                 id = "OAuch.Compliance.Tests." + id;
             if (!id.EndsWith("Test")) {
                 if (!ComplianceDatabase.Tests.ContainsKey(id))
-                    id = id + "Test";
+                    id += "Test";
             }
             return id;
         }
@@ -30,7 +30,7 @@ namespace OAuch.Helpers {
             if (index == -1)
                 return "";
             else
-                return shortId.Substring(0, index);
+                return shortId[..index];
         }
     }
 }

@@ -15,8 +15,7 @@ namespace OAuch.Compliance.Tests {
             this.Context = context;
             this.Http = new HttpHelper(context);
             this.Result = result;
-            _dependencies = new List<TestResult>();
-            _dependencies.AddRange(dependencies);
+            _dependencies = [.. dependencies];
         }
 
         protected TestRunContext Context { get; }
@@ -24,8 +23,8 @@ namespace OAuch.Compliance.Tests {
         protected TestResult Result { get; }
         protected void LogInfo(string message) => Context.Log.Log(message, LoggedStringTypes.Info);
         protected virtual void LogInfo(string info, string? expected, string? received) {
-            if (expected == null) expected = "(empty string)";
-            if (received == null) received = "(empty string)";
+            expected ??= "(empty string)";
+            received ??= "(empty string)";
             LogInfo($"{ info } (expected '{ expected }', received '{ received }')");
         }
         protected void Log<T>(T o) where T : notnull => Context.Log.Log(o);
@@ -38,8 +37,7 @@ namespace OAuch.Compliance.Tests {
                 return null;
             }
             foreach (var t in _dependencies) {
-                var tc = t as T;
-                if (tc != null) {
+                if (t is T tc) {
                     if (!mustHaveSucceeded || tc.Outcome == TestOutcomes.SpecificationFullyImplemented || tc.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
                         return tc;
                     return null; // we found the dependency, but it failed
@@ -57,7 +55,7 @@ namespace OAuch.Compliance.Tests {
         protected void AddDependency<T>(T dep) where T : TestResult {
             _dependencies.Add(dep);
         }
-        private List<TestResult> _dependencies;
+        private readonly List<TestResult> _dependencies;
     }
     public abstract class TestImplementation<T> : TestImplementation where T : new() {
         public TestImplementation(TestRunContext context, TestResult<T> result, params TestResult[] dependencies) : base(context, result, dependencies) {
@@ -76,6 +74,6 @@ namespace OAuch.Compliance.Tests {
                 _typedResult.ExtraInfo = value;
             }
         }
-        private TestResult<T> _typedResult;
+        private readonly TestResult<T> _typedResult;
     }
 }

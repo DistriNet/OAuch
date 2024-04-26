@@ -20,8 +20,7 @@ namespace OAuch
 #if DEBUG
             Debug.WriteLine("Running on " + RuntimeInformation.FrameworkDescription);
             _certificate = LoadCertificate("oauch.io");
-            if (_certificate == null)
-                _certificate = LoadCertificate("localhost");
+            _certificate ??= LoadCertificate("localhost");
 #endif
             SetupExceptionHandling();
 
@@ -36,23 +35,21 @@ namespace OAuch
 #if DEBUG
         private static X509Certificate2? LoadCertificate(string subject) {
             var cert = LoadCertificate(subject, StoreLocation.CurrentUser);
-            if (cert == null)
-                cert = LoadCertificate(subject, StoreLocation.LocalMachine);
+            cert ??= LoadCertificate(subject, StoreLocation.LocalMachine);
             return cert;
         }
         private static X509Certificate2? LoadCertificate(string subject, StoreLocation location) {
             try {
-                using (var store = new X509Store(StoreName.My, location)) {
-                    store.Open(OpenFlags.ReadOnly);
-                    var certificate = store.Certificates.Find(
-                        X509FindType.FindBySubjectName,
-                        subject, false);
+                using var store = new X509Store(StoreName.My, location);
+                store.Open(OpenFlags.ReadOnly);
+                var certificate = store.Certificates.Find(
+                    X509FindType.FindBySubjectName,
+                    subject, false);
 
-                    if (certificate.Count == 0) {
-                        return null;
-                    }
-                    return certificate[0];
+                if (certificate.Count == 0) {
+                    return null;
                 }
+                return certificate[0];
             } catch {
                 return null;
             }
@@ -83,6 +80,7 @@ namespace OAuch
         }
         private static void HandleException(Exception? e, bool isTerminating) {
             Debug.WriteLine(e?.ToString());
+            Debug.WriteLine($"Is terminating? {isTerminating}");
         }
     }
 }

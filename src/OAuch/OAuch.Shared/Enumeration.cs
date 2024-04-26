@@ -27,9 +27,7 @@ namespace OAuch.Shared {
         }
 
         public override bool Equals(object? obj) {
-            var otherValue = obj as Enumeration;
-
-            if (otherValue == null)
+            if (obj is not Enumeration otherValue)
                 return false;
 
             var typeMatches = GetType().Equals(otherValue.GetType());
@@ -43,8 +41,7 @@ namespace OAuch.Shared {
         }
 
         public int CompareTo(object? other) {
-            var oc = other as Enumeration;
-            if (oc == null)
+            if (other is not Enumeration oc)
                 return Id.CompareTo(null);
             return Id.CompareTo(oc.Id);
         }

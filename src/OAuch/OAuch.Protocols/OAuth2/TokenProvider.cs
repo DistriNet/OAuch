@@ -280,9 +280,9 @@ namespace OAuch.Protocols.OAuth2 {
 
             ServerResponse FromRawDictionary(Dictionary<string, string> items, string original, LogContext log) {
                 if (requestedMode == ResponseModes.FormPostJwt || requestedMode == ResponseModes.QueryJwt || requestedMode == ResponseModes.FragmentJwt) {
-                    if (!items.ContainsKey("response"))
+                    if (!items.TryGetValue("response", out string? value))
                         return new ServerResponse { OriginalContents = original, UnexpectedError = new ArgumentException("The 'response' parameter was expected but not present.") };
-                    var formJwt = JsonWebToken.CreateFromString(items["response"], log);
+                    var formJwt = JsonWebToken.CreateFromString(value, log);
                     if (formJwt == null)
                         return new ServerResponse { OriginalContents = original, UnexpectedError = new ArgumentException("The encoded JWT in the 'response' parameter could not be decoded.") };
                     items = DecodeJwt(formJwt);
@@ -304,11 +304,10 @@ namespace OAuch.Protocols.OAuth2 {
             try {
                 string c = response.ToString(true);
                 var contentType = response.Headers.Get("Content-Type");
-                if (contentType == null)
-                    contentType = "application/json";
+                contentType ??= "application/json";
                 int si = contentType.IndexOf(';');
                 if (si >= 0)
-                    contentType = contentType.Substring(0, si);
+                    contentType = contentType[..si];
                 contentType = contentType.Trim().ToLower();
 
                 IDictionary<string, string> dictionary;
@@ -364,26 +363,15 @@ namespace OAuch.Protocols.OAuth2 {
 
         public TokenProvider CreateProvider(TestRunContext context) {
             if (Info.Settings == null)
-                throw new ArgumentNullException("Settings cannot be null.");
-            switch (FlowType) {
-                case OAuthHelper.TOKEN_FLOW_TYPE:
-                case OAuthHelper.IDTOKEN_TOKEN_FLOW_TYPE:
-                case OAuthHelper.IDTOKEN_FLOW_TYPE:
-                    return new ImplicitTokenProvider(Info.Settings, context);
-                case OAuthHelper.CLIENT_CREDENTIALS_FLOW_TYPE:
-                    return new ClientCredentialsTokenProvider(Info.Settings, context);
-                case OAuthHelper.CODE_FLOW_TYPE:
-                case OAuthHelper.CODE_IDTOKEN_FLOW_TYPE:
-                case OAuthHelper.CODE_IDTOKEN_TOKEN_FLOW_TYPE:
-                case OAuthHelper.CODE_TOKEN_FLOW_TYPE:
-                    return new AuthorizationCodeTokenProvider(Info.Settings, context);
-                case OAuthHelper.DEVICE_FLOW_TYPE:
-                    return new DeviceTokenProvider(Info.Settings, context);
-                case OAuthHelper.PASSWORD_FLOW_TYPE:
-                    return new PasswordTokenProvider(Info.Settings, context);
-                default:
-                    throw new NotSupportedException("The requested response type is not supported.");
-            }
+                throw new ArgumentNullException(nameof(context), "Settings in Context cannot be null.");
+            return FlowType switch {
+                OAuthHelper.TOKEN_FLOW_TYPE or OAuthHelper.IDTOKEN_TOKEN_FLOW_TYPE or OAuthHelper.IDTOKEN_FLOW_TYPE => new ImplicitTokenProvider(Info.Settings, context),
+                OAuthHelper.CLIENT_CREDENTIALS_FLOW_TYPE => new ClientCredentialsTokenProvider(Info.Settings, context),
+                OAuthHelper.CODE_FLOW_TYPE or OAuthHelper.CODE_IDTOKEN_FLOW_TYPE or OAuthHelper.CODE_IDTOKEN_TOKEN_FLOW_TYPE or OAuthHelper.CODE_TOKEN_FLOW_TYPE => new AuthorizationCodeTokenProvider(Info.Settings, context),
+                OAuthHelper.DEVICE_FLOW_TYPE => new DeviceTokenProvider(Info.Settings, context),
+                OAuthHelper.PASSWORD_FLOW_TYPE => new PasswordTokenProvider(Info.Settings, context),
+                _ => throw new NotSupportedException("The requested response type is not supported."),
+            };
         }
     }
 }

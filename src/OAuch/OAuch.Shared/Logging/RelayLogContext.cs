@@ -11,7 +11,7 @@ namespace OAuch.Shared.Logging {
         }
 
         public override DateTime CreatedAt => RelayContext?.CreatedAt ?? DateTime.Now;
-        public override IList<LoggedItem> Children => RelayContext?.Children ?? new List<LoggedItem>();
+        public override IList<LoggedItem> Children => RelayContext?.Children ?? [];
 
         public override void Log(string? message, LoggedStringTypes type = LoggedStringTypes.Info) {
             RelayContext?.Log(message, type);

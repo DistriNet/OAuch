@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OAuch.Shared {
     public class StateCollection {
         public StateCollection() {
-            _bag = new Dictionary<StateKeys, object>();
+            _bag = [];
         }
         /// <summary>
         /// Searches the state collection for the given key. 
@@ -18,8 +18,8 @@ namespace OAuch.Shared {
         /// <returns>If the key is found, it returns the saved value of type T, null otherwise.</returns>
         public T? Find<T>(StateKeys key) where T : class {
             T? ret = null;
-            if (_bag.ContainsKey(key)) {
-                ret = _bag[key] as T;
+            if (_bag.TryGetValue(key, out object? value)) {
+                ret = value as T;
             }
             return ret;
         }
@@ -48,7 +48,7 @@ namespace OAuch.Shared {
         }
 
         [JsonProperty]
-        private Dictionary<StateKeys, object> _bag;
+        private readonly Dictionary<StateKeys, object> _bag;
     }
     public enum StateKeys {
         ModernConnectionResults,

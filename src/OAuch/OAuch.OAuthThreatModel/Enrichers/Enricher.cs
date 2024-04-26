@@ -19,9 +19,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
 
         public static List<Enricher> All { 
             get {
-                if (_allEnrichers == null) {
-                    _allEnrichers = FindElements<Enricher>();
-                }
+                _allEnrichers ??= FindElements<Enricher>();
                 return _allEnrichers;
             }
         }

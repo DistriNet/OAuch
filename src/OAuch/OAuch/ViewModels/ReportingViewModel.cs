@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace OAuch.ViewModels {
     public class ReportingViewModel {
-        public bool IncludeSettings { get; set; }
-        public bool IncludeLog { get; set; }
-        public bool IncludeSucceededTests { get; set; }
-        public bool IncludeDeprecatedFeatures { get; set; }
-        public bool IncludeThreats { get; set; }
-        public bool IncludeIndividualTests { get; set; }
+        public required bool IncludeSettings { get; set; }
+        public required bool IncludeLog { get; set; }
+        public required bool IncludeSucceededTests { get; set; }
+        public required bool IncludeDeprecatedFeatures { get; set; }
+        public required bool IncludeThreats { get; set; }
+        public required bool IncludeIndividualTests { get; set; }
 
-        public bool IncludeSkippedTests { get; set; }
-        public bool IncludeFailedTests { get; set; }
-        public bool IncludePendingTests { get; set; }
-        public Guid SiteId { get; set; }
-        public string SiteName { get; set; }
-        public Guid ResultId { get; set; }
-        public DateTime StartedAt { get; set; }
-        public ComplianceResult Result { get; set; }
+        public required Guid SiteId { get; set; }
+        public required string SiteName { get; set; }
+        public required Guid ResultId { get; set; }
+        public required DateTime StartedAt { get; set; }
+        public required ComplianceResult Result { get; set; }
     }
 }

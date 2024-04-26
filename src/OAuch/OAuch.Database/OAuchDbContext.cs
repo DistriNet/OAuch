@@ -12,7 +12,7 @@ namespace OAuch.Database {
         public OAuchDbContext(IConfiguration configuration) : base() {
             _configuration = configuration;
         }
-        private IConfiguration? _configuration;
+        private readonly IConfiguration? _configuration;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public DbSet<SavedCertificate> Certificates { get; set; }

@@ -15,13 +15,11 @@ namespace OAuch.ViewModels {
             this.Settings = settings;
         }
         public SiteSettings Settings { get; set; }
-        public string SiteName { get; set; }
-        public SelectList Certificates { get; set; }
+        public string? SiteName { get; set; }
+        public SelectList? Certificates { get; set; }
         
         public IList<Site>? Sites { get; set; }
         public Site? ActiveSite { get; set; }
         public PageType PageType { get; set; }
-
-        public int TD { get; set; }
     }
 }
