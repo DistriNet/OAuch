@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 
 namespace OAuch.Shared.Logging {
     public abstract class LoggedItem {
-        public LoggedItem() : this(DateTime.Now) {}
+        public LoggedItem() : this(DateTime.Now) { }
         public LoggedItem(DateTime createdAt) {
             this.CreatedAt = createdAt;
         }

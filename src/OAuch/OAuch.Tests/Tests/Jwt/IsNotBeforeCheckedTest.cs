@@ -3,10 +3,6 @@ using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.JWT;
 using OAuch.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
     public class IsNotBeforeCheckedTest : Test {

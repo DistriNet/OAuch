@@ -1,26 +1,11 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using OAuch.Shared.Settings;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Linq.Expressions;
 
 namespace OAuch.Compliance.Tests.Concurrency {
     public abstract class FastACExchangeTestImplementation : ConcurrencyTestImplementation {

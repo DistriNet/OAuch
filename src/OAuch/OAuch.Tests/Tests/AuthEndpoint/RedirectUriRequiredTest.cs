@@ -5,11 +5,8 @@ using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using OAuch.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
@@ -44,7 +41,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             provider.Pipeline.AddAfter<GetAuthParameters, bool, Dictionary<string, string?>>(redirectResultProcessor);
 
             var result = await provider.GetToken();
-            if (result.IsValid && !string.IsNullOrEmpty(result.IdentityToken) ) {
+            if (result.IsValid && !string.IsNullOrEmpty(result.IdentityToken)) {
                 LogInfo("The server returned a valid token despite the missing redirect uri parameter");
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
             } else {

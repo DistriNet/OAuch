@@ -34,12 +34,10 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return;
             }
 
-            var basicContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var basicContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretPost, // force post authentication
-                    Certificates = new X509CertificateCollection(),
+                    Certificates = [],
                     PKCEDefault = Context.MostSecureSupportedPKCEType()
                 }
             };
@@ -47,7 +45,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 (f, p) => p.Context.SiteSettings.IsConfidentialClient);
             if (provider == null) { // no confidential provider found
                 // check if a flow that supports client authentication is working (without client authentication)
-                string[] aflows = new string[] { OAuthHelper.CODE_FLOW_TYPE, OAuthHelper.CODE_IDTOKEN_FLOW_TYPE, OAuthHelper.CODE_IDTOKEN_TOKEN_FLOW_TYPE, OAuthHelper.CODE_TOKEN_FLOW_TYPE, OAuthHelper.DEVICE_FLOW_TYPE, OAuthHelper.CLIENT_CREDENTIALS_FLOW_TYPE, OAuthHelper.PASSWORD_FLOW_TYPE };
+                string[] aflows = [OAuthHelper.CODE_FLOW_TYPE, OAuthHelper.CODE_IDTOKEN_FLOW_TYPE, OAuthHelper.CODE_IDTOKEN_TOKEN_FLOW_TYPE, OAuthHelper.CODE_TOKEN_FLOW_TYPE, OAuthHelper.DEVICE_FLOW_TYPE, OAuthHelper.CLIENT_CREDENTIALS_FLOW_TYPE, OAuthHelper.PASSWORD_FLOW_TYPE];
                 if (aflows.Any(f => flows.HasFlow(f))) {
                     Result.Outcome = TestOutcomes.SpecificationNotImplemented;
                     LogInfo("The token server does not require a password");

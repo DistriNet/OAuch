@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests {
@@ -57,7 +56,7 @@ namespace OAuch.Compliance.Tests {
             for (int i = 0; i < ConstructorParameters.Length; i++) {
                 if (contextType.IsAssignableFrom(ConstructorParameters[i].ParameterType)) {
                     objects[i] = context;
-                } else if (testResultType.IsAssignableFrom(ConstructorParameters[i].ParameterType))  {
+                } else if (testResultType.IsAssignableFrom(ConstructorParameters[i].ParameterType)) {
                     var tr = results.FirstOrDefault(c => c.GetType() == ConstructorParameters[i].ParameterType);
                     if (tr == null) {
                         Debugger.Break(); // this should never happen!
@@ -67,14 +66,15 @@ namespace OAuch.Compliance.Tests {
                     }
                     objects[i] = tr;
                 } else {
-                        Debugger.Break(); // this should never happen!
-                                          // when we get here, we have a constructor with an object that
-                                          // is not of type TestRunContext or TestResult
-                        throw new MethodAccessException("Invalid parameter type in constructor of " + implementationType.FullName);
-                    }
+                    Debugger.Break(); // this should never happen!
+                                      // when we get here, we have a constructor with an object that
+                                      // is not of type TestRunContext or TestResult
+                    throw new MethodAccessException("Invalid parameter type in constructor of " + implementationType.FullName);
                 }
-            var result = Activator.CreateInstance(implementationType, objects) as TestImplementation;
-            return result ?? throw new MethodAccessException("Could not initialize " + implementationType.FullName); ;
+            }
+            if (Activator.CreateInstance(implementationType, objects) is not TestImplementation result)
+                throw new MethodAccessException("Could not initialize " + implementationType.FullName);
+            return result;
         }
         [JsonIgnore]
         public IEnumerable<Type> Dependencies {

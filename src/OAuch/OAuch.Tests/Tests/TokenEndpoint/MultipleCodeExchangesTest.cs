@@ -7,8 +7,6 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -34,7 +32,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
 
             var provider = flows.CreateProviderWithStage<CreateTokenRequest, Dictionary<string, string?>, HttpRequest>(this.Context,
                 (f, p) => f.HasAuthorizationCodes);
-            if (provider == null) { 
+            if (provider == null) {
                 Result.Outcome = TestOutcomes.Skipped;
                 LogInfo("Could not find a working flow with authorization codes");
                 return;

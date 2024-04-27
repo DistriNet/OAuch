@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Authentication;
-using System.Text;
 
 namespace OAuch.Protocols.Tls {
     public class SniffOptions {
+#pragma warning disable SYSLIB0039
+#pragma warning disable CS0618
         public SniffOptions() {
             this.SniffAlgorithms = false;
             this.SniffProtocols = false;
-            this.Protocols = new SslProtocols[] { SslProtocols.Ssl3, SslProtocols.Tls, SslProtocols.Tls11, SslProtocols.Tls12, SslProtocols.Tls13 };
+            this.Protocols = [SslProtocols.Ssl3, SslProtocols.Tls, SslProtocols.Tls11, SslProtocols.Tls12, SslProtocols.Tls13];
             this.CipherSuites = CipherSuite.All;
         }
+#pragma warning restore SYSLIB0039
+#pragma warning restore CS0618
         /// <summary>
         /// Set to true to sniff support for individual cipher suites
         /// </summary>
@@ -31,6 +33,6 @@ namespace OAuch.Protocols.Tls {
         /// </summary>
         public IEnumerable<SslProtocols> Protocols { get; set; }
 
-        public static SniffOptions Default => new SniffOptions();
+        public static SniffOptions Default => new();
     }
 }

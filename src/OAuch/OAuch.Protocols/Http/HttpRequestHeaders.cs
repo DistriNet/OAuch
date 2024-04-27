@@ -1,31 +1,32 @@
-﻿using System;
+﻿using OAuch.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using OAuch.Shared;
 
 namespace OAuch.Protocols.Http {
     public class HttpRequestHeaders : Enumeration {
-        public static HttpRequestHeaders ContentType = new HttpRequestHeaders(1, "Content-Type");
-        public static HttpRequestHeaders Authorization = new HttpRequestHeaders(2, "Authorization");
-        public static HttpRequestHeaders ContentLength = new HttpRequestHeaders(3, "Content-Length");
-        public static HttpRequestHeaders CacheControl = new HttpRequestHeaders(4, "Cache-Control");
-        public static HttpRequestHeaders AcceptEncoding = new HttpRequestHeaders(5, "Accept-Encoding");
-        public static HttpRequestHeaders UserAgent = new HttpRequestHeaders(6, "User-Agent");
+        public static readonly HttpRequestHeaders ContentType = new(1, "Content-Type");
+        public static readonly HttpRequestHeaders Authorization = new(2, "Authorization");
+        public static readonly HttpRequestHeaders ContentLength = new(3, "Content-Length");
+        public static readonly HttpRequestHeaders CacheControl = new(4, "Cache-Control");
+        public static readonly HttpRequestHeaders AcceptEncoding = new(5, "Accept-Encoding");
+        public static readonly HttpRequestHeaders UserAgent = new(6, "User-Agent");
 
         private HttpRequestHeaders(int id, string name) : base(id, name) { }
 
         static HttpRequestHeaders() {
-            _headers = new List<HttpRequestHeaders>();
-            _headers.Add(ContentType);
-            _headers.Add(Authorization);
-            _headers.Add(ContentLength);
-            _headers.Add(CacheControl);
-            _headers.Add(AcceptEncoding);
-            _headers.Add(UserAgent);
+            _headers =
+            [
+                ContentType,
+                Authorization,
+                ContentLength,
+                CacheControl,
+                AcceptEncoding,
+                UserAgent,
+            ];
         }
 
-        public static HttpRequestHeaders Create(string name) { 
+        public static HttpRequestHeaders Create(string name) {
             var matched = _headers.FirstOrDefault(h => string.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
             if (matched != null)
                 return matched;
@@ -35,6 +36,6 @@ namespace OAuch.Protocols.Http {
             return ret;
         }
         private static int _negativeCounter = -1;
-        private static List<HttpRequestHeaders> _headers;
+        private static readonly List<HttpRequestHeaders> _headers;
     }
 }

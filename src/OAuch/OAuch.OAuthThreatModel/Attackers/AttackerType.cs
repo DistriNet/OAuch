@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.OAuthThreatModel.Attackers {
+﻿namespace OAuch.OAuthThreatModel.Attackers {
     public class AttackerType {
         public AttackerType(string id, string name, string description) {
             this.Id = id;

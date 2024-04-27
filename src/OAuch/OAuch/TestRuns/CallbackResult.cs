@@ -1,8 +1,4 @@
 ﻿using OAuch.Shared.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OAuch.TestRuns {
     public class CallbackResult : ICallbackResult {

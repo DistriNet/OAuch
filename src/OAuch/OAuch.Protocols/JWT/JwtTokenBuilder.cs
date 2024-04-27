@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OAuch.Shared;
 using OAuch.Shared.Logging;
+using System;
+using System.Text;
 
 namespace OAuch.Protocols.JWT {
     public class JwtTokenBuilder {

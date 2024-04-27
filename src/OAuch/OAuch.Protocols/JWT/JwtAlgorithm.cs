@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OAuch.Shared;
+using System;
 using System.Security.Cryptography;
 using System.Text;
-using OAuch.Shared;
 
 namespace OAuch.Protocols.JWT {
     // zie ook https://tools.ietf.org/html/rfc7518
@@ -23,12 +22,8 @@ namespace OAuch.Protocols.JWT {
 
         protected JwtAlgorithm(int id, string name) : base(id, name) { }
 
-        public virtual bool Verify(JsonWebToken token, TokenKey key) {
-            throw new NotSupportedException();
-        }
-        public virtual string Sign(byte[] tokenData, TokenKey key) {
-            throw new NotSupportedException();
-        }
+        public virtual bool Verify(JsonWebToken token, TokenKey key) => throw new NotSupportedException();
+        public virtual string Sign(byte[] tokenData, TokenKey key) => throw new NotSupportedException();
         public virtual HashAlgorithm? Hash => null;
         public virtual bool IsAsymmetric => false;
 
@@ -87,14 +82,12 @@ namespace OAuch.Protocols.JWT {
             _padding = padding;
         }
         public override string Sign(byte[] tokenData, TokenKey key) {
-            if (key is not RsaTokenKey rsaKey)
-                throw new NotSupportedException();
+            var rsaKey = key as RsaTokenKey ?? throw new NotSupportedException();
             var signature = rsaKey.Value.SignData(tokenData, _hashName, _padding);
             return EncodingHelper.Base64UrlEncode(signature);
         }
         public override bool Verify(JsonWebToken token, TokenKey key) {
-            if (key is not RsaTokenKey rsaKey)
-                throw new NotSupportedException();
+            var rsaKey = key as RsaTokenKey ?? throw new NotSupportedException();
             var data = Encoding.ASCII.GetBytes(token[JWTComponents.Header] + "." + token[JWTComponents.Payload]);
             var signature = EncodingHelper.Base64UrlDecode(token[JWTComponents.Signature]);
             return rsaKey.Value.VerifyData(data, signature, _hashName, _padding);
@@ -109,8 +102,7 @@ namespace OAuch.Protocols.JWT {
             _hashName = hashName;
         }
         public override string Sign(byte[] tokenData, TokenKey key) {
-            if (key is not ECDsaTokenKey ecdsaKey)
-                throw new NotSupportedException();
+            var ecdsaKey = key as ECDsaTokenKey ?? throw new NotSupportedException();
             var signature = ecdsaKey.Value.SignData(tokenData, _hashName);
             return EncodingHelper.Base64UrlEncode(signature);
         }

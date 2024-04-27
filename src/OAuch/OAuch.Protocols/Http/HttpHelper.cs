@@ -1,21 +1,16 @@
-﻿using System;
+﻿using OAuch.Protocols.Tls;
+using OAuch.Shared;
+using OAuch.Shared.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Security;
-using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
-using OAuch.Protocols.Tls;
-using OAuch.Shared;
-using OAuch.Shared.Interfaces;
-using OAuch.Shared.Logging;
 
 namespace OAuch.Protocols.Http {
     public class HttpHelper {
@@ -44,7 +39,7 @@ namespace OAuch.Protocols.Http {
         //    //password = EncodingHelper.UrlEncode(password);
         //    return $"Basic { EncodingHelper.Base64Encode(username + ":" + password) }";
         //}
-        
+
         public async Task<HttpResponse> SendRequest(HttpRequest req) {
             var mule = new ParameterMule {
                 Request = req
@@ -223,7 +218,7 @@ namespace OAuch.Protocols.Http {
             if (headers.HasCacheControlNoStore()) cache |= CacheSettings.CacheControlNoStore;
             if (headers.HasPragmaNoCache()) cache |= CacheSettings.PragmaNoCache;
             return cache;
-        }    
+        }
 
         /// <summary>
         /// Registers a full URL
@@ -313,11 +308,11 @@ namespace OAuch.Protocols.Http {
 
         public static async Task<IEnumerable<SslProtocols>> TryDowngradeConnection(string url) {
             // do not cache the result, because it is only used in one test
-            if (!Uri.TryCreate(url, UriKind.Absolute ,out var uri))
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
                 return [];
 
             var sniffer = new TlsSniffer();
-            var options = new SniffOptions() { 
+            var options = new SniffOptions() {
                 SniffProtocols = true,
                 Protocols = [SslProtocols.Ssl3, SslProtocols.Tls, SslProtocols.Tls11]
             };
@@ -328,10 +323,10 @@ namespace OAuch.Protocols.Http {
         public async Task<IEnumerable<SslProtocols>> TryModernConnection(string url) {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
                 return [];
-            string host = $"{ uri.Host }:{ uri.Port }";
+            string host = $"{uri.Host}:{uri.Port}";
 
-            var modernReports = State.Get<Dictionary<string, IEnumerable<SslProtocols>>>(StateKeys.ModernConnectionResults);            
-            if (modernReports.TryGetValue(host, out var ret))                
+            var modernReports = State.Get<Dictionary<string, IEnumerable<SslProtocols>>>(StateKeys.ModernConnectionResults);
+            if (modernReports.TryGetValue(host, out var ret))
                 return ret;
 
             var sniffer = new TlsSniffer();

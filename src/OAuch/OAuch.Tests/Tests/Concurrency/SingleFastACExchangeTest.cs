@@ -1,14 +1,10 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.Pkce;
 using OAuch.Compliance.Tests.TokenEndpoint;
 using OAuch.Shared;
-using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {
     public class SingleFastACExchangeTest : Test {

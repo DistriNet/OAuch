@@ -7,9 +7,6 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -33,10 +30,8 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return;
             }
 
-            var basicContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var basicContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretBasic // force basic authentication, so that we know where to remove the credentials
                 }
             };

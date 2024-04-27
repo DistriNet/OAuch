@@ -1,14 +1,8 @@
 ﻿using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Consequences;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCode {
-    public class T4_4_1_4_MaliciousClient : Threat
-    {
+    public class T4_4_1_4_MaliciousClient : Threat {
         public override string Description => "Malicious Client Obtains Authorization";
 
         public override string Id => "6819_4_4_1_4";

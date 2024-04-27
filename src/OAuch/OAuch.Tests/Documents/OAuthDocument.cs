@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OAuch.Compliance {
     public class OAuthDocument {
@@ -30,7 +26,7 @@ namespace OAuch.Compliance {
             return this.Id.GetHashCode();
         }
     }
-    public enum DocumentCategories : int { 
+    public enum DocumentCategories : int {
         OAuth2,
         OpenIDConnect,
         Draft,

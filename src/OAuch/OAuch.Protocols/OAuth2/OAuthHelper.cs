@@ -6,10 +6,8 @@ using OAuch.Shared.Enumerations;
 using OAuch.Shared.Settings;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace OAuch.Protocols.OAuth2 {
@@ -148,7 +146,7 @@ namespace OAuch.Protocols.OAuth2 {
             if (string.IsNullOrEmpty(client.ClientId))
                 return;
             if (settings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.ClientSecretBasic && !string.IsNullOrEmpty(client.ClientSecret)) { // without a secret, we must use POST parameters
-                headers[HttpRequestHeaders.Authorization] = $"Basic { EncodingHelper.Base64Encode(client.ClientId + ":" + client.ClientSecret) }";
+                headers[HttpRequestHeaders.Authorization] = $"Basic {EncodingHelper.Base64Encode(client.ClientId + ":" + client.ClientSecret)}";
             } else if (settings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.ClientSecretPost || settings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.ClientSecretBasic /* we don't have a secret */) {
                 body["client_id"] = client.ClientId;
                 body["client_secret"] = client.ClientSecret;

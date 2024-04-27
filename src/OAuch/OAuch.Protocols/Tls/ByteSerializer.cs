@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Authentication;
-using System.Text;
 
 namespace OAuch.Protocols.Tls {
     public static class ByteSerializer {

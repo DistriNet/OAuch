@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
 using OAuch.Compliance;
 using OAuch.Compliance.Tests;
 using OAuch.Database;
@@ -12,13 +10,10 @@ using OAuch.Shared.Logging;
 using OAuch.Shared.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace OAuch.TestRuns {
     public class TestRunManager {
@@ -116,7 +111,7 @@ namespace OAuch.TestRuns {
                 }
             }
             return resultsList;
-            
+
             void AddTests(IEnumerable<Test> tests) {
                 foreach (var testRL in tests) {
                     AddTest(testRL);
@@ -178,7 +173,7 @@ namespace OAuch.TestRuns {
             //if (Context.Site.Settings.ExcludeImplicitFlow) excludedCategories.Add(TestCategories.ImplicitFlow);
             //if (Context.Site.Settings.ExcludePasswordFlow) excludedCategories.Add(TestCategories.PasswordFlow);
             //if (Context.Site.Settings.ExcludeTestAPI) excludedCategories.Add(TestCategories.Tokens);
-            
+
             int tested = 0;
             foreach (var tr in TestRun.TestResults) {
                 if (tr.Outcome == null) {  // we haven't run the test yet

@@ -4,9 +4,6 @@ using OAuch.Protocols.JWT;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
@@ -47,6 +44,6 @@ namespace OAuch.Compliance.Tests.Jwt {
 
         protected override bool LogResult => false;
 
-        private string _jti;
+        private readonly string _jti;
     }
 }

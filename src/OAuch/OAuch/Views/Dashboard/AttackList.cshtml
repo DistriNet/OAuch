@@ -1,6 +1,7 @@
 ﻿@using OAuch.OAuthThreatModel.Attackers
 @using OAuch.OAuthThreatModel.Enrichers
 @using OAuch.OAuthThreatModel.Threats
+@using OAuch.Compliance.Results
 @using OAuch.Shared.Enumerations
 @using Microsoft.AspNetCore.Html
 @using OAuch.OAuthThreatModel
@@ -59,8 +60,8 @@
         </ul>
     }
 
-} else if (Model.AttackReport != null && Model.AttackReport.AttackChains.Count == OAuch.Compliance.Results.AttackReport.MaxResults) {
-    <p>Only the first @OAuch.Compliance.Results.AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
+} else if (Model.AttackReport != null && Model.AttackReport.AttackChains.Count == AttackReport.MaxResults) {
+    <p>Only the first @AttackReport.MaxResults attack scenarios are shown. You may want to filter out some Threats and/or Authorization Grants.</p>
 }
 <div id="ElementsFilter" class="form-group">
     <select id="SelectedFilter" name="SelectedFilter" class="selectpicker show-tick" data-width="100%" multiple="multiple">

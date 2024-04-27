@@ -1,17 +1,14 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Shared.Enumerations;
-using OAuch.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
 using OAuch.Protocols.Tls;
+using OAuch.Shared;
+using OAuch.Shared.Enumerations;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
     public abstract class AreStrongCiphersEnabledTestImplementationBase : TestImplementation {
-        public AreStrongCiphersEnabledTestImplementationBase(TestRunContext context, TestResult result, string? url,  bool strictCheck, HasSupportedFlowsTestResult supportedFlows, TestResult<IsModernTlsSupportedExtraInfo> modernTls, IsDeprecatedTlsSupportedTestResult deprecatedTls) : base(context, result, supportedFlows, modernTls, deprecatedTls) {
+        public AreStrongCiphersEnabledTestImplementationBase(TestRunContext context, TestResult result, string? url, bool strictCheck, HasSupportedFlowsTestResult supportedFlows, TestResult<IsModernTlsSupportedExtraInfo> modernTls, IsDeprecatedTlsSupportedTestResult deprecatedTls) : base(context, result, supportedFlows, modernTls, deprecatedTls) {
             _url = url;
             _strictCheck = strictCheck;
         }
@@ -27,8 +24,7 @@ namespace OAuch.Compliance.Tests.Shared {
             }
 
             var sniffer = new TlsSniffer();
-            var options = new SniffOptions()
-            {
+            var options = new SniffOptions() {
                 SniffProtocols = true,
                 SniffAlgorithms = true
             };
@@ -61,7 +57,7 @@ namespace OAuch.Compliance.Tests.Shared {
                 LogInfo("Only TLS 1.3 is supported.");
             }
         }
-        private string? _url;
-        private bool _strictCheck;
+        private readonly string? _url;
+        private readonly bool _strictCheck;
     }
 }

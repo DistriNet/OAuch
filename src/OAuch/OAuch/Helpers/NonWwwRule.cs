@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Rewrite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Rewrite;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Helpers {
     public class NonWwwRule : IRule {

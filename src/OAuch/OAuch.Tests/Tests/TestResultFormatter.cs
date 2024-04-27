@@ -1,10 +1,4 @@
 ﻿using OAuch.Shared.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests {
     public class TestResultFormatter {
@@ -38,7 +32,7 @@ namespace OAuch.Compliance.Tests {
             return "??";
         }
 
-        public static TestResultFormatter YesGoodNoBad => new TestResultFormatter();
-        public static TestResultFormatter YesBadNoGood => new TestResultFormatter("NO", countermeasureNotImplemented: "YES");
+        public static TestResultFormatter YesGoodNoBad => new();
+        public static TestResultFormatter YesBadNoGood => new("NO", countermeasureNotImplemented: "YES");
     }
 }

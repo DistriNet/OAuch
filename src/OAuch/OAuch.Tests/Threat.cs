@@ -1,12 +1,4 @@
-﻿using OAuch.Compliance.Tests;
-using OAuch.Shared.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Collections.Generic;
 
 namespace OAuch.Compliance {
     public class Threat {
@@ -23,7 +15,7 @@ namespace OAuch.Compliance {
         // this represents an AND-list of tests
         // ALL tests must (partially) succeed (or skipped - this means the test is irrelevant)
     }
-    public class  ThreatInstance {
+    public class ThreatInstance {
         public string? ExtraDescription { get; init; }
         public required List<Test> DependsOnFeatures { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered relevant
         public required List<TestCombination> MitigatedBy { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered (partially) mitigated

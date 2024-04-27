@@ -3,12 +3,10 @@ using Microsoft.Extensions.Configuration;
 using OAuch.Database.Entities;
 using OAuch.Shared;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OAuch.Database {
     public class OAuchDbContext : DbContext {
-        public OAuchDbContext() : base() {}
+        public OAuchDbContext() : base() { }
         public OAuchDbContext(IConfiguration configuration) : base() {
             _configuration = configuration;
         }

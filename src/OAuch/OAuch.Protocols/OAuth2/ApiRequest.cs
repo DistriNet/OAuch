@@ -3,12 +3,9 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Settings;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
-using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,24 +49,23 @@ namespace OAuch.Protocols.OAuth2 {
             }
             // add any additional headers that the user requested to be added
             if (!string.IsNullOrWhiteSpace(Settings.TestHeaders)) {
-                using (var sr = new StringReader(Settings.TestHeaders)) {
-                    var line = sr.ReadLine();
-                    while (line != null) {
-                        int index = line.IndexOf(':');
-                        if (index > 0) {
-                            string name = line.Substring(0, index).Trim();
-                            string value = line.Substring(index + 1).Trim();
-                            if (name.Length > 0 && value.Length > 0)
-                                hasAddedTokenToHeaders = hasAddedTokenToHeaders || FixString(ref value, accessToken);
-                            req.Headers[HttpRequestHeaders.Create(name)] = value;
-                        }
-                        line = sr.ReadLine();
+                using var sr = new StringReader(Settings.TestHeaders);
+                var line = sr.ReadLine();
+                while (line != null) {
+                    int index = line.IndexOf(':');
+                    if (index > 0) {
+                        string name = line[..index].Trim();
+                        string value = line[(index + 1)..].Trim();
+                        if (name.Length > 0 && value.Length > 0)
+                            hasAddedTokenToHeaders = hasAddedTokenToHeaders || FixString(ref value, accessToken);
+                        req.Headers[HttpRequestHeaders.Create(name)] = value;
                     }
+                    line = sr.ReadLine();
                 }
             }
             req.ClientCertificates = Settings.Certificates;
             if (!hasAddedTokenToUrl && !hasAddedTokenToBody && !hasAddedTokenToHeaders && accessToken.Length > 0)
-                req.Headers[HttpRequestHeaders.Authorization] = $"Bearer { accessToken }";
+                req.Headers[HttpRequestHeaders.Authorization] = $"Bearer {accessToken}";
             req.ServerCertificateValidationCallback = RemoteCertificateValidationCallback;
             this.ManualAccessTokenInUrl = hasAddedTokenToUrl;
             this.ManualAccessTokenInBody = hasAddedTokenToBody;
@@ -82,7 +78,7 @@ namespace OAuch.Protocols.OAuth2 {
                     || FixDelim(ref value, ACCESS_TOKEN_DELIM_BASE64, EncodingHelper.Base64Encode(accessToken));
             }
             bool FixDelim(ref string value, string delim, string replaceWith) {
-                if (value.IndexOf(delim) >= 0) {
+                if (value.Contains(delim, StringComparison.CurrentCulture)) {
                     value = value.Replace(delim, replaceWith);
                     return true;
                 }

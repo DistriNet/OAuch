@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.Protocols.OAuth2.Pipeline {
+﻿namespace OAuch.Protocols.OAuth2.Pipeline {
     public static class PipelineExtensions {
         public static PipelineStage<TNew> Then<TOrg, TNew>(this PipelineStage<TOrg> pipeline, Processor<TOrg, TNew> processor) {
             return new PipelineStage<TNew, TOrg>(pipeline, processor);

@@ -1,16 +1,11 @@
-﻿using AngleSharp.Css;
-using OAuch.Compliance.Tests.DocumentSupport;
+﻿using OAuch.Compliance.Tests.DocumentSupport;
 using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
 using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Revocation {
@@ -60,7 +55,7 @@ namespace OAuch.Compliance.Tests.Revocation {
                 if (p == null)
                     LogInfo($"The token revocation failed.");
                 else
-                    LogInfo($"The token revocation failed with error '{ p.Error ?? "unknown" }': '{ p.ErrorDescription ?? "no description was specified" }' (HTTP response code { (p.StatusCode.HasValue ? ((int)p.StatusCode.Value).ToString() : "unknown") })");
+                    LogInfo($"The token revocation failed with error '{p.Error ?? "unknown"}': '{p.ErrorDescription ?? "no description was specified"}' (HTTP response code {(p.StatusCode.HasValue ? ((int)p.StatusCode.Value).ToString() : "unknown")})");
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
                 return;
             }

@@ -2,10 +2,6 @@
 using OAuch.Protocols.Http;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
@@ -30,7 +26,7 @@ namespace OAuch.Compliance.Tests.Shared {
             }
         }
 
-        private string? _url;
-        private CacheSettings _checkFor;
+        private readonly string? _url;
+        private readonly CacheSettings _checkFor;
     }
 }

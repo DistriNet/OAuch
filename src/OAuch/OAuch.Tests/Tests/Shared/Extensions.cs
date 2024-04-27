@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using OAuch.Protocols.JWK;
+﻿using OAuch.Protocols.JWK;
 using OAuch.Protocols.JWT;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
@@ -7,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace OAuch.Compliance.Tests.Shared {
@@ -70,7 +68,7 @@ namespace OAuch.Compliance.Tests.Shared {
                 int idx = formUrlEncoded.LastIndexOf('&');
                 if (idx == -1)
                     return formUrlEncoded; // no parameters
-                return formUrlEncoded + "&" + formUrlEncoded.Substring(idx + 1);
+                return formUrlEncoded + "&" + formUrlEncoded[(idx + 1)..];
             }
         }
         public static byte[] DuplicateParameter(this byte[] utf8FormUrlEncoded) {
@@ -83,9 +81,7 @@ namespace OAuch.Compliance.Tests.Shared {
         public static double CalculateEntropy(this string s) {
             var map = new Dictionary<char, int>();
             foreach (char c in s) {
-                if (!map.ContainsKey(c))
-                    map.Add(c, 1);
-                else
+                if (!map.TryAdd(c, 1))
                     map[c] += 1;
             }
 

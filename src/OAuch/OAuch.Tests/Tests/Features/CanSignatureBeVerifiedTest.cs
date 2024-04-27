@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using OAuch.Protocols.Http;
+﻿using OAuch.Protocols.Http;
 using OAuch.Protocols.JWK;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
@@ -21,7 +17,7 @@ namespace OAuch.Compliance.Tests.Features {
         public override Type ImplementationType => typeof(CanSignatureBeVerifiedTestImplementation);
     }
     public class CanSignatureBeVerifiedTestImplementation : TestImplementation {
-        public CanSignatureBeVerifiedTestImplementation(TestRunContext context, CanSignatureBeVerifiedTestResult result, HasSupportedFlowsTestResult supportedFlows) 
+        public CanSignatureBeVerifiedTestImplementation(TestRunContext context, CanSignatureBeVerifiedTestResult result, HasSupportedFlowsTestResult supportedFlows)
             : base(context, result, supportedFlows) { }
         public override async Task Run() {
             var keyset = await LoadKeySet();

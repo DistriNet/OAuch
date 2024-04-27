@@ -1,17 +1,12 @@
 ﻿using OAuch.Compliance.Tests.DocumentSupport;
+using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.Shared;
+using OAuch.Protocols.JWK;
 using OAuch.Protocols.JWT;
 using OAuch.Protocols.OAuth2;
-using OAuch.Shared.Enumerations;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.JWK;
-using System.Security.Cryptography;
 
 namespace OAuch.Compliance.Tests.IdTokens {
     public class SigningKeySecureTest : Test {
@@ -45,7 +40,7 @@ namespace OAuch.Compliance.Tests.IdTokens {
                 return;
 
             bool ok;
-            switch(key.TokenKey ) {
+            switch (key.TokenKey) {
                 case RsaTokenKey rsa:
                     ok = rsa.Value.KeySize >= 2048;
                     LogInfo($"The identity token is signed with an RSA key size of {rsa.Value.KeySize} bits.");

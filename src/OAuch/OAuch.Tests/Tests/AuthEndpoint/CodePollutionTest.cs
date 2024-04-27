@@ -7,11 +7,7 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class CodePollutionTest : Test {
@@ -57,7 +53,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             var redirectResultProcessor = new RedirectFullResultProcessor();
             provider.Pipeline.AddAfter<SendAuthorizationRedirect, string, ICallbackResult?>(redirectResultProcessor);
 
-            var result = await provider.GetToken();
+            await provider.GetToken();
             ExtraInfo.IsCodePolluted = redirectResultProcessor.IsCodePolluted;
             if (redirectResultProcessor.IsCodePolluted == true) {
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;

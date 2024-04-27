@@ -21,14 +21,14 @@ namespace OAuch.Compliance.Tests.Features {
         public override Type ResultType => typeof(HasSupportedFlowsTestResult);
     }
     public class HasSupportedFlowsTestResult : TestResult<HasSupportedFlowsTestInfo> {
-        public HasSupportedFlowsTestResult(string testId) : base(testId) {}
+        public HasSupportedFlowsTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(HasSupportedFlowsTestImplementation);
 
         [MemberNotNull(nameof(_factories))]
         private void InitializeFactories() {
             if (_factories != null)
                 return;
-            
+
             _factories = [];
             if (this.ExtraInfo != null && this.ExtraInfo.WorkingProviders != null) {
                 foreach (var providerInfo in this.ExtraInfo.WorkingProviders) {
@@ -104,7 +104,7 @@ namespace OAuch.Compliance.Tests.Features {
             return null;
         }
         public TokenProvider? CreateProviderWithStage<TProcessor, TIn, TOut>(TestRunContext context, Func<TokenProviderFactory, TokenProvider, bool>? extraValidator = null, bool mustHaveAccessTokens = true, bool mustHaveRefresh = false, bool mustHaveJwtTokens = false, bool mustHaveIdTokens = false, bool mustHaveCodes = false) where TProcessor : Processor<TIn, TOut> {
-            return CreateProvider(context, 
+            return CreateProvider(context,
                 (f, p) => p.Pipeline.HasProcessor<TProcessor>() && (extraValidator == null || extraValidator(f, p)),
                 mustHaveAccessTokens, mustHaveRefresh, mustHaveJwtTokens, mustHaveIdTokens, mustHaveCodes);
         }
@@ -118,7 +118,7 @@ namespace OAuch.Compliance.Tests.Features {
             return ret;
         }
     }
-    public class HasSupportedFlowsTestInfo { 
+    public class HasSupportedFlowsTestInfo {
         public List<TokenProviderInfo>? WorkingProviders { get; set; }
     }
     public class HasSupportedFlowsTestImplementation : TestImplementation<HasSupportedFlowsTestInfo> {
@@ -146,7 +146,7 @@ namespace OAuch.Compliance.Tests.Features {
             Result.Outcome = workingProviders.Count > 0 ? TestOutcomes.SpecificationFullyImplemented : TestOutcomes.SpecificationNotImplemented;
 
             foreach (var providerInfo in workingProviders) {
-                LogInfo($"The { providerInfo.ExtraInfo!.Settings!.Name } is working ({ FormatFlow(providerInfo.ExtraInfo!) })");
+                LogInfo($"The {providerInfo.ExtraInfo!.Settings!.Name} is working ({FormatFlow(providerInfo.ExtraInfo!)})");
             }
 
             Context.Browser.SendFeatureDetected("at", workingProviders.Any(wp => wp.ExtraInfo!.HasAccessTokens));

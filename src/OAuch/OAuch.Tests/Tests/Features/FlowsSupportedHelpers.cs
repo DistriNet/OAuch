@@ -2,11 +2,8 @@
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using OAuch.Shared.Settings;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
@@ -15,7 +12,7 @@ namespace OAuch.Compliance.Tests.Features {
             this.FlowType = flowType;
             _resultType = resultType;
         }
-        private Type _resultType;
+        private readonly Type _resultType;
         protected string FlowType { get; }
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => _resultType;

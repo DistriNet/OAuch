@@ -1,22 +1,19 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
-using OAuch.Protocols.OAuth2.Pipeline;
+using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
+using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OAuch.Protocols.Http;
-using System.Diagnostics;
-using System.Threading;
 using System.IO;
+using System.Linq;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-using OAuch.Shared.Enumerations;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {
     public abstract class ConcurrencyTestImplementation : TestImplementation<ConcurrencyInfo> {
@@ -34,7 +31,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             }
             var succeededRequests = exchangeResponses.Where(r => (int)r.ResponseCode >= 200 && (int)r.ResponseCode < 300).ToList();
 
-            this.ExtraInfo.SucceededRequestCount = succeededRequests.Count();
+            this.ExtraInfo.SucceededRequestCount = succeededRequests.Count;
             this.ExtraInfo.TotalRequestCount = exchangeResponses.Count();
             this.ExtraInfo.ReturnedAccessTokens = succeededRequests.Where(r => r.AccessToken != null).Select(r => r.AccessToken!).Distinct().ToList();
             this.ExtraInfo.ReturnedRefreshTokens = succeededRequests.Where(r => r.RefreshToken != null).Select(r => r.RefreshToken!).Distinct().ToList();
@@ -43,7 +40,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             LogInfo($"Received {this.ExtraInfo.ReturnedAccessTokens?.Count ?? 0} new unique access token(s) and {this.ExtraInfo.ReturnedRefreshTokens?.Count ?? 0} new unique refresh token(s)");
 
             // test the access tokens
-            this.ExtraInfo.WorkingAccessTokens = new List<string>();
+            this.ExtraInfo.WorkingAccessTokens = [];
             if (this.ExtraInfo.ReturnedAccessTokens != null) {
                 var api = GetDependency<TestUriSupportedTestResult>(true);
                 if (api == null) {
@@ -61,7 +58,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             }
 
             //// test the refresh tokens
-            this.ExtraInfo.WorkingRefreshTokens = new List<string>();
+            this.ExtraInfo.WorkingRefreshTokens = [];
             if (this.ExtraInfo.ReturnedRefreshTokens != null) {
                 foreach (var rt in this.ExtraInfo.ReturnedRefreshTokens) {
                     if (rt != null) {
@@ -133,7 +130,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             while (pointer < sortedList.Count) {
                 var elapsedMs = (int)PreciseTime.Now.Subtract(start).TotalMilliseconds;
                 while (pointer < sortedList.Count && sortedList[pointer].Server.TripTime <= elapsedMs) {
-                    System.Diagnostics.Debug.WriteLine($"Released {sortedList[pointer].Server.Ip.ToString()} after {elapsedMs}ms");
+                    System.Diagnostics.Debug.WriteLine($"Released {sortedList[pointer].Server.Ip} after {elapsedMs}ms");
                     sortedList[pointer].BlockHandle.Set();
                     pointer++;
                 }
@@ -154,50 +151,49 @@ namespace OAuch.Compliance.Tests.Concurrency {
 
             try {
                 var uri = new Uri(request.Url);
-                using (var client = new TcpClient()) {
-                    client.Connect(ip, uri.Port);
+                using var client = new TcpClient();
+                client.Connect(ip, uri.Port);
 
-                    Stream networkStream = client.GetStream();
-                    if (uri.Port != 80) { // we use HTTPS by default
-                        var sslStream = new SslStream(networkStream, false, ServerCertificateValidator);
-                        sslStream.AuthenticateAsClient(uri.Host);
-                        networkStream = sslStream;
-                    }
+                Stream networkStream = client.GetStream();
+                if (uri.Port != 80) { // we use HTTPS by default
+                    var sslStream = new SslStream(networkStream, false, ServerCertificateValidator);
+                    sslStream.AuthenticateAsClient(uri.Host);
+                    networkStream = sslStream;
+                }
 
-                    // build query
-                    var header = new StringBuilder();
-                    header.AppendLine($"{request.Method.Name} {uri.PathAndQuery} HTTP/1.0");
-                    header.AppendLine($"Host: {uri.Host}");
-                    foreach (var headerEntry in request.Headers) {
-                        header.AppendLine($"{headerEntry.Key.Name}: {headerEntry.Value}");
-                    }
-                    if (request.Content != null && request.Content.Length > 0 && !request.Headers.Any(c => c.Key.Name == "Content-Length")) {
-                        header.AppendLine($"Content-Length: {request.Content.Length}");
-                    }
-                    header.AppendLine();
-                    var headerBytes = Encoding.UTF8.GetBytes(header.ToString());
+                // build query
+                var header = new StringBuilder();
+                header.AppendLine($"{request.Method.Name} {uri.PathAndQuery} HTTP/1.0");
+                header.AppendLine($"Host: {uri.Host}");
+                foreach (var headerEntry in request.Headers) {
+                    header.AppendLine($"{headerEntry.Key.Name}: {headerEntry.Value}");
+                }
+                if (request.Content != null && request.Content.Length > 0 && !request.Headers.Any(c => c.Key.Name == "Content-Length")) {
+                    header.AppendLine($"Content-Length: {request.Content.Length}");
+                }
+                header.AppendLine();
+                var headerBytes = Encoding.UTF8.GetBytes(header.ToString());
 
-                    // send bytes
-                    networkStream.Write(headerBytes, 0, headerBytes.Length);
+                // send bytes
+                networkStream.Write(headerBytes, 0, headerBytes.Length);
 
-                    // signal we're ready to send the Content
-                    parameters.ReadyHandle.Set();
+                // signal we're ready to send the Content
+                parameters.ReadyHandle.Set();
 
-                    // wait until everything is ready
-                    parameters.BlockHandle.Wait();
+                // wait until everything is ready
+                parameters.BlockHandle.Wait();
 
-                    // send the content
-                    if (request.Content != null && request.Content.Length > 0) {
-                        networkStream.Write(request.Content, 0, request.Content.Length);
-                        networkStream.Flush();
-                    }
+                // send the content
+                if (request.Content != null && request.Content.Length > 0) {
+                    networkStream.Write(request.Content, 0, request.Content.Length);
+                    networkStream.Flush();
+                }
 
-                    var httpResponse = new HttpResponse(networkStream, ip.ToString());
-                    Log(httpResponse);
-                    var serverResponse = ServerResponse.FromResponseBody(httpResponse);
-                    lock (parameters.Results) {
-                        parameters.Results.Add(serverResponse);
-                    }
+                var httpResponse = new HttpResponse(networkStream, ip.ToString());
+                Log(httpResponse);
+                var serverResponse = ServerResponse.FromResponseBody(httpResponse);
+                lock (parameters.Results) {
+                    parameters.Results.Add(serverResponse);
                 }
             } catch (Exception e) {
                 parameters.ReadyHandle.Set();

@@ -7,9 +7,7 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -44,10 +42,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var modContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var modContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
 
                     CallbackUri = this.Context.SiteSettings.CallbackUri?.AddQueryParameter("extra", "oauch")
                 }

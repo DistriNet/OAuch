@@ -1,15 +1,8 @@
-﻿using Newtonsoft.Json;
-using OAuch.Compliance.Tests;
-using OAuch.Compliance.Tests.Features;
+﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.Http;
 using OAuch.Shared;
-using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class HasValidCertificateTest : Test {
@@ -19,7 +12,7 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
         public override Type ResultType => typeof(HasValidCertificateTestResult);
     }
     public class HasValidCertificateTestResult : TestResult<CertificateReport> {
-        public HasValidCertificateTestResult(string testId) : base(testId) {}
+        public HasValidCertificateTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(HasValidCertificateTestImplementation);
     }
     public class HasValidCertificateTestImplementation : HasValidCertificateTestImplementationBase {

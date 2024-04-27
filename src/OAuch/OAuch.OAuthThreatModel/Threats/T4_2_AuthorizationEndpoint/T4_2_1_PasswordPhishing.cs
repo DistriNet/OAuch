@@ -1,15 +1,8 @@
 ﻿using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Consequences;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint
-{
-    public class T4_2_1_PasswordPhishing : Threat
-    {
+namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
+    public class T4_2_1_PasswordPhishing : Threat {
         public override string Description => "Password Phishing by Counterfeit Authorization Server";
 
         public override string Id => "6819_4_2_1";

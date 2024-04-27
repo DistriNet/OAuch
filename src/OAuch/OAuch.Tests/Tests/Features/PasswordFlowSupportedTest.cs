@@ -1,10 +1,5 @@
 ﻿using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
     public class PasswordFlowSupportedTest : FlowSupportedTest {

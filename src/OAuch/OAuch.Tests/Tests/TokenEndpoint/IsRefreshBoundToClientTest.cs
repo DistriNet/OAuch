@@ -3,10 +3,7 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -53,10 +50,9 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             var am = Context.SiteSettings.ClientAuthenticationMechanism;
             if (am == ClientAuthenticationMechanisms.PrivateKeyJwt)
                 am = ClientAuthenticationMechanisms.ClientSecretBasic;
-            var postSettings = this.Context.SiteSettings with
-            {
+            var postSettings = this.Context.SiteSettings with {
                 ClientAuthenticationMechanism = am,
-                Certificates = new X509CertificateCollection(),
+                Certificates = [],
                 DefaultClient = Context.SiteSettings.AlternativeClient
             };
             var refreshProvider = provider.CreateRefreshProvider(postSettings);

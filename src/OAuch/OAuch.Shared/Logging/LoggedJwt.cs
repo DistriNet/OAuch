@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.Shared.Logging {
+﻿namespace OAuch.Shared.Logging {
     public class LoggedJwt : LoggedItem {
         public LoggedJwt() {
             this.Content = string.Empty;

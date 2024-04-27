@@ -4,9 +4,6 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.ApiEndpoint {
@@ -43,10 +40,8 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
             if (token.AccessToken == null)
                 return; // weird
 
-            var noTlsContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var noTlsContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     CertificateId = null // do not use mTLS
                 }
             };

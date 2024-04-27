@@ -1,6 +1,4 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
@@ -10,7 +8,6 @@ using OAuch.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -51,14 +48,14 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
 
         private class SendPostAuthorizationRedirect : Processor<string, ICallbackResult?> {
             public async override Task<ICallbackResult?> Process(string authUrl, IProvider tokenProvider, TokenResult tokenResult) {
-                var authParams = new Dictionary<string, string?>();
+                //var authParams = new Dictionary<string, string?>();
 
                 // add any query parameters from the authorization url
                 var authUri = new Uri(authUrl);
                 var query = HttpUtility.ParseQueryString(authUri.Query);
 
                 var encoded = EncodingHelper.Base64UrlEncode(EncodingHelper.FormUrlEncode(query.ToDictionary()!));
-                var postUrl = $"/Callback/PostRedirect/{ tokenProvider.Context.ManagerId.ToString("N") }?values={ encoded }";
+                var postUrl = $"/Callback/PostRedirect/{tokenProvider.Context.ManagerId:N}?values={encoded}";
                 return await tokenProvider.Context.Browser.RequestCallback(postUrl);
             }
         }

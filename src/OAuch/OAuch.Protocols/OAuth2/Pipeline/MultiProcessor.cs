@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.Pipeline {
     public class MultiProcessor<TIn, TMiddle, TOut> : Processor<TIn, TOut> {
-        public MultiProcessor(Processor<TIn, TMiddle> first, Processor<TMiddle, TOut> second ) {
+        public MultiProcessor(Processor<TIn, TMiddle> first, Processor<TMiddle, TOut> second) {
             this.First = first;
             this.Second = second;
         }
@@ -21,7 +17,7 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
                 return temp2;
             }
             this.Succeeded = false;
-            return default(TOut);
+            return default;
         }
     }
 }

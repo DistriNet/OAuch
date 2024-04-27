@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Security.Authentication;
-using System.Text;
 
 namespace OAuch.Protocols.Http {
     public class SecurityReport : ISecurityReport {
@@ -59,8 +56,8 @@ namespace OAuch.Protocols.Http {
                 // <meta http-equiv="Content-Security-Policy" content="...">
                 try {
                     var html = response.ToString(true);
-                    hasCsp = html.Contains("Content-Security-Policy", StringComparison.CurrentCulture); // not the best test to see if it is correctly embedded, but good enough for us
-                } catch { 
+                    hasCsp = html.Contains("Content-Security-Policy", System.StringComparison.CurrentCulture); // not the best test to see if it is correctly embedded, but good enough for us
+                } catch {
                     // ok, guess it's not a UTF-8 string
                 }
             }

@@ -1,13 +1,8 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -21,7 +16,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
         public RefreshTokenRevokedAfterUseTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(RefreshTokenRevokedAfterUseTestImplementation);
     }
-    public class RefreshTokenRevokedAfterUseInfo { 
+    public class RefreshTokenRevokedAfterUseInfo {
         public bool UsesTokenRotation { get; set; }
     }
     public class RefreshTokenRevokedAfterUseTestImplementation : TestImplementation<RefreshTokenRevokedAfterUseInfo> {

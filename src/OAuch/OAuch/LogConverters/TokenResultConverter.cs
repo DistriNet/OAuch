@@ -1,10 +1,5 @@
 ﻿using OAuch.Protocols.OAuth2;
-using OAuch.Shared;
 using OAuch.Shared.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OAuch.LogConverters {
     public class TokenResultConverter : ILogConverter<TokenResult> {
@@ -22,7 +17,7 @@ namespace OAuch.LogConverters {
                 AuthorizationCode = item.AuthorizationCode,
                 AuthorizationResponse = item.AuthorizationResponse?.OriginalContents,
                 TokenResponse = item.TokenResponse?.OriginalContents,
-                Exception = exception 
+                Exception = exception
             };
         }
     }

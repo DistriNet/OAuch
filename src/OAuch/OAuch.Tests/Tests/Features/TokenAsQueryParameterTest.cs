@@ -1,12 +1,8 @@
-﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
+﻿using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
@@ -58,7 +54,7 @@ namespace OAuch.Compliance.Tests.Features {
             var response = await request.Send(token);
             if (response.StatusCode.IsOk()) {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented; // this is a feature, not a countermeasure
-            } else { 
+            } else {
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
             }
         }

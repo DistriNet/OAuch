@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OAuch.Protocols.Http;
-using OAuch.Shared;
+using System;
+using System.Collections.Generic;
 
 namespace OAuch.Protocols.OAuth2 {
     public class OAuthMetaData {
         [JsonConstructor]
         private OAuthMetaData() {
-            _grantTypesSupported = new List<string>();
+            _grantTypesSupported = [];
         }
 
         [JsonProperty("issuer")]
@@ -54,7 +50,7 @@ namespace OAuch.Protocols.OAuth2 {
             }
             set {
                 if (value == null)
-                    _grantTypesSupported = new List<string>();
+                    _grantTypesSupported = [];
                 else
                     _grantTypesSupported = value;
             }
@@ -131,13 +127,13 @@ namespace OAuch.Protocols.OAuth2 {
             var schemeAndServer = issuerUrl.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped).TrimEnd('/');
             var path = issuerUrl.GetComponents(UriComponents.Path, UriFormat.Unescaped).TrimStart('/');
             if (path.Length > 0) {
-                urls.Add($"{ schemeAndServer }/.well-known/openid-configuration/{ path }");
-                urls.Add($"{ schemeAndServer }/.well-known/oauth-authorization-server/{ path }");
+                urls.Add($"{schemeAndServer}/.well-known/openid-configuration/{path}");
+                urls.Add($"{schemeAndServer}/.well-known/oauth-authorization-server/{path}");
             }
-            urls.Add($"{ schemeAndServer }/.well-known/openid-configuration");
-            urls.Add($"{ schemeAndServer }/.well-known/oauth-authorization-server");
+            urls.Add($"{schemeAndServer}/.well-known/openid-configuration");
+            urls.Add($"{schemeAndServer}/.well-known/oauth-authorization-server");
             if (path.Length > 0) {
-                urls.Add($"{ schemeAndServer }/{ path }");
+                urls.Add($"{schemeAndServer}/{path}");
             }
             return urls;
         }

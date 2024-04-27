@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {
     public class MultiResolver {
@@ -11,7 +9,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             var ips = ResolveAll(url);
             if (ips.Count == 0 || howMany <= 0)
                 return ips;
-            
+
             if (ips.Count >= howMany)
                 return ips.Take(howMany).ToList(); // we have too many IPs; trim the list.
 
@@ -27,7 +25,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
         }
         public static IReadOnlyList<ServerInfo> ResolveAll(string url) {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
-                return new List<ServerInfo>();
+                return [];
 
             // check if we resolved it before
             var host = uri.Host.ToLower();
@@ -41,14 +39,14 @@ namespace OAuch.Compliance.Tests.Concurrency {
             foreach (var ip in entry.AddressList) {
                 ips.Add(ip);
             }
-            
+
 
             // 'ping' all servers (by connecting to port 443)
-            List<ServerInfo> serverInfo = new List<ServerInfo>();
-            var pinger = new ConnectionPing();
-            foreach(var ip in ips) {
-                var si = new ServerInfo(ip);
-                si.TripTime = pinger.Ping(ip, 443);
+            List<ServerInfo> serverInfo = [];
+            foreach (var ip in ips) {
+                var si = new ServerInfo(ip) {
+                    TripTime = ConnectionPing.Ping(ip, 443)
+                };
                 serverInfo.Add(si);
             }
 
@@ -56,7 +54,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
             return serverInfo;
 
         }
-        private static readonly Dictionary<string, IReadOnlyList<ServerInfo>> _serverIps = new Dictionary<string, IReadOnlyList<ServerInfo>>();
+        private static readonly Dictionary<string, IReadOnlyList<ServerInfo>> _serverIps = [];
     }
     public class ServerInfo {
         public ServerInfo(IPAddress ip) {

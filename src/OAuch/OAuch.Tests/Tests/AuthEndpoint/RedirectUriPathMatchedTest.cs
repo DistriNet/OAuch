@@ -1,5 +1,4 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
@@ -7,11 +6,7 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RedirectUriPathMatchedTest : Test {
@@ -34,10 +29,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var modContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var modContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     CallbackUri = "https://oauch.io/Callback/Wrong"
                 }
             };

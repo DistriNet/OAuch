@@ -3,23 +3,18 @@ using OAuch.OAuthThreatModel;
 using OAuch.OAuthThreatModel.Consequences;
 using OAuch.OAuthThreatModel.Enrichers;
 using OAuch.OAuthThreatModel.Flows;
-using OAuch.OAuthThreatModel.Threats;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
-using System.Text;
-using System.Threading.Tasks;
-using ElementIdOps = System.Runtime.Intrinsics.Vector256;
-using ElementId = System.Runtime.Intrinsics.Vector256<byte>;
-using ConsequenceIdOps = System.Runtime.Intrinsics.Vector128;
 using ConsequenceId = System.Runtime.Intrinsics.Vector128<byte>;
-using System.Diagnostics.CodeAnalysis;
+using ConsequenceIdOps = System.Runtime.Intrinsics.Vector128;
+using ElementId = System.Runtime.Intrinsics.Vector256<byte>;
+using ElementIdOps = System.Runtime.Intrinsics.Vector256;
 
 namespace OAuch.Compliance.Results {
     /// <summary>
@@ -98,7 +93,7 @@ namespace OAuch.Compliance.Results {
         private static AttackChain? CreateAttackChain(CalculationContext context, ElementId currentChain) {
             // reconstruct the elements in a chain
             var elements = new List<ModelElement>();
-            foreach(var mev in context.ModelElementVectors) {
+            foreach (var mev in context.ModelElementVectors) {
                 if (ElementIdOps.BitwiseAnd(currentChain, mev.BitId) == mev.BitId) {
                     elements.Add(mev.Element);
                 }
@@ -110,8 +105,8 @@ namespace OAuch.Compliance.Results {
             state.AddRange(flow.Consequences);
             var orderedElements = new List<ModelElement>() { flow };
             elements.Remove(flow);
-            while(!state.Any(c => c.IsVulnerability)) {
-                for(int i = 0; i < elements.Count; i++) {
+            while (!state.Any(c => c.IsVulnerability)) {
+                for (int i = 0; i < elements.Count; i++) {
                     if (elements[i].DependsOn.All(c => state.Contains(c))) { // is precondition met?
                         // select it
                         state.AddRange(elements[i].Consequences); // update state
@@ -178,7 +173,7 @@ namespace OAuch.Compliance.Results {
         public IReadOnlyList<AttackChain> AttackChains => _chains;
 
         private IReadOnlyList<AttackChain> _chains;
-        public static int MaxResults => 50;
+        public const int MaxResults = 50;
 
         public ThreatModelContext Context { get; private set; }
 

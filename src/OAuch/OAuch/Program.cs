@@ -1,21 +1,15 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using OAuch.Database;
+using OAuch.Shared;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OAuch.Database;
-using OAuch.Shared;
 
-namespace OAuch
-{
-    public class Program
-    {
+namespace OAuch {
+    public class Program {
         public static void Main(string[] args) {
 #if DEBUG
             Debug.WriteLine("Running on " + RuntimeInformation.FrameworkDescription);
@@ -78,9 +72,9 @@ namespace OAuch
             //};
             TaskScheduler.UnobservedTaskException += (s, e) => HandleException(e.Exception, false);
         }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         private static void HandleException(Exception? e, bool isTerminating) {
             Debug.WriteLine(e?.ToString());
-            Debug.WriteLine($"Is terminating? {isTerminating}");
         }
     }
 }

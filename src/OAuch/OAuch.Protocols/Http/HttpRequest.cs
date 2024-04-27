@@ -7,13 +7,13 @@ using System.Text;
 namespace OAuch.Protocols.Http {
     public class HttpRequest {
         private HttpRequest(HttpMethods method, string url) {
-            this.Headers = new Dictionary<HttpRequestHeaders, string>();
+            this.Headers = [];
             //this.Headers[HttpRequestHeaders.AcceptEncoding] = "gzip, deflate, br";
             this.Method = method;
             this.Url = url;
             this.AllowAutoRedirect = false;
-            this.ClientCertificates = new X509CertificateCollection();
-            _content = new byte[0];
+            this.ClientCertificates = [];
+            _content = [];
         }
         public string Url { get; set; }
         public HttpMethods Method { get; set; }
@@ -38,9 +38,9 @@ namespace OAuch.Protocols.Http {
 
         public override string ToString() {
             var sb = new StringBuilder();
-            sb.AppendLine( $"{ Method } { Url }");
+            sb.AppendLine($"{Method} {Url}");
             foreach (var h in Headers) {
-                sb.AppendLine($"{ h.Key.Name }: { h.Value }");
+                sb.AppendLine($"{h.Key.Name}: {h.Value}");
             }
             sb.AppendLine();
             if (Content.Length > 0) {
@@ -55,6 +55,6 @@ namespace OAuch.Protocols.Http {
         }
         public static HttpRequest CreateGet(string url) {
             return new HttpRequest(HttpMethods.Get, url);
-        }        
+        }
     }
 }

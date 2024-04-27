@@ -7,7 +7,6 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,10 +46,9 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return; // should not happen
             }
 
-            var postSettings = this.Context.SiteSettings with
-            {
+            var postSettings = this.Context.SiteSettings with {
                 ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretPost, // force post authentication
-                Certificates = new X509CertificateCollection()
+                Certificates = []
             };
             var refreshProvider = provider.CreateRefreshProvider(postSettings);
             var processor = new NoAuthentication();

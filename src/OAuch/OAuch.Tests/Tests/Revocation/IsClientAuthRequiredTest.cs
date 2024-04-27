@@ -5,9 +5,6 @@ using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Revocation {
@@ -38,7 +35,7 @@ namespace OAuch.Compliance.Tests.Revocation {
             }
 
             var provider = flows.CreateProvider(Context,
-                (fact, tp) => tp.SiteSettings.IsConfidentialClient, 
+                (fact, tp) => tp.SiteSettings.IsConfidentialClient,
                 rt, false, false, false);
             if (provider == null) {
                 Result.Outcome = TestOutcomes.Skipped;
@@ -70,7 +67,7 @@ namespace OAuch.Compliance.Tests.Revocation {
             if (succeeded) {
                 LogInfo("The server accepted the unauthenticated revocation request");
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-            } else { 
+            } else {
                 LogInfo("The server rejected the unauthenticated revocation request");
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
             }

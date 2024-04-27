@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace OAuch.Protocols.Http {
     public interface ISecurityReport {
@@ -14,14 +11,14 @@ namespace OAuch.Protocols.Http {
         string? Url { get; }
     }
     [Flags]
-    public enum SecurityChecks : int { 
+    public enum SecurityChecks : int {
         HttpsUsed = 1,
         ServerCertificateValid = 2,
         TlsMin12 = 4,
         TlsMin13 = 8
     }
     [Flags]
-    public enum CacheSettings : int { 
+    public enum CacheSettings : int {
         None = 0,
         CacheControlNoStore = 1,
         PragmaNoCache = 2,
@@ -57,7 +54,7 @@ namespace OAuch.Protocols.Http {
         public string Thumbprint { get; set; }
 
         public override string ToString() {
-            return $"Issued to: { IssuedTo }\r\nIssued by: { IssuedBy }\r\nThumbprint: { Thumbprint }\r\nValid from {ValidFrom:d MMM yyyy} to {ValidTo:d MMM yyyy}\r\n\r\nTrusted certificate: { (IsValid ? "YES" : "NO") }";
+            return $"Issued to: {IssuedTo}\r\nIssued by: {IssuedBy}\r\nThumbprint: {Thumbprint}\r\nValid from {ValidFrom:d MMM yyyy} to {ValidTo:d MMM yyyy}\r\n\r\nTrusted certificate: {(IsValid ? "YES" : "NO")}";
         }
     }
 }

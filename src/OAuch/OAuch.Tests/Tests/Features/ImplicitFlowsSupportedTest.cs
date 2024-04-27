@@ -1,24 +1,16 @@
-﻿using Newtonsoft.Json;
-using OAuch.Protocols.JWT;
-using OAuch.Protocols.OAuth2;
+﻿using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
-using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Resolution;
 
 namespace OAuch.Compliance.Tests.Features {
     public abstract class ImplicitFlowSupportedTest : FlowSupportedTest {
         public ImplicitFlowSupportedTest(string responseType, Type resultType) : base(responseType, resultType) { }
-        public override string Title => $"Is the implicit grant (response type = '{ this.FlowType }') supported";
-        public override string Description => $"This test determines whether the server supports the implicit grant (with response type '{ this.FlowType }').";
+        public override string Title => $"Is the implicit grant (response type = '{this.FlowType}') supported";
+        public override string Description => $"This test determines whether the server supports the implicit grant (with response type '{this.FlowType}').";
     }
     public abstract class ImplicitFlowSupportedTestImplementation : FlowSupportedTestImplementation {
         public ImplicitFlowSupportedTestImplementation(string responseType, TestRunContext context, FlowSupportedTestResult result)
-            : base($"Implicit grant (response type '{ responseType }')", 
+            : base($"Implicit grant (response type '{responseType}')",
                   responseType, context, result) { }
         protected override TokenProvider CreateProvider(TokenProviderSettings ps, TestRunContext tc) {
             return new ImplicitTokenProvider(ps, tc);
@@ -30,7 +22,7 @@ namespace OAuch.Compliance.Tests.Features {
     ///  TOKEN
     ////////////////
     public class TokenFlowSupportedTest : ImplicitFlowSupportedTest {
-        public TokenFlowSupportedTest() : base(OAuthHelper.TOKEN_FLOW_TYPE, typeof(TokenFlowSupportedTestResult)) {}
+        public TokenFlowSupportedTest() : base(OAuthHelper.TOKEN_FLOW_TYPE, typeof(TokenFlowSupportedTestResult)) { }
     }
     public class TokenFlowSupportedTestResult : FlowSupportedTestResult {
         public TokenFlowSupportedTestResult(string testId) : base(testId, typeof(TokenFlowSupportedTestImplementation)) { }

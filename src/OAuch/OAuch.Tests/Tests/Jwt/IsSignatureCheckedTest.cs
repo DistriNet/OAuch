@@ -3,11 +3,7 @@ using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.JWT;
 using OAuch.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
     public class IsSignatureCheckedTest : Test {
@@ -26,16 +22,12 @@ namespace OAuch.Compliance.Tests.Jwt {
             get {
                 var original = base.Key;
                 // return a random key
-                switch (original) {
-                    case BytesTokenKey btk:
-                        return TokenKey.FromBytes(new byte[20]);
-                    case RsaTokenKey btk:
-                        return TokenKey.FromRsa(RSA.Create());
-                    case ECDsaTokenKey btk:
-                        return TokenKey.FromECDsa(ECDsa.Create());
-                    default:
-                        return TokenKey.Empty;
-                }
+                return original switch {
+                    BytesTokenKey => TokenKey.FromBytes(new byte[20]),
+                    RsaTokenKey => TokenKey.FromRsa(RSA.Create()),
+                    ECDsaTokenKey => TokenKey.FromECDsa(ECDsa.Create()),
+                    _ => TokenKey.Empty,
+                };
             }
         }
     }

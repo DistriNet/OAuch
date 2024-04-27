@@ -1,12 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.Shared.Logging {
+﻿namespace OAuch.Shared.Logging {
     //public class LoggedItemJsonConverter : JsonConverter {
     //    public override bool CanConvert(Type objectType) {
     //        return (objectType == typeof(LoggedItem));

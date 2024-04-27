@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OAuch.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OAuch.Controllers {
     public abstract class BaseController : Controller {

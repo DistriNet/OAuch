@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OAuch.Compliance.Tests;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
+﻿using OAuch.Protocols.Http;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Authentication;
-using OAuch.Shared.Settings;
+using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
     public class IsDeprecatedTlsSupportedTest : Test {
@@ -36,7 +32,7 @@ namespace OAuch.Compliance.Tests.Features {
                 return;
             }
 
-            var hosts = new string?[] { 
+            var hosts = new string?[] {
                 Context.SiteSettings.AuthorizationUri,
                 Context.SiteSettings.TokenUri,
                 Context.SiteSettings.DeviceAuthorizationUri,
@@ -62,21 +58,21 @@ namespace OAuch.Compliance.Tests.Features {
                 return null;
             }
 
-            var host = $"{ uri.Host }:{ uri.Port }";
+            var host = $"{uri.Host}:{uri.Port}";
             if (testedHosts.Contains(host))
                 return null;
             testedHosts.Add(host);
 
             var result = await HttpHelper.TryDowngradeConnection(url);
-            if (result.Count() > 0) {
+            if (result.Any()) {
                 foreach (var sslProt in result) {
                     if (!supportedProtocols.Contains(sslProt))
                         supportedProtocols.Add(sslProt);
                 }
-                LogInfo($"The host '{ host }' supports the following deprecated protocols: " + string.Join(", ", result.Select(c => c.ToName())));
+                LogInfo($"The host '{host}' supports the following deprecated protocols: " + string.Join(", ", result.Select(c => c.ToName())));
                 return true;
             }
-            LogInfo($"The host '{ host }' does not support deprecated protocols");
+            LogInfo($"The host '{host}' does not support deprecated protocols");
             return false;
         }
     }

@@ -1,12 +1,6 @@
 ﻿using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2.Pipeline;
-using OAuch.Shared.Enumerations;
-using OAuch.Shared.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {

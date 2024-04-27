@@ -1,26 +1,20 @@
-﻿using AngleSharp.Dom;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OAuch.Compliance.Tests;
-using OAuch.Shared.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OAuch.Helpers {
     public static class OAuchJsonConvert {
         public static T? Deserialize<T>(string json) {
-            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-            {
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
                 TypeNameHandling = TypeNameHandling.Auto,
                 SerializationBinder = new ForgivingSerializationBinder() // add new ISerializationBuilder to catch serialization errors (because test cases are renamed or removed)
             });
         }
 
         public static string Serialize(object o, Formatting formatting = Formatting.None) {
-            return JsonConvert.SerializeObject(o, formatting, new JsonSerializerSettings { 
-                 TypeNameHandling = TypeNameHandling.Auto
+            return JsonConvert.SerializeObject(o, formatting, new JsonSerializerSettings {
+                TypeNameHandling = TypeNameHandling.Auto
             });
         }
     }

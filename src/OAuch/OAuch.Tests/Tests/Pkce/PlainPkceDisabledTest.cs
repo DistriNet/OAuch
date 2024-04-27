@@ -1,11 +1,8 @@
-﻿using OAuch.Shared.Enumerations;
+﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Tests.Pkce {
     public class PlainPkceDisabledTest : Test {

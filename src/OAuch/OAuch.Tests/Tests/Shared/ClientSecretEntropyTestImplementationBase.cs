@@ -1,10 +1,6 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
@@ -30,18 +26,18 @@ namespace OAuch.Compliance.Tests.Shared {
 
             ExtraInfo.Entropy = secret.CalculateEntropy() * secret.Length;
 
-            LogInfo($"The calculated entropy of the client secret is { ExtraInfo.Entropy:F1} bits");
+            LogInfo($"The calculated entropy of the client secret is {ExtraInfo.Entropy:F1} bits");
             if (ExtraInfo.Entropy < _minEntropy) {
-                LogInfo($"The entropy is below the required { _minEntropy } bits");
+                LogInfo($"The entropy is below the required {_minEntropy} bits");
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
             } else {
-                LogInfo($"The entropy is above the required { _minEntropy } bits");
+                LogInfo($"The entropy is above the required {_minEntropy} bits");
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
             }
             return Task.CompletedTask;
         }
 
-        private double _minEntropy;
-        private TestResult<ClientSecretEntropyInfo>? _dependsOn;
+        private readonly double _minEntropy;
+        private readonly TestResult<ClientSecretEntropyInfo>? _dependsOn;
     }
 }

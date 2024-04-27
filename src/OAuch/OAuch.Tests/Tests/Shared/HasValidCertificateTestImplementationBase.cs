@@ -3,13 +3,10 @@ using OAuch.Protocols.Http;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
-     public abstract class HasValidCertificateTestImplementationBase : TestImplementation<CertificateReport> {
+    public abstract class HasValidCertificateTestImplementationBase : TestImplementation<CertificateReport> {
         public HasValidCertificateTestImplementationBase(TestRunContext context, TestResult<CertificateReport> result, string? url, HasSupportedFlowsTestResult supportedFlows) : base(context, result, supportedFlows) {
             _url = url;
         }
@@ -19,7 +16,7 @@ namespace OAuch.Compliance.Tests.Shared {
                 return;
             }
 
-            if ( !Uri.TryCreate(_url, UriKind.Absolute, out var uri))
+            if (!Uri.TryCreate(_url, UriKind.Absolute, out _))
                 return;
 
             var report = await Http.GetSecurityReport(_url);
@@ -30,6 +27,6 @@ namespace OAuch.Compliance.Tests.Shared {
             Result.Outcome = report.Check(SecurityChecks.ServerCertificateValid) ? TestOutcomes.SpecificationFullyImplemented : TestOutcomes.SpecificationNotImplemented;
         }
 
-        private string? _url;
+        private readonly string? _url;
     }
 }

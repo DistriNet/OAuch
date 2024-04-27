@@ -4,10 +4,8 @@ using Newtonsoft.Json.Linq;
 using OAuch.Protocols.JWT;
 using OAuch.Shared;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace OAuch.Protocols.JWK {
     public class JsonWebKey {
@@ -35,7 +33,7 @@ namespace OAuch.Protocols.JWK {
 
         [JsonProperty("use")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public JwkKeyUsage? Usage {get; }
+        public JwkKeyUsage? Usage { get; }
 
         [JsonProperty("alg")]
         [JsonConverter(typeof(JwtAlgorithmConverter))]
@@ -92,19 +90,18 @@ namespace OAuch.Protocols.JWK {
             return null;
 
             TokenKey ParseOct() {
-                var key = GetValue("k");
-                if (key == null)
-                    throw new NotSupportedException();
+                var key = GetValue("k") ?? throw new NotSupportedException();
                 return TokenKey.FromBytes(key);
             }
             TokenKey ParseRSA() {
-                var rsap = new RSAParameters();
-                rsap.Modulus = GetValue("n");
+                var rsap = new RSAParameters {
+                    Modulus = GetValue("n")
+                };
                 int size = rsap.Modulus?.Length ?? 0;
                 if (size == 0)
                     return TokenKey.Empty;
                 if (size % 2 != 0) {
-                    size = size + 1;
+                    size++;
                     rsap.Modulus = FixSize(rsap.Modulus, size);
                 }
                 rsap.Exponent = GetValue("e");

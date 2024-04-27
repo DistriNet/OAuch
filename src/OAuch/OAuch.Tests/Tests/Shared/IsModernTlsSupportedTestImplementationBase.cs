@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
@@ -25,13 +24,13 @@ namespace OAuch.Compliance.Tests.Shared {
             }
 
             var result = await Http.TryModernConnection(_url);
-            if (result.Count() > 0) {
+            if (result.Any()) {
                 LogInfo("The server supports the following modern protocols: " + string.Join(", ", result.Select(c => c.ToName())));
             }
             this.ExtraInfo.SupportedModernProtocols = result;
-            this.Result.Outcome = (result == null || result.Count() == 0) ? TestOutcomes.SpecificationNotImplemented : TestOutcomes.SpecificationFullyImplemented;
+            this.Result.Outcome = (result == null || !result.Any()) ? TestOutcomes.SpecificationNotImplemented : TestOutcomes.SpecificationFullyImplemented;
         }
-        private string? _url;
+        private readonly string? _url;
     }
     public class IsModernTlsSupportedExtraInfo {
         public IEnumerable<SslProtocols>? SupportedModernProtocols { get; set; }

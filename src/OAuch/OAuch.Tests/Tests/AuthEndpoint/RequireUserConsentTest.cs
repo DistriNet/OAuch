@@ -3,16 +3,13 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RequireUserConsentTest : Test {
         public override string Title => "Is consent required";
         public override string Description => "This test checks if the authorization server requires user consent before issuing a token without client authentication.";
-        public override TestResultFormatter ResultFormatter => new TestResultFormatter("PROBABLY", "PROBABLY", "PROBABLY NOT");
+        public override TestResultFormatter ResultFormatter => new("PROBABLY", "PROBABLY", "PROBABLY NOT");
         public override Type ResultType => typeof(RequireUserConsentTestResult);
     }
     public class RequireUserConsentTestResult : TestResult {
@@ -46,7 +43,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             }
 
             var ms = Math.Floor(duration.TotalMilliseconds);
-            LogInfo($"OAuch received a valid token from the server in { ms }ms. Any result faster than { ConsentTimeout }ms is considered an automatic authorization.");
+            LogInfo($"OAuch received a valid token from the server in {ms}ms. Any result faster than {ConsentTimeout}ms is considered an automatic authorization.");
             if (ms < ConsentTimeout) {
                 LogInfo("The server automatically issued an access token without requiring client authentication.");
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;

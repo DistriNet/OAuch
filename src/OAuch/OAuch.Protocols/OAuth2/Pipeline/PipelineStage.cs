@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.Pipeline {
@@ -28,8 +24,8 @@ namespace OAuch.Protocols.OAuth2.Pipeline {
             this.AllStages = previous.AllStages;
             this.AllStages.AddStage(this);
         }
-        private PipelineStage<TPrev> _previous;
-        
+        private readonly PipelineStage<TPrev> _previous;
+
         public Processor<TPrev, T> Processor { get; set; }
         Processor IHasProcessor.Processor {
             get {

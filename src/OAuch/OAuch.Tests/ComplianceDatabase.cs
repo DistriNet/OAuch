@@ -1,13 +1,8 @@
-﻿using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Shared.Enumerations;
+﻿using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance {
     public class ComplianceDatabase {
@@ -36,7 +31,7 @@ namespace OAuch.Compliance {
         public static Dictionary<string, Test> Tests {
             get {
                 if (_testsDictionary == null) {
-                    _testsDictionary = new Dictionary<string, Test>();
+                    _testsDictionary = [];
                     foreach (var test in AllTests) {
                         _testsDictionary[test.TestId] = test;
                     }
@@ -56,29 +51,29 @@ namespace OAuch.Compliance {
         private static List<Threat>? _threats;
         public static IReadOnlyList<Threat> AllThreats {
             get {
-                _threats ??= new List<Threat> {                         
+                _threats ??= [
                         new Threat {
                             Id = "6819_4_1_1",
                             Title = "Obtaining Client Secrets",
                             Description = "The attacker could try to get access to the secret of a particular client in order to obtain tokens on behalf of the attacked client with the privileges of that 'client_id' acting as an instance of the client.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.1.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = "A malicious client can impersonate another client and obtain access to protected resources if the impersonated client fails to, or is unable to, keep its client credentials confidential.",
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RequireUserConsentTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_1_2",
@@ -86,24 +81,24 @@ namespace OAuch.Compliance {
                             Description = "Depending on the client type, there are different ways that refresh tokens may be revealed to an attacker. An attacker may obtain the refresh tokens issued to a web application by way of overcoming the web server's security controls. On native clients, refresh tokens may be read from the local file system or the device could be stolen or cloned.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.1.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test> {
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.UsesTokenRotationTest"],
-                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.InvalidatedRefreshTokenTest"],                                              
+                                              Tests["OAuch.Compliance.Tests.TokenEndpoint.InvalidatedRefreshTokenTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenRevokedAfterUseTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.Revocation.CanRefreshTokensBeRevokedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_1_3",
@@ -111,19 +106,19 @@ namespace OAuch.Compliance {
                             Description = "Depending on the client type, there are different ways that access tokens may be revealed to an attacker. Access tokens could be stolen from the device if the application stores them in a storage device that is accessible to other applications.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.1.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.HasAccessTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Tokens.TokenTimeoutTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_1_5",
@@ -131,10 +126,10 @@ namespace OAuch.Compliance {
                             Description = "An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation.  If the authorization server allows the client to register only part of the redirect URI, an attacker can use an open redirector operated by the client to construct a redirect URI that will pass the authorization server validation but will send the authorization 'code' or access token to an endpoint under the control of the attacker.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.1.5.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -143,17 +138,17 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_2_1",
@@ -161,10 +156,10 @@ namespace OAuch.Compliance {
                             Description = "OAuth makes no attempt to verify the authenticity of the authorization server. A hostile party could take advantage of this by intercepting the client's requests and returning misleading or otherwise incorrect responses. This could be achieved using DNS or Address Resolution Protocol (ARP) spoofing.  Wide deployment of OAuth and similar protocols may cause users to become inured to the practice of being redirected to web sites where they are asked to enter their passwords. If users are not careful to verify the authenticity of these web sites before entering their credentials, it will be possible for attackers to exploit this practice to steal users' passwords.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.2.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -173,17 +168,17 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.IsHttpsRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.IsModernTlsSupportedTest"],
-                                          }
+                                          ]
 
-                                      }
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_2_3",
@@ -191,10 +186,10 @@ namespace OAuch.Compliance {
                             Description = "Authorization servers may wish to automatically process authorization requests from clients that have been previously authorized by the user. When the user is redirected to the authorization server's end-user authorization endpoint to grant access, the authorization server detects that the user has already granted access to that particular client. Instead of prompting the user for approval, the authorization server automatically redirects the user back to the client. A malicious client may exploit that feature and try to obtain such an authorization 'code' instead of the legitimate client.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.2.3",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -203,20 +198,20 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RequireUserConsentTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_2_4",
@@ -224,10 +219,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker could use the end-user authorization endpoint and the redirect URI parameter to abuse the authorization server as an open redirector. An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation. An attacker could utilize a user's trust in an authorization server to launch a phishing attack.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.2.4",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -236,18 +231,18 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"] // BCP 4.10.2
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_3_1",
@@ -255,14 +250,14 @@ namespace OAuch.Compliance {
                             Description = "Attackers may attempt to eavesdrop access tokens in transit from the authorization server to the client.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.3.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.HasSupportedFlowsTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
@@ -271,10 +266,10 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.DeviceAuthEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.DeviceAuthEndpoint.IsHttpsRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.DeviceAuthEndpoint.IsModernTlsSupportedTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_3_3",
@@ -282,24 +277,24 @@ namespace OAuch.Compliance {
                             Description = "An attacker could attempt to eavesdrop the transmission of client credentials between the client and server during the client authentication process or during OAuth token requests.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.3.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.HasSupportedFlowsTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsAsymmetricClientAuthenticationUsedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_3_5",
@@ -307,10 +302,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker may try to guess valid 'client_id'/secret pairs.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.3.5.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the token endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -319,18 +314,18 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.ClientCredentialsFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.DeviceFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.ClientSecretEntropyMinReqTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.ClientSecretEntropySugReqTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsAsymmetricClientAuthenticationUsedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_1",
@@ -338,27 +333,27 @@ namespace OAuch.Compliance {
                             Description = "An attacker could try to eavesdrop transmission of the authorization 'code' between the authorization server and client. Furthermore, authorization 'codes' are passed via the browser, which may unintentionally leak those codes to untrusted web sites and attackers in different ways.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses authorization codes */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.AuthorizationCodeTimeoutTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_3",
@@ -366,28 +361,28 @@ namespace OAuch.Compliance {
                             Description = "An attacker may try to guess valid authorization 'code' values and send the guessed code value using the grant type 'code' in order to obtain a valid access token.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses authorization codes */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Tokens.AuthorizationCodeEntropyMinReqTest"],
                                               Tests["OAuch.Compliance.Tests.Tokens.AuthorizationCodeEntropySugReqTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.AuthorizationCodeTimeoutTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsClientAuthenticationRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RedirectUriCheckedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_5",
@@ -395,24 +390,24 @@ namespace OAuch.Compliance {
                             Description = "A hostile party could impersonate the client site and get access to the authorization 'code'. This could be achieved using DNS or ARP spoofing. This applies to clients, which are web applications; thus, the redirect URI is not local to the host where the user's browser is running.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.5.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses authorization codes */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsClientAuthenticationRequiredTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_7",
@@ -420,27 +415,27 @@ namespace OAuch.Compliance {
                             Description = "The attacker leverages the authorization 'code' grant type in an attempt to get another user (victim) to log in, authorize access to his/her resources, and subsequently obtain the authorization 'code' and inject it into a client application using the attacker's account. The goal is to associate an access authorization for resources of the victim with the user account of the attacker on a client site. The attacker abuses an existing client application and combines it with his own counterfeit client web site.  The attacker depends on the victim expecting the client application to request access to a certain resource server.  The victim, seeing only a normal request from an expected application, approves the request.  The attacker then uses the victim's authorization to gain access to the information unknowingly authorized by the victim.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.7.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses authorization codes */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RedirectUriCheckedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_8",
@@ -448,25 +443,25 @@ namespace OAuch.Compliance {
                             Description = "Cross-site request forgery (CSRF) is a web-based attack whereby HTTP requests are transmitted from a user that the web site trusts or has authenticated. CSRF attacks on OAuth approvals can allow an attacker to obtain authorization to OAuth protected resources without the consent of the user.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.8.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                             Tests["OAuch.Compliance.Tests.IdTokens.NoncePresentInTokenTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                             Tests["OAuch.Compliance.Tests.AuthEndpoint.StatePresentTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_9",
@@ -474,10 +469,10 @@ namespace OAuch.Compliance {
                             Description = "With clickjacking, a malicious site loads the target site in a transparent iFrame overlaid on top of a set of dummy buttons that are carefully constructed to be placed directly under important buttons on the target site.  When a user clicks a visible button, they are actually clicking a button (such as an 'Authorize' button) on the hidden page.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.9.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -486,15 +481,15 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.HasFrameOptionsTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.HasContentSecurityPolicyTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_1_13",
@@ -502,20 +497,20 @@ namespace OAuch.Compliance {
                             Description = "An attacker could attempt to log into an application or web site using a victim's identity. Applications relying on identity data provided by an OAuth protected service API to login users are vulnerable to this threat. This pattern can be found in so-called 'social login' scenarios.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.1.13.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsClientAuthenticationRequiredTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_2_2",
@@ -523,24 +518,24 @@ namespace OAuch.Compliance {
                             Description = "An attacker could obtain the token from the browser's history. Note that this means the attacker needs access to the particular device.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.2.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Tokens.TokenTimeoutTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasCacheControlHeaderTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasPragmaHeaderTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.SupportsPostResponseModeTest"], // from BCP 4.3.2
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.TokenAsQueryParameterDisabledTest"] // from BCP 4.3.2
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_3_1",
@@ -548,19 +543,19 @@ namespace OAuch.Compliance {
                             Description = "If the client does not provide enough protection, an attacker or disgruntled employee could retrieve the passwords for a user.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.3.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.TokenEndpoint.IsPasswordFlowDisabledTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_3_2",
@@ -568,19 +563,19 @@ namespace OAuch.Compliance {
                             Description = "All interaction with the resource owner is performed by the client. Thus it might, intentionally or unintentionally, happen that the client obtains a token with scope unknown for, or unintended by, the resource owner.  For example, the resource owner might think the client needs and acquires read-only access to its media storage only but the client tries to acquire an access token with full access permissions.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.3.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.TokenEndpoint.IsPasswordFlowDisabledTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_3_3",
@@ -588,19 +583,19 @@ namespace OAuch.Compliance {
                             Description = "All interaction with the resource owner is performed by the client. Thus it might, intentionally or unintentionally, happen that the client obtains a long-term authorization represented by a refresh token even if the resource owner did not intend so.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.3.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.TokenEndpoint.IsPasswordFlowDisabledTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_4_3_4",
@@ -608,21 +603,21 @@ namespace OAuch.Compliance {
                             Description = "An attacker could attempt to eavesdrop the transmission of end-user credentials with the grant type 'password' between the client and server.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.4.3.4.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_5_1",
@@ -630,21 +625,21 @@ namespace OAuch.Compliance {
                             Description = "An attacker may eavesdrop refresh tokens when they are transmitted between the authorization server and the client.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.5.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_5_2",
@@ -652,20 +647,20 @@ namespace OAuch.Compliance {
                             Description = "This threat is applicable if the authorization server stores refresh tokens as handles in a database.  An attacker may obtain refresh tokens from the authorization server's database by gaining access to the database or launching a SQL injection attack.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.5.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_5_3",
@@ -673,22 +668,22 @@ namespace OAuch.Compliance {
                             Description = "An attacker may try to guess valid refresh token values and send it using the grant type 'refresh_token' in order to obtain a valid access token.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.5.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropyMinReqTest"],
                                               Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropySugReqTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_5_4",
@@ -696,19 +691,19 @@ namespace OAuch.Compliance {
                             Description = "An attacker could try to obtain valid refresh tokens by proxying requests to the authorization server.  Given the assumption that the authorization server URL is well-known at development time or can at least be obtained from a well-known resource server, the attacker must utilize some kind of spoofing in order to succeed.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.5.4.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_6_1",
@@ -716,22 +711,22 @@ namespace OAuch.Compliance {
                             Description = "An attacker could try to obtain a valid access token on transport between the client and resource server.  As access tokens are shared secrets between the authorization server and resource server, they should be treated with the same care as other credentials (e.g., end-user passwords).",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.6.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.IsHttpsRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.Tokens.TokenTimeoutTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_6_2",
@@ -739,21 +734,21 @@ namespace OAuch.Compliance {
                             Description = "An attacker could attempt to replay valid requests in order to obtain or to modify/destroy user data.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.6.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.HasValidCertificateTest"],
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.IsHttpsRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_6_3",
@@ -761,21 +756,21 @@ namespace OAuch.Compliance {
                             Description = "Where the token is a handle, the attacker may attempt to guess the access token values based on knowledge they have from other access tokens.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.6.3.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Tokens.TokenTimeoutTest"],
                                               Tests["OAuch.Compliance.Tests.Tokens.AccessTokenEntropyMinReqTest"],
                                               Tests["OAuch.Compliance.Tests.Tokens.AccessTokenEntropySugReqTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_6_6",
@@ -783,10 +778,10 @@ namespace OAuch.Compliance {
                             Description = "An OAuth HTTP authentication scheme as discussed in RFC6749 is optional.  However, RFC2616 relies on the Authorization and WWW-Authenticate headers to distinguish authenticated content so that it can be protected.  Proxies and caches, in particular, may fail to adequately protect requests not using these headers.  For example, private authenticated content may be stored in (and thus be retrievable from) publicly accessible caches.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.6.6.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the token endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -795,15 +790,15 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.ClientCredentialsFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.DeviceFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasCacheControlHeaderTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasPragmaHeaderTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "6819_4_6_7",
@@ -811,19 +806,19 @@ namespace OAuch.Compliance {
                             Description = "If access tokens are sent via URI query parameters, such tokens may leak to log files and the HTTP 'referer'.",
                             Document = Documents["RFC6819"],
                             LocationInDocument = "4.6.7.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.TokenAsQueryParameterDisabledTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_1_1",
@@ -832,26 +827,26 @@ namespace OAuch.Compliance {
                             Description = "Some authorization servers allow clients to register redirect URI patterns instead of complete redirect URIs. This approach turned out to be more complex to implement and more error prone to manage than exact redirect URI matching. Several successful attacks exploiting flaws in the pattern matching implementation or concrete configurations have been observed in the wild.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.1.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_1_2",
@@ -860,27 +855,27 @@ namespace OAuch.Compliance {
                             Description = "Implicit clients can be subject to an attack that utilizes the fact that user agents re-attach fragments to the destination URL of a redirect if the location header does not contain a fragment. This allows circumvention even of very narrow redirect URI patterns, but not strict URL matching.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.1.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.FragmentFixTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_2_2",
@@ -888,10 +883,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker can learn state from the authorization request if the authorization endpoint at the authorization server contains links or third-party content.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.2.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
@@ -899,23 +894,23 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsCodeBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.TokenValidAfterMultiExchangeTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenValidAfterMultiExchangeTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.ReferrerPolicyEnforcedTest"],
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.SupportsPostResponseModeTest"],
-                                          }
-                                    }
+                                          ]
+                                    ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_3_1",
@@ -923,26 +918,26 @@ namespace OAuch.Compliance {
                             Description = "When a browser navigates to 'client.example/redirection_endpoint?code=abcd' as a result of a redirect from a provider's authorization endpoint, the URL including the authorization code may end up in the browser's history.  An attacker with access to the device could obtain the code and try to replay it.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.3.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that use authorization codes */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.SupportsPostResponseModeTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_3_2_A",
@@ -951,19 +946,19 @@ namespace OAuch.Compliance {
                             Description = "An access token may end up in the browser history if a client or a web site that already has a token deliberately navigates to a page like provider.com/get_user_profile?access_token=abcdef.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.3.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.TokenAsQueryParameterDisabledTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_3_2_B",
@@ -971,20 +966,18 @@ namespace OAuch.Compliance {
                             Description = "In the implicit grant, a URL like client.example/redirection_endpoint#access_token=abcdef may end up in the browser history as a result of a redirect from a provider's authorization endpoint.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.3.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          // cannot be mitigated
-                                      }
+                                      ],
+                                      MitigatedBy = []
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_5",
@@ -992,21 +985,21 @@ namespace OAuch.Compliance {
                             Description = "In an authorization code injection attack, the attacker attempts to inject a stolen authorization code into the attacker's own session with the client. The aim is to associate the attacker's session at the client with the victim's resources or identity.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.5.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"],
                                             Tests["OAuch.Compliance.Tests.Pkce.HashedPkceDisabledTest"],
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_7",
@@ -1015,10 +1008,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker might attempt to inject a request to the redirect URI of the legitimate client on the victim's device, e.g., to cause the client to access resources under the attacker's control. This is a variant of an attack known as Cross-Site Request Forgery (CSRF).",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.7.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
@@ -1026,17 +1019,17 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceRequiredTest"]
-                                          },
-                                          new TestCombination {
+                                          ],
+                                          [
                                             Tests["OAuch.Compliance.Tests.IdTokens.NoncePresentInTokenTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_8",
@@ -1044,21 +1037,21 @@ namespace OAuch.Compliance {
                             Description = "An authorization server that supports PKCE but does not make its use mandatory for all flows can be susceptible to a PKCE downgrade attack.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.8.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Pkce.IsPkceDowngradeDetectedTest"],
                                               Tests["OAuch.Compliance.Tests.Pkce.IsPkcePlainDowngradeDetectedTest"],
                                               Tests["OAuch.Compliance.Tests.Pkce.IsPkceTokenDowngradeDetectedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
 
 
@@ -1068,10 +1061,10 @@ namespace OAuch.Compliance {
                             Description = "Access tokens can be stolen by an attacker in various ways. Authorization servers therefore SHOULD ensure that access tokens are sender-constrained and audience-restricted.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.10.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
@@ -1081,14 +1074,14 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.ClientCredentialsFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.PasswordFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.ApiEndpoint.AreBearerTokensDisabledTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_11_1",
@@ -1097,10 +1090,10 @@ namespace OAuch.Compliance {
                             Description = "An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation.  If the authorization server allows the client to register only part of the redirect URI, an attacker can use an open redirector operated by the client to construct a redirect URI that will pass the authorization server validation but will send the authorization 'code' or access token to an endpoint under the control of the attacker.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.11.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -1109,17 +1102,17 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_11_2",
@@ -1128,10 +1121,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker could use the end-user authorization endpoint and the redirect URI parameter to abuse the authorization server as an open redirector. An open redirector is an endpoint using a parameter to automatically redirect a user agent to the location specified by the parameter value without any validation. An attacker could utilize a user's trust in an authorization server to launch a phishing attack.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.11.2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -1140,18 +1133,18 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriPathMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.CodePollutionTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"] // BCP 4.11.2
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_14",
@@ -1159,14 +1152,14 @@ namespace OAuch.Compliance {
                             Description = "Refresh tokens are an attractive target for attackers, since they represent the overall grant a resource owner delegated to a certain client. If an attacker is able to exfiltrate and successfully replay a refresh token, the attacker will be able to mint access tokens and use them to access resource servers on behalf of the resource owner.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.14.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.UsesTokenRotationTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.InvalidatedRefreshTokenTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.RefreshTokenRevokedAfterUseTest"],
@@ -1177,10 +1170,10 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsModernTlsSupportedTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.IsHttpsRequiredTest"],
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.HasValidCertificateTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_16",
@@ -1189,10 +1182,10 @@ namespace OAuch.Compliance {
                             Description = "The authorization request is susceptible to clickjacking attacks, also called user interface redressing. An attacker can use this vector to obtain the user's authentication credentials, change the scope of access granted to the client, and potentially access the user's resources.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.16.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -1201,15 +1194,15 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.HasFrameOptionsTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.HasContentSecurityPolicyTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "BCP_4_17",
@@ -1217,10 +1210,10 @@ namespace OAuch.Compliance {
                             Description = "An attacker could utilize a correctly registered redirect URI to perform phishing attacks. The authorization server SHOULD only automatically redirect the user agent if it trusts the redirect URI. If the URI is not trusted, the authorization server MAY inform the user and rely on the user to make the correct decision.",
                             Document = Documents["SecBCP"],
                             LocationInDocument = "4.17.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           /* Depends on one of the flows that uses the authorization endpoint */
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.CodeTokenFlowSupportedTest"],
@@ -1229,15 +1222,15 @@ namespace OAuch.Compliance {
                                           Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenTokenFlowSupportedTest"],
                                           Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidScopeTest"],
                                               Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidResponseTypeTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "7519_6",
@@ -1245,19 +1238,19 @@ namespace OAuch.Compliance {
                             Description = "An attacker can remove or forge the signature of a JWT to impersonate another user.",
                             Document = Documents["AttsDefs"],
                             LocationInDocument = "",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Features.HasJwtAccessTokensTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Jwt.AcceptsNoneSignatureTest"], // API authorization with JWT
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "7523",
@@ -1265,14 +1258,14 @@ namespace OAuch.Compliance {
                             Description = "An attacker can use an expired or otherwise invalid token to impersonate another user.",
                             Document = Documents["RFC7523"],
                             LocationInDocument = "4.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.Jwt.SupportsJwtClientAuthenticationTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Jwt.IsSignatureCheckedTest"], // client authentication with JWT
                                               Tests["OAuch.Compliance.Tests.Jwt.IsSignatureRequiredTest"], // client authentication with JWT
                                               Tests["OAuch.Compliance.Tests.Jwt.HasAudienceClaimTest"],
@@ -1282,10 +1275,10 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.Jwt.IsIssuedAtCheckedTest"],
                                               Tests["OAuch.Compliance.Tests.Jwt.IsJwtReplayDetectedTest"],
                                               Tests["OAuch.Compliance.Tests.Jwt.IsNotBeforeCheckedTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "7009_1",
@@ -1293,22 +1286,22 @@ namespace OAuch.Compliance {
                             Description = "Leaked (and potentially long-lived) access or refesh tokens that cannot be revoked may enable an attacker to impersonate a user.",
                             Document = Documents["RFC7009"],
                             LocationInDocument = "2.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.DocumentSupport.RFC7009SupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Revocation.AccessRevokesRefreshTest"],
                                               Tests["OAuch.Compliance.Tests.Revocation.CanAccessTokensBeRevokedTest"],
                                               Tests["OAuch.Compliance.Tests.Revocation.CanRefreshTokensBeRevokedTest"],
                                               Tests["OAuch.Compliance.Tests.Revocation.RefreshRevokesAccessTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "7009_2",
@@ -1316,20 +1309,20 @@ namespace OAuch.Compliance {
                             Description = "An authentication server that supports token revocation must verify the ownership of a token before revocation.",
                             Document = Documents["RFC7009"],
                             LocationInDocument = "2.1.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.DocumentSupport.RFC7009SupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.Revocation.IsBoundToClientTest"],
                                               Tests["OAuch.Compliance.Tests.Revocation.IsClientAuthRequiredTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "OIDC_2",
@@ -1337,14 +1330,14 @@ namespace OAuch.Compliance {
                             Description = "An attacker may attempt to re-use an identity token that was acquired for another client or for another authorization session.",
                             Document = Documents["OIDC"],
                             LocationInDocument = "2.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.IdTokens.CodeHashValidTest"],
                                               Tests["OAuch.Compliance.Tests.IdTokens.HasAuthorizedPartyTest"],
                                               Tests["OAuch.Compliance.Tests.IdTokens.HasAzpForMultiAudienceTest"],
@@ -1357,10 +1350,10 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.IdTokens.IsAuthorizationCodeHashPresentTest"],
                                               Tests["OAuch.Compliance.Tests.IdTokens.KeyReferencesTest"],
                                               Tests["OAuch.Compliance.Tests.IdTokens.NoncePresentInTokenTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "OIDC_16",
@@ -1368,20 +1361,20 @@ namespace OAuch.Compliance {
                             Description = "Resource servers that do not verify the signature of an identity token, or that accept identity tokens that are signed with weak keys, are subject to an impersonation attack.",
                             Document = Documents["OIDC"],
                             LocationInDocument = "16.",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                      ExtraDescription = null,
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                             Tests["OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest"],
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.IdTokens.ClientSecretLongEnoughTest"],
                                               Tests["OAuch.Compliance.Tests.IdTokens.IsSignedTest"],
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
+                            ]
                         },
                         new Threat {
                             Id = "MultiACConc",
@@ -1389,14 +1382,14 @@ namespace OAuch.Compliance {
                             Description = "Concurrency issues can result in an authorization code being used multiple times.",
                             Document = AllDocuments[0],
                             LocationInDocument = "",
-                            Instances = new List<ThreatInstance> {
+                            Instances = [
                                 new ThreatInstance {
                                       ExtraDescription = "A malicious client can exchange an authorization code multiple times.",
-                                      DependsOnFeatures = new List<Test>{
+                                      DependsOnFeatures = [
                                           Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"]
-                                      },
-                                      MitigatedBy = new List<TestCombination> {
-                                          new TestCombination {
+                                      ],
+                                      MitigatedBy = [
+                                          [
                                               Tests["OAuch.Compliance.Tests.TokenEndpoint.MultipleCodeExchangesTest"],
                                               Tests["OAuch.Compliance.Tests.Concurrency.SingleFastACExchangeTest"],
                                               Tests["OAuch.Compliance.Tests.Concurrency.MultiFastACExchangeTest"],
@@ -1404,12 +1397,12 @@ namespace OAuch.Compliance {
                                               Tests["OAuch.Compliance.Tests.Concurrency.SingleFastRefreshTest"],
                                               Tests["OAuch.Compliance.Tests.Concurrency.MultiFastRefreshTest"],
                                               Tests["OAuch.Compliance.Tests.Concurrency.ConcurrentTokensRevokedTest"]
-                                          }
-                                      }
+                                          ]
+                                      ]
                                 }
-                            }
-                         } 
-                    };
+                            ]
+                         }
+                    ];
                 return _threats;
             }
         }
@@ -1417,7 +1410,7 @@ namespace OAuch.Compliance {
         public static Dictionary<string, OAuthDocument> Documents {
             get {
                 if (_docDictionary == null) {
-                    _docDictionary = new Dictionary<string, OAuthDocument>();
+                    _docDictionary = [];
                     foreach (var doc in AllDocuments) {
                         _docDictionary[doc.Id] = doc;
                     }
@@ -1430,7 +1423,7 @@ namespace OAuch.Compliance {
         private static List<OAuthDocument>? _documents;
         public static IReadOnlyList<OAuthDocument> AllDocuments {
             get {
-                _documents ??= new List<OAuthDocument> {
+                _documents ??= [
                         new OAuthDocument {
                              Id = "RFC6749",
                              Name = "The OAuth 2.0 Authorization Framework",
@@ -1439,14 +1432,14 @@ namespace OAuch.Compliance {
                              IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
                              IsStandard = true,
                              DocumentCategory = DocumentCategories.OAuth2,
-                             DeprecatedFeatures = new List<TestRequirementLevel> {
+                             DeprecatedFeatures = [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
                                      RequirementLevel = RequirementLevels.May,
                                      LocationInDocument = "1.6. TLS Version"
                                 }
-                             },
-                             Countermeasures= new List<TestRequirementLevel> {
+                             ],
+                             Countermeasures= [
                                  // Auth endpoint tests
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
@@ -1685,8 +1678,8 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "10.2. Client Impersonation"
                                  },
-                             },
-                             AdditionalTests = new List<Test> {
+                             ],
+                             AdditionalTests = [
                                  Tests["OAuch.Compliance.Tests.Features.HasRefreshTokensTest"],
                                  Tests["OAuch.Compliance.Tests.Features.HasAccessTokensTest"],
                                  Tests["OAuch.Compliance.Tests.Features.CodeFlowSupportedTest"],
@@ -1696,7 +1689,7 @@ namespace OAuch.Compliance {
                                  Tests["OAuch.Compliance.Tests.Features.HasSupportedFlowsTest"],
                                  Tests["OAuch.Compliance.Tests.Features.HasSupportedFlowsTest"],
                                  Tests["OAuch.Compliance.Tests.Features.HasJwtAccessTokensTest"],
-                             }
+                             ]
                         },
                         new OAuthDocument {
                             Id = "RFC6750",
@@ -1706,14 +1699,14 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6750SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures = new List<TestRequirementLevel> {
+                            DeprecatedFeatures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.TokenAsQueryParameterTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "2.3. URI Query Parameter"
                                  },
-                            },
-                            Countermeasures = new List<TestRequirementLevel> {
+                            ],
+                            Countermeasures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.SupportsAuthorizationHeaderTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -1774,11 +1767,11 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.3. Summary of Recommendations"
                                  },
-                            },
-                            AdditionalTests = new List<Test> {
+                            ],
+                            AdditionalTests = [
                                  Tests["OAuch.Compliance.Tests.Features.TestUriSupportedTest"],
                                  Tests["OAuch.Compliance.Tests.ApiEndpoint.TokenAsQueryParameterDisabledTest"],
-                             }
+                             ]
                         },
                         new OAuthDocument {
                             Id = "RFC8628",
@@ -1788,14 +1781,14 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC8628SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures = new List<TestRequirementLevel> {
+                            DeprecatedFeatures = [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
                                      RequirementLevel = RequirementLevels.May,
                                      LocationInDocument = "3.1. Device Authorization Request"
                                 }
-                            },
-                            Countermeasures = new List<TestRequirementLevel> {
+                            ],
+                            Countermeasures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.DeviceAuthEndpoint.HasValidCertificateTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -1846,10 +1839,10 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2. Device Code Brute Forcing"
                                  },
-                            },
-                            AdditionalTests = new List<Test> {
+                            ],
+                            AdditionalTests = [
                                  Tests["OAuch.Compliance.Tests.Features.DeviceFlowSupportedTest"],
-                             }
+                             ]
                         },
                         new OAuthDocument {
                             Id = "RFC7636",
@@ -1859,14 +1852,14 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC7636SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures = new List<TestRequirementLevel> {
+                            DeprecatedFeatures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.PlainPkceTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.2. Client Creates the Code Challenge"
                                  },
-                            },
-                            Countermeasures = new List<TestRequirementLevel> {
+                            ],
+                            Countermeasures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Pkce.IsPkceImplementedTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -1933,7 +1926,7 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "7.5. TLS Security Considerations"
                                  },
 
-                            }
+                            ]
                         },
                         new OAuthDocument {
                             Id = "RFC6819",
@@ -1943,10 +1936,8 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6819SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures = new List<TestRequirementLevel> { 
-                                //
-                            },
-                            Countermeasures = new List<TestRequirementLevel> {
+                            DeprecatedFeatures = [],
+                            Countermeasures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.ApiEndpoint.IsHttpsRequiredTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2107,7 +2098,7 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.May,
                                      LocationInDocument = "5.2.2.4. Revocation of Refresh Tokens"
                                  },
-                            },
+                            ],
                         },
                         new OAuthDocument {
                             Id = "RFC7523",
@@ -2117,10 +2108,8 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC7523SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures = new  List<TestRequirementLevel> {
-                                //
-                            },
-                            Countermeasures = new  List<TestRequirementLevel> {
+                            DeprecatedFeatures = [],
+                            Countermeasures = [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Jwt.SupportsJwtClientAuthenticationTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2171,7 +2160,7 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "3. JWT Format and Processing Requirements"
                                  },
-                            },
+                            ],
                         },
                         new OAuthDocument {
                             Id = "RFC7009",
@@ -2181,10 +2170,8 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC7009SupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
-                                //
-                             },
-                            Countermeasures= new List<TestRequirementLevel> {
+                            DeprecatedFeatures  = [],
+                            Countermeasures= [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Revocation.CanAccessTokensBeRevokedTest"],
                                      RequirementLevel = RequirementLevels.Should,
@@ -2226,7 +2213,7 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "2.1. Revocation Request"
                                  },
 
-                            }
+                            ]
                         },
                         /*new OAuthDocument {    // TODO: nobody supports it right now
                             Id = "RFC8705",
@@ -2262,7 +2249,7 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
                             IsStandard = false,
                             DocumentCategory = DocumentCategories.Draft,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
+                            DeprecatedFeatures  = [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
                                      RequirementLevel = RequirementLevels.Should,
@@ -2298,8 +2285,8 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "4.3.2. Access Token in Browser History"
                                  },
-                             },
-                            Countermeasures= new List<TestRequirementLevel> {
+                             ],
+                            Countermeasures= [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2360,7 +2347,7 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.2.2. Refresh Tokens"
                                  },
-                                 new TestRequirementLevel { 
+                                 new TestRequirementLevel {
                                      Test = Tests["OAuch.Compliance.Tests.TokenEndpoint.IsRefreshAuthenticationRequiredTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.2.2. Refresh Tokens"
@@ -2444,8 +2431,8 @@ namespace OAuch.Compliance {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidResponseTypeTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
-                                 },                                                                              
-                            }
+                                 },
+                            ]
                         },
                         new OAuthDocument {
                             Id = "OIDC",
@@ -2455,10 +2442,8 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest",
                              IsStandard = true,
                              DocumentCategory = DocumentCategories.OpenIDConnect,
-                             DeprecatedFeatures  = new List<TestRequirementLevel> {
-                                 //
-                             },
-                             Countermeasures= new List<TestRequirementLevel> {
+                             DeprecatedFeatures  = [],
+                             Countermeasures= [
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.IdTokens.HasRequiredClaimsTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2559,11 +2544,11 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "3.3.2.11. ID Token"
                                  },
-                             },
-                             AdditionalTests = new List<Test> {
+                             ],
+                             AdditionalTests = [
                                  Tests["OAuch.Compliance.Tests.Features.CodeIdTokenFlowSupportedTest"],
                                  Tests["OAuch.Compliance.Tests.Features.IdTokenFlowSupportedTest"],
-                             }
+                             ]
                         },
                         new OAuthDocument {
                             Id = "FormPost",
@@ -2573,16 +2558,14 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.FormPostSupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OAuth2,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
-                                 //
-                            },
-                            Countermeasures= new List<TestRequirementLevel> {
+                            DeprecatedFeatures  = [],
+                            Countermeasures= [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.SupportsPostResponseModeTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2. Form Post Response Mode"
                                 }
-                            }
+                            ]
                         },
                         new OAuthDocument {
                             Id = "FAPI1Base",
@@ -2592,7 +2575,7 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OpenIDConnect,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
+                            DeprecatedFeatures  = [
                                  new TestRequirementLevel {
                                     Test = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
                                     RequirementLevel = RequirementLevels.Must,
@@ -2604,8 +2587,8 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.2. Authorization server"
                                  },
 
-                            },
-                            Countermeasures= new List<TestRequirementLevel> {
+                            ],
+                            Countermeasures= [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2778,15 +2761,7 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 //OAuch.Compliance.Tests.AuthEndpoint.SupportsPostAuthorizationRequestsTest
-
-
-
-
-
-
-
-
-                            }
+                            ]
                         },
                         new OAuthDocument {
                             Id = "FAPI1Adv",
@@ -2796,14 +2771,14 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.OpenIdSupportedTest",
                             IsStandard = true,
                             DocumentCategory = DocumentCategories.OpenIDConnect,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
-                                 new TestRequirementLevel { 
+                            DeprecatedFeatures  = [
+                                 new TestRequirementLevel {
                                     Test = Tests["OAuch.Compliance.Tests.Features.IsDeprecatedTlsSupportedTest"],
                                     RequirementLevel = RequirementLevels.Must,
                                     LocationInDocument = "8.5. TLS considerations"
                                  }
-                            },
-                            Countermeasures= new List<TestRequirementLevel> {
+                            ],
+                            Countermeasures= [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.HasValidCertificateTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -2874,9 +2849,7 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "8.5. TLS considerations"
                                 },
-
-
-                            }
+                            ]
                         },
                         new OAuthDocument {
                             Id = "AttsDefs",
@@ -2886,10 +2859,8 @@ namespace OAuch.Compliance {
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
                             IsStandard = false,
                             DocumentCategory = DocumentCategories.Other,
-                            DeprecatedFeatures  = new List<TestRequirementLevel> {
-                                 //
-                             },
-                             Countermeasures= new List<TestRequirementLevel> {
+                            DeprecatedFeatures  = [],
+                             Countermeasures= [
                                  //new TestRequirementLevel {
                                  //    Test  = Tests["OAuch.Compliance.Tests.Debug.DebugTest"],
                                  //    RequirementLevel = RequirementLevels.Must,
@@ -2945,9 +2916,9 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = ""
                                  }
-                             }
+                             ]
                         }
-                    };
+                    ];
                 return _documents;
             }
         }

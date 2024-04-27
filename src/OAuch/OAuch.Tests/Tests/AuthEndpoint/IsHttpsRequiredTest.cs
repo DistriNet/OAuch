@@ -1,12 +1,8 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Protocols.Http;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
@@ -45,7 +41,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                     LogInfo("The server returned an HTTP error");
                 else
                     Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-            } catch {                
+            } catch {
                 // the test succeeds, because the server actively refused the connection
                 LogInfo("The server actively refused the HTTP connection");
             }

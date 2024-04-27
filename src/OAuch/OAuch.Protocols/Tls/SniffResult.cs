@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Authentication;
-using System.Text;
 
 namespace OAuch.Protocols.Tls {
     public class SniffResult {
@@ -11,7 +9,7 @@ namespace OAuch.Protocols.Tls {
         }
         public IReadOnlyList<SslProtocols> AcceptedProtocols => _acceptedProtocols;
         public IReadOnlyList<CipherSuite> AcceptedCipherSuites => _acceptedCipherSuites;
-        private List<SslProtocols> _acceptedProtocols;
-        private List<CipherSuite> _acceptedCipherSuites;
+        private readonly List<SslProtocols> _acceptedProtocols;
+        private readonly List<CipherSuite> _acceptedCipherSuites;
     }
 }

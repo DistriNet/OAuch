@@ -1,21 +1,9 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Protocols.Http;
+using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
-using OAuch.Protocols.OAuth2;
-using OAuch.Shared.Enumerations;
 using OAuch.Shared;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
+using OAuch.Shared.Enumerations;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {
@@ -25,7 +13,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
         }
 
         public async override Task Run() {
-            var flows = GetDependency<HasSupportedFlowsTestResult>(true);            
+            var flows = GetDependency<HasSupportedFlowsTestResult>(true);
             if (flows == null || !flows.HasRefreshTokens) {
                 Result.Outcome = TestOutcomes.Skipped;
                 return;

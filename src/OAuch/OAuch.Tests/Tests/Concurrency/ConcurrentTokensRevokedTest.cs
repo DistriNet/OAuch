@@ -1,17 +1,10 @@
-﻿using AngleSharp.Dom;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Shared.Enumerations;
+﻿using OAuch.Compliance.Tests.Features;
+using OAuch.Compliance.Tests.Shared;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using OAuch.Compliance.Tests.Shared;
-using OAuch.Protocols.OAuth2;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace OAuch.Compliance.Tests.Concurrency {
     public class ConcurrentTokensRevokedTest : Test {
@@ -45,12 +38,12 @@ namespace OAuch.Compliance.Tests.Concurrency {
             var mfac = GetDependency<MultiFastACExchangeTestResult>(false);
             var sfr = GetDependency<SingleFastRefreshTestResult>(false);
             var mfr = GetDependency<MultiFastRefreshTestResult>(false);
-            ExtraInfo.AccessTokens = new List<string>();
-            ExtraInfo.RefreshTokens = new List<string>();
+            ExtraInfo.AccessTokens = [];
+            ExtraInfo.RefreshTokens = [];
             GetConcurrentTokens(ExtraInfo.AccessTokens, ExtraInfo.RefreshTokens, sfac, mfac, sfr, mfr);
 
             // if this is the first time we run this test...
-            if (ExtraInfo.ResumeWhen == null) { 
+            if (ExtraInfo.ResumeWhen == null) {
                 if (ExtraInfo.AccessTokens.Count == 0 && ExtraInfo.RefreshTokens.Count == 0) {
                     LogInfo("Could not find working access or refresh tokens that were acquired via a race condition.");
                     Result.Outcome = TestOutcomes.Skipped;
@@ -102,8 +95,8 @@ namespace OAuch.Compliance.Tests.Concurrency {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
             }
         }
-        private void GetConcurrentTokens(List<string> accessTokens, List<string> refreshTokens, params TestResult<ConcurrencyInfo>?[] results) {
-            foreach(var result in results) {
+        private static void GetConcurrentTokens(List<string> accessTokens, List<string> refreshTokens, params TestResult<ConcurrencyInfo>?[] results) {
+            foreach (var result in results) {
                 if (result != null) {
                     if (result.ExtraInfo?.WorkingAccessTokens != null && result.ExtraInfo.WorkingAccessTokens.Count > 1) {
                         accessTokens.AddRange(result.ExtraInfo.WorkingAccessTokens);

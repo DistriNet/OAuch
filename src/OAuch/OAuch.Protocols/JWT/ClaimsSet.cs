@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OAuch.Protocols.JWT {
     public class ClaimsSet : JsonCollection {
@@ -18,7 +16,7 @@ namespace OAuch.Protocols.JWT {
                 var s = ReadObject<string>("aud");
                 if (s == null)
                     return null;
-                return [s]; 
+                return [s];
             }
         }
 

@@ -1,11 +1,9 @@
 ﻿using OAuch.Hubs;
 using OAuch.LogConverters;
-using OAuch.Protocols.Http;
 using OAuch.Shared;
 using OAuch.Shared.Interfaces;
 using OAuch.Shared.Logging;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OAuch.TestRuns {
@@ -53,7 +51,7 @@ namespace OAuch.TestRuns {
                 lock (_waitingCallbacks) {
                     if (_waitingCallbacks.Count == 0)
                         return null; // no callbacks
-                    return _waitingCallbacks[^1].RedirectUri;
+                    return _waitingCallbacks[_waitingCallbacks.Count - 1].RedirectUri;
                 }
             }
         }

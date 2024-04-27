@@ -3,10 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace OAuch.Shared {
@@ -154,7 +151,7 @@ namespace OAuch.Shared {
                         string? val = kv.Value?.ToObject<string?>();
                         if (val != null)
                             dict[kv.Key] = val;
-                    } catch { 
+                    } catch {
                         // couldn't convert to string; server uses some unsupported JSon structure
                     }
                 }

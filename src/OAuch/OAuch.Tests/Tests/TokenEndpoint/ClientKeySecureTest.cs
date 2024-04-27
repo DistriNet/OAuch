@@ -1,19 +1,10 @@
-﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
-using OAuch.Protocols.OAuth2.Pipeline;
-using OAuch.Protocols.OAuth2;
-using OAuch.Shared.Enumerations;
-using OAuch.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography.X509Certificates;
-using OAuch.Protocols.JWK;
+﻿using OAuch.Protocols.JWK;
 using OAuch.Protocols.JWT;
-using System.Security.Cryptography;
+using OAuch.Shared;
+using OAuch.Shared.Enumerations;
+using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class ClientKeySecureTest : Test {
@@ -47,7 +38,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             if (this.Context.SiteSettings.CertificateId != null) {
                 // ... check every certificate in the client authentication chain
                 var certs = this.Context.SiteSettings.Certificates;
-                foreach(var cert in certs) {
+                foreach (var cert in certs) {
                     if (cert is X509Certificate2 x509) {
                         var rsa = x509.PublicKey.GetRSAPublicKey();
                         if (rsa != null) {

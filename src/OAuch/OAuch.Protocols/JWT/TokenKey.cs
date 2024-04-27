@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 
 namespace OAuch.Protocols.JWT {
     public abstract class TokenKey {
@@ -13,10 +10,10 @@ namespace OAuch.Protocols.JWT {
     public class BytesTokenKey : TokenKey {
         public BytesTokenKey(byte[] value) {
             this.Value = value;
-        }   
+        }
         public byte[] Value { get; }
     }
-    public class EmptyTokenKey : TokenKey { 
+    public class EmptyTokenKey : TokenKey {
         //
     }
     public class RsaTokenKey : TokenKey {

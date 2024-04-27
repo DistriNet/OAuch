@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using Unity;
 
 namespace OAuch.Shared.Logging {
     public class LogContext : LoggedItem {
@@ -25,7 +22,7 @@ namespace OAuch.Shared.Logging {
             if (converter != null) {
                 this.Children.Add(converter.Convert(item));
             } else {
-                Debug.WriteLine($"Cannot convert log type '{ typeof(T).FullName }'");
+                Debug.WriteLine($"Cannot convert log type '{typeof(T).FullName}'");
 #if DEBUG
                 Debugger.Break();
 #endif
@@ -33,14 +30,14 @@ namespace OAuch.Shared.Logging {
             }
         }
 
-        public override void Accept(ILogVisitor formatter) {}
+        public override void Accept(ILogVisitor formatter) { }
 
         public static LogContext NullLogger => new NullLogContext();
 
         private class NullLogContext : LogContext {
             public override IList<LoggedItem> Children => [];
-            public override void Log(string? message, LoggedStringTypes type = LoggedStringTypes.Info) {}
-            public override void Log<T>(T item) {}
+            public override void Log(string? message, LoggedStringTypes type = LoggedStringTypes.Info) { }
+            public override void Log<T>(T item) { }
         }
     }
 }

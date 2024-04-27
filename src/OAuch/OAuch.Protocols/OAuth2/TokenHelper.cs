@@ -2,16 +2,13 @@
 using OAuch.Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2 {
     public static class TokenHelper {
         public static void RegisterTokenResult(TokenProvider provider, TokenResult result) {
             var dictionary = provider.Context.State.Get<Dictionary<string, List<ValidToken>>>(StateKeys.TokenCache);
             if (!dictionary.TryGetValue(provider.FlowType, out var list)) {
-                list = new List<ValidToken>();
+                list = [];
                 dictionary[provider.FlowType] = list;
             }
             if (result.UnexpectedError == null && (result.IdentityToken != null || result.AccessToken != null)) {
@@ -31,7 +28,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
         public static IEnumerable<ValidToken> GetAllTokenResults(TestRunContext context) {
             var dictionary = context.State.Get<Dictionary<string, List<ValidToken>>>(StateKeys.TokenCache);
-            foreach(var list in dictionary.Values) {
+            foreach (var list in dictionary.Values) {
                 if (list != null) {
                     foreach (var token in list) {
                         if (token != null)

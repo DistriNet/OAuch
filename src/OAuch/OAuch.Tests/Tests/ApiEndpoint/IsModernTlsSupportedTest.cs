@@ -1,16 +1,7 @@
-﻿using OAuch.Compliance.Tests;
-using OAuch.Compliance.Tests.Features;
+﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.Shared;
-using OAuch.Protocols.Http;
 using OAuch.Shared;
-using OAuch.Shared.Enumerations;
-using OAuch.Shared.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class IsModernTlsSupportedTest : Test {
@@ -24,7 +15,7 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
         public override Type ImplementationType => typeof(IsModernTlsSupportedTestImplementation);
     }
     public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestImplementationBase {
-        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows) 
-            : base(context, result, context.SiteSettings.TestUri, supportedFlows) {}
+        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows)
+            : base(context, result, context.SiteSettings.TestUri, supportedFlows) { }
     }
 }

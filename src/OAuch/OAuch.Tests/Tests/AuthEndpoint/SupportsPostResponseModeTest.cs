@@ -7,10 +7,7 @@ using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class SupportsPostResponseModeTest : Test {
@@ -33,10 +30,8 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var formPostContext = Context with
-            {
-                SiteSettings = Context.SiteSettings with
-                {
+            var formPostContext = Context with {
+                SiteSettings = Context.SiteSettings with {
                     ResponseMode = ResponseModes.FormPost
                 }
             };

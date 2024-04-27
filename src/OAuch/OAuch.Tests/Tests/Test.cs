@@ -1,16 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OAuch.Compliance.Tests;
-using OAuch.Shared;
-using OAuch.Shared.Enumerations;
-using OAuch.Shared.Interfaces;
-using OAuch.Shared.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance {
     public abstract class Test {

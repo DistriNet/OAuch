@@ -2,14 +2,9 @@
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
-using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Tokens {
@@ -29,7 +24,7 @@ namespace OAuch.Compliance.Tests.Tokens {
     }
     public class TokenTimeoutTestImplementation : TestImplementation<TokenTimeoutInfo> {
         public TokenTimeoutTestImplementation(TestRunContext context, TokenTimeoutTestResult result, HasSupportedFlowsTestResult flows) : base(context, result, flows) { }
-        
+
         public virtual int MaxTimeout { // in seconds
             get {
                 return 3600; // an expiry time of one hour is the default
@@ -53,9 +48,9 @@ namespace OAuch.Compliance.Tests.Tokens {
                 var tokenResult = await provider.GetToken();
                 var expiresIn = tokenResult.ExpiresIn;
                 ExtraInfo.AccessToken = tokenResult.AccessToken;
-                ExtraInfo.ResumeWhen = DateTime.Now.AddSeconds(MaxTimeout); 
+                ExtraInfo.ResumeWhen = DateTime.Now.AddSeconds(MaxTimeout);
                 if (expiresIn != null) {
-                    LogInfo($"The token has a reported lifetime of { expiresIn.Value } seconds.");
+                    LogInfo($"The token has a reported lifetime of {expiresIn.Value} seconds.");
                     if (expiresIn.Value > MaxTimeout) {
                         LogInfo("The access token lives longer than one hour.");
                         Result.Outcome = TestOutcomes.SpecificationNotImplemented;
@@ -66,7 +61,7 @@ namespace OAuch.Compliance.Tests.Tokens {
                     }
                 }
                 if (ExtraInfo.ResumeWhen != null)
-                    LogInfo($"Access token request succeeded. Please resume this test run after { ExtraInfo.ResumeWhen.Value:HH:mm:ss} to complete the test.");
+                    LogInfo($"Access token request succeeded. Please resume this test run after {ExtraInfo.ResumeWhen.Value:HH:mm:ss} to complete the test.");
             } else if (DateTime.Now > ExtraInfo.ResumeWhen!.Value) {
                 var request = new ApiRequest(Context);
                 var response = await request.Send(new TokenResult { AuthorizationResponse = ServerResponse.FromAccessToken(ExtraInfo.AccessToken) });

@@ -1,11 +1,4 @@
-﻿using OAuch.OAuthThreatModel.Consequences;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.OAuthThreatModel.Enrichers {
+﻿namespace OAuch.OAuthThreatModel.Enrichers {
     public abstract class Enricher : ModelElement {
         /// <summary>
         /// true if the testcase referenced in Id must be implemented, false if it should not be implemented,
@@ -17,7 +10,7 @@ namespace OAuch.OAuthThreatModel.Enrichers {
             return context.IsTestcaseImplemented(this.Id) == RelevancyResult;
         }
 
-        public static List<Enricher> All { 
+        public static List<Enricher> All {
             get {
                 _allEnrichers ??= FindElements<Enricher>();
                 return _allEnrichers;

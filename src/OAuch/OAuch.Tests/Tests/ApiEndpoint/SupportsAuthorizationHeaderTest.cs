@@ -1,11 +1,7 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.ApiEndpoint {
@@ -30,7 +26,7 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
 
             if (testUri.ExtraInfo?.HasManualAccessToken == false) {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
-            }else {
+            } else {
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
             }
             return Task.CompletedTask;

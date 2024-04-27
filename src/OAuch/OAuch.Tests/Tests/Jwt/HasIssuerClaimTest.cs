@@ -1,14 +1,8 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.JWT;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
-using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
     public class HasIssuerClaimTest : Test {

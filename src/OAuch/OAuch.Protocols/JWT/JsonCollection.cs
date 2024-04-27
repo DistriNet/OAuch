@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace OAuch.Protocols.JWT {
     public abstract class JsonCollection : IEnumerable<string> {
@@ -20,23 +18,23 @@ namespace OAuch.Protocols.JWT {
             try {
                 var token = Root[key];
                 if (token == null)
-                    return default(T);
+                    return default;
                 return token.ToObject<T>();
             } catch {
-                return default(T);
+                return default;
             }
         }
         public T? ReadObject<T>(string parentKey, string key) where T : class {
             try {
                 var parent = Root[parentKey];
                 if (parent == null)
-                    return default(T);
+                    return default;
                 var token = parent[key];
                 if (token == null)
-                    return default(T);
+                    return default;
                 return token.ToObject<T>();
             } catch {
-                return default(T);
+                return default;
             }
         }
 
@@ -71,6 +69,6 @@ namespace OAuch.Protocols.JWT {
             }
         }
 
-        private string _originalJson;
+        private readonly string _originalJson;
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.Protocols.OAuth2.Pipeline {
+﻿namespace OAuch.Protocols.OAuth2.Pipeline {
     public static class ProviderPipeline {
         public static PipelineStage<T> FromStartValue<T>(T value) {
             return new PipelineStartStage<T>(value);

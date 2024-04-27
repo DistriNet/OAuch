@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json;
-using OAuch.Shared;
-using System;
+﻿using OAuch.Shared;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests {
     public class TestRun {

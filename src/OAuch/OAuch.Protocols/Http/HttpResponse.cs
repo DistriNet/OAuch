@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using System.Security.Authentication;
-using static OAuch.Protocols.Http.HttpHelper;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Net;
 using System.Net.Security;
-using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using static OAuch.Protocols.Http.HttpHelper;
 
 namespace OAuch.Protocols.Http {
     public class HttpResponse {
@@ -118,7 +116,7 @@ namespace OAuch.Protocols.Http {
             this.Content = content;
             this.SecurityReport = securityReport;
 
-            var ce = headers.Get("Content-Encoding"); 
+            var ce = headers.Get("Content-Encoding");
             if (ce != null) {
                 Func<Stream, Stream>? decompressor = null;
                 switch (ce.ToLower()) {
@@ -157,11 +155,11 @@ namespace OAuch.Protocols.Http {
         public string ToString(bool contentsOnly) {
             var sb = new StringBuilder();
             if (!contentsOnly) {
-                sb.AppendLine($"HTTP { (int)StatusCode } { Enum.GetName(typeof(HttpStatusCode), StatusCode) }");
-                for(int i = 0; i < Headers.Count; i++) {
+                sb.AppendLine($"HTTP {(int)StatusCode} {Enum.GetName(typeof(HttpStatusCode), StatusCode)}");
+                for (int i = 0; i < Headers.Count; i++) {
                     var key = Headers.GetKey(i);
                     var value = Headers.Get(i);
-                    sb.AppendLine($"{ key }: { value }");
+                    sb.AppendLine($"{key}: {value}");
                 }
                 sb.AppendLine();
             }

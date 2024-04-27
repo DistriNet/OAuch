@@ -1,8 +1,5 @@
 ﻿using OAuch.Protocols.OAuth2.Pipeline;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
@@ -17,9 +14,9 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
             } else {
                 tokenProvider.RaiseOnSendingRedirect(UriTypes.VerificationUri, verificationUri);
                 await tokenProvider.Context.Browser.RedirectPopup(verificationUri, true);
-                await tokenProvider.Context.Browser.SendMessage($"Please enter the following code in the popup window: <strong class=\"text-success\">{ userCode }</strong>");
+                await tokenProvider.Context.Browser.SendMessage($"Please enter the following code in the popup window: <strong class=\"text-success\">{userCode}</strong>");
                 this.Succeeded = true;
-            }            
+            }
             return this.Succeeded;
         }
     }

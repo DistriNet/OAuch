@@ -2,11 +2,8 @@
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests {
@@ -25,7 +22,7 @@ namespace OAuch.Compliance.Tests {
         protected virtual void LogInfo(string info, string? expected, string? received) {
             expected ??= "(empty string)";
             received ??= "(empty string)";
-            LogInfo($"{ info } (expected '{ expected }', received '{ received }')");
+            LogInfo($"{info} (expected '{expected}', received '{received}')");
         }
         protected void Log<T>(T o) where T : notnull => Context.Log.Log(o);
 

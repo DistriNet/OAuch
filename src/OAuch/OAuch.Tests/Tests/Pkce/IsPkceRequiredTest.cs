@@ -1,10 +1,7 @@
-﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Shared;
+﻿using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Pkce {

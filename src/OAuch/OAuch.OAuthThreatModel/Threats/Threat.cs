@@ -1,11 +1,4 @@
 ﻿using OAuch.OAuthThreatModel.Attackers;
-using OAuch.OAuthThreatModel.Consequences;
-using OAuch.OAuthThreatModel.Enrichers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.OAuthThreatModel.Threats {
     public abstract class Threat : ModelElement {

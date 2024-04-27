@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Authentication;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -127,7 +125,7 @@ namespace OAuch.Protocols.Tls {
         private readonly object _syncRoot = new();
     }
 
-    public enum DecodeState { 
+    public enum DecodeState {
         Success,
         NeedMoreData,
         InvalidMessage
@@ -192,7 +190,7 @@ namespace OAuch.Protocols.Tls {
                 // there are extensions in the hello message
                 int extensionsLength = bytes.ReadInt(2);
                 int processed = 0;
-                while(processed < extensionsLength) {
+                while (processed < extensionsLength) {
                     int size = 0;
                     var ext = TlsExtension.Create(bytes, ref size);
                     processed += size;
@@ -249,7 +247,7 @@ namespace OAuch.Protocols.Tls {
         public IEnumerable<TlsExtension> Extensions { get; }
         public int CipherSuitesLength => SupportedCipherSuites.Count() * 2;
         public int ExtensionsLength => Extensions.Sum(e => e.Length);
-        public int Length => 
+        public int Length =>
                 1 /* message type */
                 + 3 /* message length */
                 + 2 /* client version */
@@ -315,7 +313,7 @@ namespace OAuch.Protocols.Tls {
             }
             size = length + 4;
             if (size <= 0)
-                throw new ArgumentException("Invalid parameter", nameof(size)); // weird stuff
+                throw new ArgumentException("size cannot be negative", nameof(size)); // weird stuff
             ms.Position = startPos + size;
             return ext;
         }
@@ -329,7 +327,7 @@ namespace OAuch.Protocols.Tls {
             p.AddRange(protocols);
             this.Protocols = p;
         }
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SupportedVersionsExtension(MemoryStream contents, int length) {
             // if we receive this extension from the server, the contents is not a vector, so we do not need to read that single byte anymore
             var p = new List<SslProtocols> {
@@ -352,7 +350,7 @@ namespace OAuch.Protocols.Tls {
         }
     }
     internal class SupportedGroupsExtension : TlsExtension {
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SupportedGroupsExtension(MemoryStream contents, int totalLength) {
             var p = new List<int>();
             int length = contents.ReadInt(2);
@@ -396,7 +394,7 @@ namespace OAuch.Protocols.Tls {
         }
     }
     internal class SignatureAlgorithmsExtension : TlsExtension {
-        [SuppressMessage("Style", "IDE0060:Remove unused parameter")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter")]
         public SignatureAlgorithmsExtension(MemoryStream contents, int totalLength) {
             var p = new List<int>();
             int length = contents.ReadInt(2);
@@ -407,8 +405,8 @@ namespace OAuch.Protocols.Tls {
         }
         public SignatureAlgorithmsExtension() {
             this.SignatureIds = [
-                0x0401, 0x0501, 0x0601, 0x0403, 0x0503, 0x0603, 
-                0x0804, 0x0805, 0x0806, 0x0807, 0x0808, 0x0809, 0x080a, 0x080b, 
+                0x0401, 0x0501, 0x0601, 0x0403, 0x0503, 0x0603,
+                0x0804, 0x0805, 0x0806, 0x0807, 0x0808, 0x0809, 0x080a, 0x080b,
                 0x0201, 0x0203
             ];
         }
@@ -428,8 +426,8 @@ namespace OAuch.Protocols.Tls {
         public ServerNameExtension(MemoryStream contents, int totalLength) {
             if (totalLength < 5)
                 return;
-            contents.ReadInt(2); // length
-            contents.ReadByte(); // type
+            _ = contents.ReadInt(2);
+            _ = contents.ReadByte();
             int hostLength = contents.ReadInt(2);
             var buffer = new byte[hostLength];
             contents.Read(buffer, 0, buffer.Length);
@@ -453,6 +451,6 @@ namespace OAuch.Protocols.Tls {
             ms.Write(hostBytes, 0, hostBytes.Length);
         }
     }
-   
+
 
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OAuch.Shared;
 using OAuch.Shared.Logging;
+using System;
+using System.Text;
 
 namespace OAuch.Protocols.JWT {
     public class JsonWebToken {
@@ -40,7 +39,7 @@ namespace OAuch.Protocols.JWT {
             return Header.Algorithm.Verify(this, key);
         }
 
-        private string[] _tokenParts;
+        private readonly string[] _tokenParts;
 
         public static JsonWebToken? CreateFromString(string? token, LogContext logger) {
             if (token == null)
@@ -68,8 +67,8 @@ namespace OAuch.Protocols.JWT {
             return null;
         }
     }
-    public enum JWTComponents : int { 
-        Header = 0, 
+    public enum JWTComponents : int {
+        Header = 0,
         Payload = 1,
         Signature = 2
     }

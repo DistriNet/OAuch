@@ -6,10 +6,7 @@ using OAuch.Shared.Enumerations;
 using OAuch.Shared.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Results {
     public class ComplianceResult {
@@ -26,8 +23,12 @@ namespace OAuch.Compliance.Results {
             this.FailedTests = this.AllResults.Count(c => c.Outcome == TestOutcomes.Failed);
             this.PendingTests = this.AllResults.Count(c => c.Outcome == null);
             if (this.PendingTests > 0) {
-                foreach(var pt in this.AllResults.Where(t => t.Outcome == null)) {
-                    if (pt is IHasInfo cr) {
+                foreach (var pt in this.AllResults.Where(t => t.Outcome == null)) {
+                    if (pt is not IHasInfo cr) {
+                        // the test has not been executed yet
+                        this.ResumeWhen = DateTime.Now;
+                        break;
+                    } else {
                         var ei = cr.ExtraInfo as ITimeDelayedTest;
                         if (ei?.ResumeWhen != null) {
                             if (this.ResumeWhen == null) {
@@ -36,10 +37,6 @@ namespace OAuch.Compliance.Results {
                                 this.ResumeWhen = ei.ResumeWhen;
                             }
                         }
-                    } else {
-                        // the test has not been executed yet
-                        this.ResumeWhen = DateTime.Now;
-                        break;
                     }
                 }
             }
@@ -93,7 +90,7 @@ namespace OAuch.Compliance.Results {
             return new ComplianceReport(this.AllResults, deprecatedFeatures.Values, countermeasures.Values);
 
             static bool MustReplace(RequirementLevels storedRl, RequirementLevels newRl) {
-                if (storedRl == newRl 
+                if (storedRl == newRl
                         || storedRl == RequirementLevels.Must
                         || (storedRl == RequirementLevels.Should && newRl != RequirementLevels.Must)
                         || newRl == RequirementLevels.May)
@@ -148,8 +145,8 @@ namespace OAuch.Compliance.Results {
         public IList<ThreatReport> ThreatReports { get; }
 
         public ImprovementReport ImprovementReport {
-            get { 
-                _improvementReport ??= new ImprovementReport(_allResults, this.ThreatReports);
+            get {
+                _improvementReport ??= new ImprovementReport(/*_allResults,*/ this.ThreatReports);
                 return _improvementReport;
             }
         }
@@ -171,7 +168,7 @@ namespace OAuch.Compliance.Results {
         private readonly Dictionary<string, TestResult> _allResults;
     }
 
-    public enum SimpleRatings { 
+    public enum SimpleRatings {
         APlus,
         A,
         B,

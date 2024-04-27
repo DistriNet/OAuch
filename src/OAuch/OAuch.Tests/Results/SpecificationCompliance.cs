@@ -1,10 +1,7 @@
 ﻿using OAuch.Compliance.Tests;
 using OAuch.Shared.Enumerations;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Results {
     public class SpecificationCompliance {
@@ -29,7 +26,7 @@ namespace OAuch.Compliance.Results {
         }
         public TestResult? TestResult { get; }
 
-        private bool _isDeprecatedFeature;
-        private DocumentTestRequirementLevel _docReqLevel;
+        private readonly bool _isDeprecatedFeature;
+        private readonly DocumentTestRequirementLevel _docReqLevel;
     }
 }

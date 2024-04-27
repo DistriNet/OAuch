@@ -5,10 +5,7 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
@@ -90,7 +87,7 @@ namespace OAuch.Compliance.Tests.Jwt {
             }
         }
 
-    private class NoneCasedAlgorithm : JwtAlgorithm {
+        private class NoneCasedAlgorithm : JwtAlgorithm {
             public NoneCasedAlgorithm() : base(1, "nOne") { }
             public override string Sign(byte[] tokenData, TokenKey key) {
                 return string.Empty;

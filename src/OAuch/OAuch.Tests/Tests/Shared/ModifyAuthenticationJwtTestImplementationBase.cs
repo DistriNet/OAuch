@@ -7,16 +7,14 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Shared {
     public abstract class ModifyAuthenticationJwtTestImplementationBase : TestImplementation {
-        public ModifyAuthenticationJwtTestImplementationBase(TestRunContext context, TestResult result, HasSupportedFlowsTestResult flows, SupportsJwtClientAuthenticationTestResult jwt) 
-            : base(context, result, flows, jwt) {}
+        public ModifyAuthenticationJwtTestImplementationBase(TestRunContext context, TestResult result, HasSupportedFlowsTestResult flows, SupportsJwtClientAuthenticationTestResult jwt)
+            : base(context, result, flows, jwt) { }
 
 
         protected virtual TokenKey Key {
@@ -33,7 +31,7 @@ namespace OAuch.Compliance.Tests.Shared {
                 return TokenKey.Empty;
             }
         }
-        protected virtual void ModifyToken(JwtTokenBuilder builder) { 
+        protected virtual void ModifyToken(JwtTokenBuilder builder) {
             // leave the token unmodified by default
         }
         protected virtual string BuildToken(JwtTokenBuilder builder) {
@@ -48,10 +46,8 @@ namespace OAuch.Compliance.Tests.Shared {
             }
 
             var selectedType = Context.SiteSettings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.PrivateKeyJwt ? ClientAuthenticationMechanisms.PrivateKeyJwt : ClientAuthenticationMechanisms.ClientSecretJwt;
-            var jwtContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var jwtContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     ClientAuthenticationMechanism = selectedType
                 }
             };

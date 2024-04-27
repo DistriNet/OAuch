@@ -1,13 +1,9 @@
 ﻿using OAuch.Compliance.Tests.DocumentSupport;
 using OAuch.Compliance.Tests.Features;
 using OAuch.Protocols.OAuth2;
-using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Revocation {
@@ -57,8 +53,7 @@ namespace OAuch.Compliance.Tests.Revocation {
                 return; // should not happen
             }
 
-            var alternativeSettings= Context.SiteSettings with
-            {
+            var alternativeSettings = Context.SiteSettings with {
                 DefaultClient = Context.SiteSettings.AlternativeClient
             };
             var revoker = provider.CreateRevocationProvider(alternativeSettings)!;

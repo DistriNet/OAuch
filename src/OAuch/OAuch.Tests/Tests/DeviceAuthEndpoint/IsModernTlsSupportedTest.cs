@@ -2,13 +2,9 @@
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.DeviceAuthEndpoint {
-        public class IsModernTlsSupportedTest : Test {
+    public class IsModernTlsSupportedTest : Test {
         public override string Title => "Does the device authorization server support a modern version of TLS";
         public override string Description => "This test determines whether the device authorization server supports modern versions of the TLS protocol (v1.2 and higher).";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
@@ -19,8 +15,8 @@ namespace OAuch.Compliance.Tests.DeviceAuthEndpoint {
         public override Type ImplementationType => typeof(IsModernTlsSupportedTestImplementation);
     }
     public class IsModernTlsSupportedTestImplementation : IsModernTlsSupportedTestImplementationBase {
-        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows) 
-            : base(context, result, context.SiteSettings.DeviceAuthorizationUri, supportedFlows) {}
+        public IsModernTlsSupportedTestImplementation(TestRunContext context, IsModernTlsSupportedTestResult result, HasSupportedFlowsTestResult supportedFlows)
+            : base(context, result, context.SiteSettings.DeviceAuthorizationUri, supportedFlows) { }
     }
 
 }

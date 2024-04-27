@@ -1,14 +1,10 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Protocols.Http;
-using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
-using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Jwt {
@@ -39,13 +35,11 @@ namespace OAuch.Compliance.Tests.Jwt {
                     LogInfo("Could not find a working provider that accesses the token endpoint");
                 } else {
                     Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
-                    LogInfo($"The authorization server supports authentication mechanism '{ Context.SiteSettings.ClientAuthenticationMechanism }'");
+                    LogInfo($"The authorization server supports authentication mechanism '{Context.SiteSettings.ClientAuthenticationMechanism}'");
                 }
             } else { // client JWT authentication is not set up, but may be supported
-                var jwtContext = this.Context with
-                {
-                    SiteSettings = this.Context.SiteSettings with
-                    {
+                var jwtContext = this.Context with {
+                    SiteSettings = this.Context.SiteSettings with {
                         ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretJwt
                     }
                 };

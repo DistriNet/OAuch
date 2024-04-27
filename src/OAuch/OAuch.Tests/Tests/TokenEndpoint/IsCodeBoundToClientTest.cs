@@ -7,9 +7,7 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -27,7 +25,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
         public IsCodeBoundToClientTestImplementation(TestRunContext context, IsCodeBoundToClientTestResult result, HasSupportedFlowsTestResult flows) : base(context, result, flows) { }
 
         public async override Task Run() {
-            if (string.IsNullOrEmpty( Context.SiteSettings.AlternativeClient.ClientId )) {
+            if (string.IsNullOrEmpty(Context.SiteSettings.AlternativeClient.ClientId)) {
                 LogInfo("This test requires that an alternative client id is set up");
                 Result.Outcome = TestOutcomes.Skipped;
                 return;
@@ -69,7 +67,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 var request = HttpRequest.CreatePost(tokenUri);
                 request.Headers[HttpRequestHeaders.ContentType] = "application/x-www-form-urlencoded";
                 if (tokenUri.IsSecure())
-                    request.ClientCertificates = new X509CertificateCollection(); // do not use mTLS authentication
+                    request.ClientCertificates = []; // do not use mTLS authentication
                 OAuthHelper.AddClientAuthentication(tokenProvider.SiteSettings, request.Headers, parameters, tokenProvider.SiteSettings.AlternativeClient);
                 request.Content = EncodingHelper.FormUrlEncode(parameters);
                 return Task.FromResult<HttpRequest?>(request);

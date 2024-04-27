@@ -3,19 +3,17 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Features {
     public abstract class HybridCodeFlowSupportedTest : FlowSupportedTest {
         public HybridCodeFlowSupportedTest(string responseType, Type resultType) : base(responseType, resultType) { }
-        public override string Title => $"Is the hybrid grant (response type = '{ this.FlowType }') supported";
-        public override string Description => $"This test determines whether the server supports the hybrid grant (with response type '{ this.FlowType }').";
+        public override string Title => $"Is the hybrid grant (response type = '{this.FlowType}') supported";
+        public override string Description => $"This test determines whether the server supports the hybrid grant (with response type '{this.FlowType}').";
     }
     public abstract class HybridFlowSupportedTestImplementation : AuthorizationCodeFlowSupportedTestImplementation {
         public HybridFlowSupportedTestImplementation(string responseType, TestRunContext context, FlowSupportedTestResult result)
-            : base($"Hybrid grant (response type = '{ responseType }')",
+            : base($"Hybrid grant (response type = '{responseType}')",
                   responseType, context, result) { }
     }
     public abstract class AuthorizationCodeFlowSupportedTestImplementation : FlowSupportedTestImplementation {
@@ -38,14 +36,14 @@ namespace OAuch.Compliance.Tests.Features {
         public CodeFlowSupportedTestResult(string testId) : base(testId, typeof(CodeFlowSupportedTestImplementation)) { }
     }
     public class CodeFlowSupportedTestImplementation : AuthorizationCodeFlowSupportedTestImplementation {
-        public CodeFlowSupportedTestImplementation(TestRunContext context, CodeFlowSupportedTestResult result) 
-            : base("Authorization Code grant", OAuthHelper.CODE_FLOW_TYPE, context, result) { 
-        
+        public CodeFlowSupportedTestImplementation(TestRunContext context, CodeFlowSupportedTestResult result)
+            : base("Authorization Code grant", OAuthHelper.CODE_FLOW_TYPE, context, result) {
+
         }
         protected override TokenProvider CreateProvider(TokenProviderSettings providerSettings, TestRunContext context) {
             var customContext = context with {
-                SiteSettings = context.SiteSettings with { 
-                     PKCEDefault = CurrentType
+                SiteSettings = context.SiteSettings with {
+                    PKCEDefault = CurrentType
                 }
             };
             return new AuthorizationCodeTokenProvider(providerSettings, customContext);
@@ -58,14 +56,14 @@ namespace OAuch.Compliance.Tests.Features {
             var types = new PKCESupportTypes[] { PKCESupportTypes.Hash, PKCESupportTypes.Plain, PKCESupportTypes.None };
             var supportedTypes = Context.State.Get<List<PKCESupportTypes>>(StateKeys.WorkingPkceTypes);
             foreach (var type in types) {
-                LogInfo($"Now testing the authorization code grant with PKCE type '{ type }'");
+                LogInfo($"Now testing the authorization code grant with PKCE type '{type}'");
                 this.CurrentType = type;
                 await base.Run();
                 if (Result.Outcome == TestOutcomes.SpecificationFullyImplemented) {
-                    LogInfo($"The authorization code grant with PKCE type '{ type }' returns a valid token");
+                    LogInfo($"The authorization code grant with PKCE type '{type}' returns a valid token");
                     supportedTypes.Add(type);
                 } else {
-                    LogInfo($"The authorization code grant with PKCE type '{ type }' does not work");
+                    LogInfo($"The authorization code grant with PKCE type '{type}' does not work");
                 }
             }
             Result.Outcome = supportedTypes.Count > 0 ? TestOutcomes.SpecificationFullyImplemented : TestOutcomes.SpecificationNotImplemented;

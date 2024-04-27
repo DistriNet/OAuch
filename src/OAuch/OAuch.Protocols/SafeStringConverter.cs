@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OAuch.Protocols {
     public class SafeStringConverter : JsonConverter {
@@ -41,7 +40,7 @@ namespace OAuch.Protocols {
             }
         }
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
-            
+
         }
     }
 }

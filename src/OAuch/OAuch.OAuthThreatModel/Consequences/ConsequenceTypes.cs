@@ -1,12 +1,4 @@
-﻿using OAuch.OAuthThreatModel.Enrichers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace OAuch.OAuthThreatModel.Consequences {
     public static class ConsequenceTypes {
@@ -34,7 +26,7 @@ namespace OAuch.OAuthThreatModel.Consequences {
             ClientHoldsUserPassword = ConsequenceType.CreateConsequence("Client holds user password", "The user's password is used directly in the client");
             MachineToMachine = ConsequenceType.CreateConsequence("Machine-to-machine", "The flow doesn't involve a user");
             HasRefreshToken = ConsequenceType.CreateConsequence("Refresh Token", "Has refresh token");
-            
+
             ClientUsesMultipleAuthServers = ConsequenceType.CreateConsequence("Client uses multiple authorization servers", "The client supports authorization/login via multiple authorization servers");
             ClientUsesMultipleResourceServers = ConsequenceType.CreateConsequence("Client uses multiple resource servers", "The client is not bound to one specific resource server (and its URL) at development time, but client instances are provided with the resource server URL at runtime");
             Uses307Redirect = ConsequenceType.CreateConsequence("Authorization server uses a HTTP 307 redirect", "When the status code 307 is used for redirection, the user agent will send the user's credentials via HTTP POST to the client.");

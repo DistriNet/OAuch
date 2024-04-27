@@ -5,10 +5,6 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.IdTokens {
     public class KeyReferencesTest : Test {
@@ -29,7 +25,7 @@ namespace OAuch.Compliance.Tests.IdTokens {
             foreach (var illegalKey in illegalKeys) {
                 if (idToken.Header.ContainsKey(illegalKey)) {
                     Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-                    LogInfo($"The ID token uses the '{ illegalKey }' header parameter field, which is not allowed by the OpenID Connect standard.");
+                    LogInfo($"The ID token uses the '{illegalKey}' header parameter field, which is not allowed by the OpenID Connect standard.");
                 }
             }
         }

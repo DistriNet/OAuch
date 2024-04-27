@@ -5,11 +5,7 @@ using OAuch.Shared;
 using OAuch.Shared.Logging;
 using OAuch.Shared.Settings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2 {
@@ -39,7 +35,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
 
         public async Task<bool> RevokeToken(string token, bool isRefresh) {
-            Log.Log($"Revoking { (isRefresh ? "a refresh" : "an access") } token");
+            Log.Log($"Revoking {(isRefresh ? "a refresh" : "an access")} token");
 
             var rp = this.Pipeline.FindProcessor<GetRevocationParameters>();
             if (rp == null)

@@ -5,10 +5,6 @@ using OAuch.Shared;
 using OAuch.Shared.Logging;
 using OAuch.Shared.Settings;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2 {
@@ -39,7 +35,7 @@ namespace OAuch.Protocols.OAuth2 {
 
         public async Task<TokenResult> RefreshToken(string refreshToken) {
             if (Context.SiteSettings.TokenDelay > 0 && Context.SiteSettings.TokenDelay <= 15) {
-                Log.Log($"Waiting { Context.SiteSettings.TokenDelay } second(s)");
+                Log.Log($"Waiting {Context.SiteSettings.TokenDelay} second(s)");
                 await Task.Delay(Context.SiteSettings.TokenDelay * 1000);
             }
             Log.Log("Refreshing a token");

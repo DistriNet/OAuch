@@ -1,15 +1,10 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Protocols.Http;
-using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
-using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -34,8 +29,8 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             }
 
             var basicContext = this.Context with {
-                SiteSettings = this.Context.SiteSettings with { 
-                     ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretBasic
+                SiteSettings = this.Context.SiteSettings with {
+                    ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretBasic
                 }
             };
             var provider = flows.CreateProviderWithStage<CreateTokenRequest, Dictionary<string, string?>, HttpRequest>(basicContext,

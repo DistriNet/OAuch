@@ -5,10 +5,7 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.IdTokens {
     public class HasCorrectMacTest : Test {
@@ -32,7 +29,7 @@ namespace OAuch.Compliance.Tests.IdTokens {
             }
 
             var key = Encoding.UTF8.GetBytes(client.ClientSecret);
-            if ( idToken.Verify(TokenKey.FromBytes(key))) {
+            if (idToken.Verify(TokenKey.FromBytes(key))) {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
                 LogInfo("The signature of the identity token is valid");
             } else {

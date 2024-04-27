@@ -1,17 +1,13 @@
 ﻿using OAuch.Compliance.Tests;
 using OAuch.Shared.Enumerations;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Results {
-    public class InstanceReport { 
+    public class InstanceReport {
         public required ThreatInstance ThreatInstance { get; init; }
-        public TestOutcomes? Outcome { get; init; }
-        public bool? IsRelevant { get; init; }
+        public required TestOutcomes? Outcome { get; init; }
+        public required bool? IsRelevant { get; init; }
     }
     public class ThreatReport {
         public ThreatReport(Threat threat, IList<TestResult> results) {
@@ -56,10 +52,10 @@ namespace OAuch.Compliance.Results {
                         case TestOutcomes.Skipped:
                             skipped++;
                             break;
-                        //case TestOutcomes.SpecificationFullyImplemented: // this is the default case
+                            //case TestOutcomes.SpecificationFullyImplemented: // this is the default case
                     }
                     potentialRelevants++; // increase the number of threat instances that are (potentially) relevant
-                } 
+                }
             }
             if (potentialRelevants > 0) // check if this threat is relevant
                 return skipped == potentialRelevants ? null : ret;  // return null if all threat instances were skipped; in this case we have relevant threats, but no tests to confirm whether anything is implemented

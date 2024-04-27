@@ -1,11 +1,8 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Shared.Enumerations;
 using OAuch.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.Concurrency {

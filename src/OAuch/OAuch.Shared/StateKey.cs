@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OAuch.Shared {
+﻿namespace OAuch.Shared {
     public abstract class StateKey { }
     /// <summary>
     /// The class that can be used as a key for a state collection.

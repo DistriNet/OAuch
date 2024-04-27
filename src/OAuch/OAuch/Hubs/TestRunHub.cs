@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using OAuch.Compliance;
 using OAuch.Compliance.Tests;
-using OAuch.Controllers;
 using OAuch.Shared.Enumerations;
 using OAuch.TestRuns;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OAuch.Hubs {
@@ -129,7 +126,7 @@ namespace OAuch.Hubs {
                     break;
             }
             var test = ComplianceDatabase.Tests[testResult.TestId];
-            await SendMessage($"{ test.Title }: <span class=\"{ cls }\">{ test.ResultFormatter.Format(testResult.Outcome) }</span>");
+            await SendMessage($"{test.Title}: <span class=\"{cls}\">{test.ResultFormatter.Format(testResult.Outcome)}</span>");
         }
         public Task EnableCancel() => EnableCancel(Proxy);
         public Task RedirectPopup(string url, bool cancelable) => RedirectPopup(Proxy, url, cancelable);

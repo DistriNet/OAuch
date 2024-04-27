@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
-using System.Text;
 using System.Web;
 
 namespace OAuch.Protocols.Http {
@@ -14,13 +12,13 @@ namespace OAuch.Protocols.Http {
             return headers.Get("Content-Security-Policy") != null;
         }
         public static bool HasPragmaNoCache(this WebHeaderCollection headers) {
-            return ((headers.Get("Pragma")?.IndexOf( "no-cache")) ?? -1) >= 0;
+            return ((headers.Get("Pragma")?.IndexOf("no-cache")) ?? -1) >= 0;
         }
         public static bool HasCacheControlNoStore(this WebHeaderCollection headers) {
             return ((headers.Get("Cache-Control")?.IndexOf("no-store")) ?? -1) >= 0;
         }
         public static bool IsSecure(this string url) {
-            return url.ToLower().StartsWith("https://");
+            return url.StartsWith("https://", true, null);
         }
         public static string ToHttp(this string url) {
             var uriBuilder = new UriBuilder(url) {

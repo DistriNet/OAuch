@@ -7,8 +7,6 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -34,7 +32,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             }
 
             var provider = flows.CreateProviderWithStage<CreateTokenRequest, Dictionary<string, string?>, HttpRequest>(this.Context);
-            if (provider == null) { 
+            if (provider == null) {
                 Result.Outcome = TestOutcomes.Skipped;
                 LogInfo("Could not find a working flow that uses the token server");
                 return;
@@ -56,13 +54,13 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 var pars = EncodingHelper.EncodedFormToDictionary(value.Content);
                 var builder = new UriBuilder(value.Url);
                 var query = HttpUtility.ParseQueryString(builder.Query);
-                foreach(var key in pars.Keys) {
+                foreach (var key in pars.Keys) {
                     query[key] = pars[key];
                 }
                 builder.Query = query.ToString();
                 value.Url = builder.ToString();
                 value.Method = HttpMethods.Get;
-                value.Content = new byte[0];
+                value.Content = [];
                 return Task.FromResult<HttpRequest?>(value);
             }
         }

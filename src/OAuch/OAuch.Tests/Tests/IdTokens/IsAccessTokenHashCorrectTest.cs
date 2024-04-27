@@ -1,11 +1,9 @@
 ﻿using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.JWT;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,7 +53,7 @@ namespace OAuch.Compliance.Tests.IdTokens {
                     } else if (computedHash == hashInIdToken) {
                         LogInfo("The ID token contains a valid access token hash");
                         Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
-                    } else { 
+                    } else {
                         LogInfo("The ID token contains the hash of the access token, but the value is wrong", computedHash, hashInIdToken);
                         Result.Outcome = TestOutcomes.SpecificationNotImplemented;
                     }

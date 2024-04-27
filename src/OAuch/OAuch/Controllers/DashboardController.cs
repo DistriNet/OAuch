@@ -3,25 +3,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Newtonsoft.Json;
 using OAuch.Compliance;
 using OAuch.Compliance.Results;
 using OAuch.Compliance.Tests;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.Shared;
 using OAuch.Database;
 using OAuch.Database.Entities;
 using OAuch.Helpers;
 using OAuch.Hubs;
-using OAuch.OAuthThreatModel;
 using OAuch.OAuthThreatModel.Attackers;
 using OAuch.OAuthThreatModel.Flows;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
-using OAuch.Shared.Logging;
 using OAuch.Shared.Settings;
 using OAuch.TestRuns;
 using OAuch.ViewModels;
@@ -30,9 +24,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.WebSockets;
-using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -50,7 +41,7 @@ namespace OAuch.Controllers {
 
         public IActionResult Index() {
             var model = new DashboardViewModel {
-                 SiteResults = GetSiteResults()
+                SiteResults = GetSiteResults()
             };
             FillMenu(model);
             return View(model);
@@ -106,14 +97,14 @@ namespace OAuch.Controllers {
             };
 
             var site = new Site {
-                SiteId = Guid.NewGuid(),                 
+                SiteId = Guid.NewGuid(),
                 Name = "Demo Site",
                 OwnerId = this.OAuchInternalId!.Value,
                 CurrentConfigurationJson = OAuchJsonConvert.Serialize(settings, Formatting.Indented),
                 LatestResultId = null
             };
             Database.Sites.Add(site);
-            Database.SaveChanges();        
+            Database.SaveChanges();
             return RedirectToAction("Index", "Dashboard");
         }
 
@@ -174,7 +165,7 @@ namespace OAuch.Controllers {
                             }
                         }
                         Database.SaveChanges(); // get the Id of the most recent test run
-                        if (mostRecent != null ) {
+                        if (mostRecent != null) {
                             site.LatestResultId = mostRecent.TestResultId;
                             Database.SaveChanges();
                         }
@@ -182,7 +173,7 @@ namespace OAuch.Controllers {
                     return RedirectToAction("Index");
                 } else {
                     ModelState.AddModelError("DeserializeError", "Could not deserialize the input file.");
-                }                
+                }
             }
             var model = new EmptyViewModel();
             FillMenu(model, pageType: PageType.Import);
@@ -239,7 +230,7 @@ namespace OAuch.Controllers {
         private class SiteData {
             public string? Name { get; set; }
             public SiteSettings? CurrentConfiguration { get; set; }
-            public CertificateInfo? Certificate {get;set;}
+            public CertificateInfo? Certificate { get; set; }
             public List<TestRunData>? TestRuns { get; set; }
         }
         private class TestRunData {
@@ -249,7 +240,7 @@ namespace OAuch.Controllers {
             public required List<TestResult> TestResults { get; set; }
             public required StateCollection StateCollection { get; set; }
         }
-        private class CertificateInfo { 
+        private class CertificateInfo {
             public required string Name { get; set; }
             public string? Password { get; set; }
             public required byte[] Blob { get; set; }
@@ -259,7 +250,7 @@ namespace OAuch.Controllers {
             var model = new AddSiteViewModel();
             FillMenu(model, pageType: PageType.AddSite);
             return View(model);
-        }       
+        }
         private static bool IsSiteNameOk([NotNullWhen(true)] string? name) {
             if (name == null || name.Length == 0 || name.Length > 20)
                 return false;
@@ -351,10 +342,10 @@ namespace OAuch.Controllers {
 
             var runningManagers = TestRunManager.Current.Where(c => c.SiteId == id).ToList();
             if (runningManagers.Count > 0) {
-                foreach(var man in runningManagers) {
+                foreach (var man in runningManagers) {
                     await man.OnAbort();
                 }
-                for(int retry = 0; retry < 10; retry++) { // use at most 1 second
+                for (int retry = 0; retry < 10; retry++) { // use at most 1 second
                     await Task.Delay(100); // wait 100 ms
                     if (!TestRunManager.Current.Any(trm => trm.SiteId == id))
                         break; // some test runs haven't been complete yet
@@ -419,7 +410,7 @@ namespace OAuch.Controllers {
             if (site == null)
                 return NotFound();
 
-            if (IsSiteNameOk( model.SiteName )) {
+            if (IsSiteNameOk(model.SiteName)) {
                 site.Name = model.SiteName;
             }
             // check certificate
@@ -651,7 +642,7 @@ namespace OAuch.Controllers {
                         cname = x509Cert.GetNameInfo(X509NameType.SimpleName, false);
                     }
                     if (!string.IsNullOrEmpty(cname)) {
-                        cert.Name = $"{ cname } ({ Path.GetFileName(file.FileName) })";
+                        cert.Name = $"{cname} ({Path.GetFileName(file.FileName)})";
                     } else {
                         cert.Name = Path.GetFileName(file.FileName);
                     }

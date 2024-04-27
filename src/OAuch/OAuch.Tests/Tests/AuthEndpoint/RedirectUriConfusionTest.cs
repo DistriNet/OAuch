@@ -1,5 +1,4 @@
 ﻿using OAuch.Compliance.Tests.Features;
-using OAuch.Protocols.Http;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
@@ -8,11 +7,8 @@ using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class RedirectUriConfusionTest : Test {
@@ -53,7 +49,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 callbackUriBase + "/%2e%2e%2FFAKEPATH",
                 callbackUriBase + "/..%252FFAKEPATH",
                 callbackUriBase + "/%252e%252e%252FFAKEPATH",
-                
+
                 callbackUriBase + "/FAKEPATH/..",
                 callbackUriBase + "%2FFAKEPATH%2F..",
                 callbackUriBase + "%2FFAKEPATH%2F%2e%2e",
@@ -74,7 +70,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
 
             Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
             int cnt = 1;
-            foreach(var c in modifiedCallbacks) {
+            foreach (var c in modifiedCallbacks) {
                 var status = await TestCallback(flows, c);
                 if (status == TestOutcomes.SpecificationNotImplemented) {
                     LogInfo($"The callback '{c}' triggered a path confusion on the server.");
@@ -102,7 +98,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             var unescapedRedirect = new UnescapedRedirectProcessor();
             provider.Pipeline.Replace<BuildAuthorizationUrl, Dictionary<string, string?>, string>(unescapedRedirect);
 
-            var result = await provider.GetToken();
+            await provider.GetToken();
             ExtraInfo.WrongRedirect = redirectResultProcessor.WrongRedirect;
             if (ExtraInfo.WrongRedirect == true)
                 return TestOutcomes.SpecificationNotImplemented;
@@ -110,7 +106,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
         }
 
         public class ConfusedPathResultProcessor : Processor<ICallbackResult?, ICallbackResult?> {
-            public ConfusedPathResultProcessor() {}
+            public ConfusedPathResultProcessor() { }
             public bool? WrongRedirect { get; private set; }
             public override Task<ICallbackResult?> Process(ICallbackResult? value, IProvider tokenProvider, TokenResult tokenResult) {
                 this.WrongRedirect = null;

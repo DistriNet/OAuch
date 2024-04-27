@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json.Linq;
 
 namespace OAuch.Protocols.JWT {
     public class JsonDictionary : Dictionary<string, object?> {

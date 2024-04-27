@@ -1,15 +1,10 @@
 ﻿using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Pkce;
 using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.JWT;
 using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.IdTokens {
     public class HasRequiredClaimsTest : Test {
@@ -31,7 +26,7 @@ namespace OAuch.Compliance.Tests.IdTokens {
             var names = new string[] { "issuer", "subject", "audience", "expiration time", "issued at" };
             for (int i = 0; i < keys.Length; i++) {
                 if (!idToken.Claims.ContainsKey(keys[i])) {
-                    LogInfo($"The { names[i] } claim ({ keys[i] }) is missing from the ID token");
+                    LogInfo($"The {names[i]} claim ({keys[i]}) is missing from the ID token");
                     Result.Outcome = TestOutcomes.SpecificationNotImplemented;
                 }
             }

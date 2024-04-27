@@ -4,9 +4,6 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.ApiEndpoint {
@@ -44,11 +41,10 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
             }
 
             // we have found a working provider
-            var unsafeContext = Context with
-            {
-                 SiteSettings = Context.SiteSettings with { 
-                     TestUri = Context.SiteSettings.TestUri!.ToHttp()
-                 }
+            var unsafeContext = Context with {
+                SiteSettings = Context.SiteSettings with {
+                    TestUri = Context.SiteSettings.TestUri!.ToHttp()
+                }
             };
             var token = await provider.GetToken();
             var request = new ApiRequest(unsafeContext);

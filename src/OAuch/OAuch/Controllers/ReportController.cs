@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.Configuration;
 using OAuch.Compliance;
 using OAuch.Compliance.Results;
 using OAuch.Compliance.Tests;
@@ -14,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OAuch.Controllers {
     [Authorize]
@@ -32,7 +29,7 @@ namespace OAuch.Controllers {
             if (site == null || site.OwnerId != this.OAuchInternalId!.Value)
                 return NotFound();
 
-            var model = new ReportingViewModel {    
+            var model = new ReportingViewModel {
                 IncludeLog = includeLog,
                 IncludeSettings = includeSettings,
                 IncludeIndividualTests = includeIndividualTests,

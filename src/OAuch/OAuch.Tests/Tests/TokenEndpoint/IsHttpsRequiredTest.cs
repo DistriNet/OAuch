@@ -5,8 +5,6 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.TokenEndpoint {
@@ -30,10 +28,8 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return;
             }
 
-            var httpContext = this.Context with
-            {
-                SiteSettings = this.Context.SiteSettings with
-                {
+            var httpContext = this.Context with {
+                SiteSettings = this.Context.SiteSettings with {
                     TokenUri = this.Context.SiteSettings.TokenUri?.ToHttp() // use regular http
                 }
             };
