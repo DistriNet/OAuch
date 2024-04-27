@@ -6,6 +6,7 @@ using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Security;
@@ -125,12 +126,17 @@ namespace OAuch.Compliance.Tests.Concurrency {
                 sortedList = sortedList.Select(el => new RequestThreadParameters(el.Results, el.BlockHandle, el.Request, new ServerInfo(el.Server.Ip), el.ReadyHandle)).ToList();
             }
 
-            var start = PreciseTime.Now;
+            if (!Stopwatch.IsHighResolution) {
+                LogInfo("WARNING: No high-resolution time measurement infrastructure found on this system; the timings in this test case may be inaccurate.");
+            }
+
+            var start = Stopwatch.GetTimestamp();
             int pointer = 0;
             while (pointer < sortedList.Count) {
-                var elapsedMs = (int)PreciseTime.Now.Subtract(start).TotalMilliseconds;
+                var cur = Stopwatch.GetTimestamp();
+                var elapsedMs = (int)Stopwatch.GetElapsedTime(start, cur).TotalMilliseconds;
                 while (pointer < sortedList.Count && sortedList[pointer].Server.TripTime <= elapsedMs) {
-                    System.Diagnostics.Debug.WriteLine($"Released {sortedList[pointer].Server.Ip} after {elapsedMs}ms");
+                    Debug.WriteLine($"Released {sortedList[pointer].Server.Ip} after {elapsedMs}ms");
                     sortedList[pointer].BlockHandle.Set();
                     pointer++;
                 }

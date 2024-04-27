@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /OAuch
 
 # Copy everything
@@ -11,7 +11,7 @@ RUN dotnet publish -c Release -o docker-build
 RUN dotnet dev-certs https
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /OAuch
 COPY --from=build-env /OAuch/docker-build .
 # Copy the HTTPS certificates from the build environment
