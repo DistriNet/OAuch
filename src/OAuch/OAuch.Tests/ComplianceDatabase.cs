@@ -2853,7 +2853,7 @@ namespace OAuch.Compliance {
                         },
                         new OAuthDocument {
                             Id = "AttsDefs",
-                            Name = "OAuth 2.0 Attacks & Defenses",
+                            Name = "OAuth2 Attacks & Defenses",
                             Description = "This document contains a small set of test cases for attacks on OAuth implementations that are not covered by the other documents.",
                             Url = "",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",

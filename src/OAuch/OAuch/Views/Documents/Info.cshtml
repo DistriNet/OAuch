@@ -1,0 +1,43 @@
+﻿@model OAuch.ViewModels.DocumentViewModel
+@using OAuch.Shared.Enumerations
+@using OAuch.Helpers
+@{
+    ViewData["Title"] = "Standards Document info";
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h6><small><strong class="text-monospace">@Model.Document.Id</strong></small></h6>
+        <h2>@Model.Document.Name</h2>
+        <p>
+            @Model.Document.Description
+            @if(Model.Document.IsStandard) {
+                <text>This document is an officially published standard.</text>
+            } else {
+                <text>This document is NOT an officially published standard.</text>
+            }
+        </p>
+        @if (!string.IsNullOrEmpty(Model.Document.Url))
+        {
+            <p>Full text: <a href="@Model.Document.Url" target="_blank">@Model.Document.Url</a></p>
+        }
+        @if (Model.Document.DeprecatedFeatures.Count > 0) {
+            <h5><strong>Deprecated Features</strong></h5>
+            <p>This document deprecates a number of OAuth features. The OAuch tests related to these deprecated features are:</p>
+            <ul>
+                @foreach (var dep in Model.Document.DeprecatedFeatures) {
+                    <li><a href="/Tests/Info/@dep.Test.TestId">@HelperMethods.ShortenTestId(dep.Test.TestId)</a></li>
+                }
+            </ul>
+        }
+        @if (Model.Document.Countermeasures.Count > 0) {
+            <h5><strong>Countermeasures</strong></h5>
+            <p>This document introduces a number of security countermeasures for OAuth. The OAuch tests related to these countermeasures are:</p>
+            <ul>
+                @foreach (var cm in Model.Document.Countermeasures) {
+                    <li><a href="/Tests/Info/@cm.Test.TestId">@HelperMethods.ShortenTestId(cm.Test.TestId)</a></li>
+                }
+            </ul>
+        }
+        <p>Back to <a href="/Documents">the documents overview</a></p>
+    </div>
+</div>

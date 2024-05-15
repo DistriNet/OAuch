@@ -32,6 +32,18 @@ using System.Threading.Tasks;
 namespace OAuch.Controllers {
     [Authorize]
     public partial class DashboardController : BaseController {
+
+        private static readonly Dictionary<string, (string Title, IEnumerable<OAuthDocument> Documents)> _initialDocuments = new() {
+            //{ "OAUTH21", ("OAuth 2.1 (default)", [ComplianceDatabase.Documents[""]]) },
+            { "OAUTH20BCP", ("OAuth 2.0 (with Best Practices)", [ComplianceDatabase.Documents["RFC6749"], ComplianceDatabase.Documents["RFC6750"], ComplianceDatabase.Documents["RFC6819"], ComplianceDatabase.Documents["SecBCP"], ComplianceDatabase.Documents["RFC7636"]]) },
+            { "OAUTH20", ("OAuth 2.0 (original standard, outdated)", [ComplianceDatabase.Documents["RFC6749"], ComplianceDatabase.Documents["RFC6750"], ComplianceDatabase.Documents["RFC6819"]]) },
+            { "OIDC", ("OpenID Connect + OAuth 2.0", [ComplianceDatabase.Documents["OIDC"], ComplianceDatabase.Documents["RFC6749"], ComplianceDatabase.Documents["RFC6750"], ComplianceDatabase.Documents["RFC6819"]]) },
+            { "FAPIBASE", ("Financial-grade API 1.0 (base profile)", [ComplianceDatabase.Documents["FAPI1Base"], ComplianceDatabase.Documents["OIDC"], ComplianceDatabase.Documents["RFC6749"], ComplianceDatabase.Documents["RFC6750"], ComplianceDatabase.Documents["RFC6819"]]) },
+            { "FAPIADV", ("Financial-grade API 1.0 (advanced profile)", [ComplianceDatabase.Documents["FAPI1Adv"], ComplianceDatabase.Documents["FAPI1Base"], ComplianceDatabase.Documents["OIDC"], ComplianceDatabase.Documents["RFC6749"], ComplianceDatabase.Documents["RFC6750"], ComplianceDatabase.Documents["RFC6819"]]) },
+            { "ALL",  ("All available tests", ComplianceDatabase.AllDocuments) },
+        };
+        private const string _defaultInitialDocuments = "OAUTH20BCP";
+
         public DashboardController(OAuchDbContext db, IHubContext<TestRunHub> hubContext) {
             this.HubContext = hubContext;
             this.Database = db;
@@ -249,6 +261,8 @@ namespace OAuch.Controllers {
         public IActionResult AddSite() {
             var model = new AddSiteViewModel();
             FillMenu(model, pageType: PageType.AddSite);
+            model.InitialDocuments = _initialDocuments;
+            model.SelectedInitialDocuments = _defaultInitialDocuments;
             return View(model);
         }
         private static bool IsSiteNameOk([NotNullWhen(true)] string? name) {
@@ -260,6 +274,9 @@ namespace OAuch.Controllers {
         [HttpPost]
         public IActionResult AddSite(AddSiteViewModel model) {
             if (ModelState.IsValid) {
+                if (!_initialDocuments.Keys.Any(c => c == model.SelectedInitialDocuments)) 
+                    model.SelectedInitialDocuments = _defaultInitialDocuments;               
+
                 if (IsSiteNameOk(model.Name)) {
                     OAuthMetaData? metadata = null;
                     if (!string.IsNullOrWhiteSpace(model.MetadataUrl) && Uri.TryCreate(model.MetadataUrl, UriKind.Absolute, out var metadataUri)) {
@@ -270,7 +287,7 @@ namespace OAuch.Controllers {
                     if (ModelState.ErrorCount == 0) {
                         var settings = new SiteSettings {
                             CallbackUri = OAuchHelper.CallbackUri,
-                            SelectedStandards = ComplianceDatabase.AllDocuments.Select(d => d.Id).ToList() //.Where(d => d.DocumentCategory != DocumentCategories.Other)
+                            SelectedStandards = _initialDocuments[model.SelectedInitialDocuments].Documents.Select(c => c.Id).ToList() //ComplianceDatabase.AllDocuments.Select(d => d.Id).ToList() //.Where(d => d.DocumentCategory != DocumentCategories.Other)
                         };
                         if (metadata != null) { // != null implies that it's valid
                             string? scope = null;
@@ -333,6 +350,7 @@ namespace OAuch.Controllers {
                 }
             }
             FillMenu(model, pageType: PageType.AddSite);
+            model.InitialDocuments = _initialDocuments;
             return View(model);
         }
         public async Task<IActionResult> DeleteSite(Guid id) {

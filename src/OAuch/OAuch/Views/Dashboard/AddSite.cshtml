@@ -1,6 +1,20 @@
-﻿@model OAuch.ViewModels.AddSiteViewModel
+﻿@using Microsoft.AspNetCore.Html
+@using OAuch.Compliance
+@model OAuch.ViewModels.AddSiteViewModel
 @{
     ViewData["Title"] = "Add a new site";
+
+    IHtmlContent CreateDocumentOption(string id, string title, IEnumerable<OAuthDocument> docs) {
+        var isDocumentSelected = Model.SelectedInitialDocuments == id;
+        string docText;
+        if (docs.Count() == ComplianceDatabase.AllDocuments.Count) {
+            docText = "This includes tests from all the standards documents that are supported in OAuch";
+        } else {
+            docText = $"This includes tests from the following documents: {string.Join(", ", docs.Select(d => d.Id))}";
+        }
+        string dataContent = $"<div class='od'><strong>{title}</strong><br/><em>{docText}</em></div>";
+        return new HtmlString($"<option value=\"{id}\" title=\"{title}\" data-content=\"{dataContent}\"{(isDocumentSelected ? " selected" : "")}></option>");
+    }
 }
 <h1 class="display-4">Add a new site</h1>
 <p>
@@ -26,10 +40,17 @@
                 </small>
             </div>
             <div class="form-group">
-
-
-
-
+                @Html.LabelFor(c => c.SelectedInitialDocuments)
+                <select id="SelectedInitialDocuments" name="SelectedInitialDocuments" class="selectpicker show-tick" data-width="100%">
+                    @foreach (var c in Model.InitialDocuments!) {
+                        <text>@CreateDocumentOption(c.Key, c.Value.Title, c.Value.Documents)</text>
+                    }
+                </select>
+                <small id="ScopeHelp" class="form-text text-muted">
+                    Select the initial set of OAuth-related standards to test the implementation against. By default, OAuch will test it against
+                    the OAuth 2.0 standard (including the latest best practices). You can adjust the selected documents before running a test run.
+                    For more information on the individual standard documents, visit the @Html.ActionLink("document overview", "Index", "Documents", new {}, new {target = "_blank"}).
+                </small>
             </div>
         </div>
     </div>
@@ -38,4 +59,19 @@
             <button type="submit" class="btn btn-block btn-primary">Add site</button>
         </div>
     </div>
+}
+@section Styles {
+    <link rel="stylesheet" href="/plugins/bootstrap-select/css/bootstrap-select.min.css">
+}
+@section Scripts {
+    <script src="/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script>
+        $(function () {
+            $('.selectpicker').selectpicker(
+                {
+                    style: '',
+                    styleBase: 'form-control'
+                });
+        });
+    </script>
 }

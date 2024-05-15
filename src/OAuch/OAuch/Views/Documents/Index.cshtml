@@ -1,0 +1,20 @@
+﻿@model OAuch.ViewModels.DocumentsViewModel
+@using OAuch.ViewModels;
+@using OAuch.Helpers;
+@{
+    ViewData["Title"] = "Standards Documents Overview";
+}
+<div class="row">
+    <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+        <h1 class="display-4">Standards Documents Overview</h1>
+        <p>
+            OAuth 2.0 is a <em>framework</em> with multiple extensions that have been standardized over the years to support new use cases or to improve the security.
+            The test cases in OAuch are based on the security specifications as written down in these OAuth-related standards documents. The following documents are supported:
+        </p>
+        <ul>
+            @foreach (var doc in Model.Documents) {
+                <li><a href="/Documents/Info/@doc.Id">@doc.Name</a> (@doc.Id)</li>
+            }
+        </ul>
+    </div>
+</div>

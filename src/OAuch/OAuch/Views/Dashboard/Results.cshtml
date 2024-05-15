@@ -254,9 +254,9 @@
                                 <ul>
                                     @foreach (var dc in Model.Result.DocumentCompliance) {
                                         if (dc.IsDocumentSupported) {
-                                            <li><strong>@dc.Document.Id</strong> with an overall failure rate of @FlToS(dc.OverallScore.FailureRate) (@FlToS(dc.MustScore.FailureRate) - @FlToS(dc.ShouldScore.FailureRate) - @FlToS(dc.MayScore.FailureRate))</li>
+                                            <li><strong>@Html.ActionLink(dc.Document.Id, "Info", "Documents", new { dc.Document.Id }, new { target = "_blank" })</strong> with an overall failure rate of @FlToS(dc.OverallScore.FailureRate) (@FlToS(dc.MustScore.FailureRate) - @FlToS(dc.ShouldScore.FailureRate) - @FlToS(dc.MayScore.FailureRate))</li>
                                         } else {
-                                            <li><strong>@dc.Document.Id</strong> is not supported</li>
+                                            <li><strong>@Html.ActionLink(dc.Document.Id, "Info", "Documents", new { dc.Document.Id }, new { target = "_blank" })</strong> is not supported</li>
                                         }
                                     }
                                 </ul>
