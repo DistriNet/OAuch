@@ -10,6 +10,7 @@ namespace OAuch.Compliance {
         public required string LocationInDocument { get; init; }
         public required List<ThreatInstance> Instances { get; init; }
         public string? AliasOf { get; init; } //used for BCP threats that are an alias of threats in RFC6819
+        public required List<>
     }
     public class TestCombination : List<Test> {
         // this represents an AND-list of tests
