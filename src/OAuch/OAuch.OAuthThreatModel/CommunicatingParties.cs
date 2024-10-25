@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OAuch.Compliance {
+namespace OAuch.OAuthThreatModel {
     public static class CommunicatingParties {
         public static CommunicatingParty ClientToAS => new CommunicatingParty(Parties.Client, Parties.AuthorizationServer);
         public static CommunicatingParty ASToClient => new CommunicatingParty(Parties.AuthorizationServer, Parties.Client);

@@ -25,5 +25,8 @@ namespace OAuch.OAuthThreatModel.Threats {
             }
         }
         private static List<Threat>? _allThreats;
+
+        public abstract List<StrideThreatCategories> StrideCategories { get; }
+        public abstract List<CommunicatingParty> Parties { get; }
     }
 }

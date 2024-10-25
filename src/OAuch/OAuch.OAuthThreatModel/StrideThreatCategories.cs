@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OAuch.Compliance {
+namespace OAuch.OAuthThreatModel {
     [Flags]
     public enum StrideThreatCategories : int {
         /// <summary>
