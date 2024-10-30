@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
@@ -23,11 +24,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OAuch.Controllers {
     [Authorize]
@@ -128,12 +131,29 @@ namespace OAuch.Controllers {
         [HttpPost]
         public IActionResult Import(IFormFile file) {
             if (file != null && file.Length > 0) {
-                byte[] blob;
-                using (var s = file.OpenReadStream()) {
-                    blob = s.ReadFully();
+                byte[]? blob = null;
+                if (file.FileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)) {
+                    using (var s = file.OpenReadStream()) {
+                        using (var zip = new ZipArchive(s, ZipArchiveMode.Read)) {
+                            var entry = zip.Entries.FirstOrDefault();
+                            if (entry != null) {
+                                using (var stream = entry.Open()) {
+                                    blob = stream.ReadFully();
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    using (var s = file.OpenReadStream()) {
+                        blob = s.ReadFully();
+                    }
                 }
-                var json = Encoding.UTF8.GetString(blob);
-                var o = OAuchJsonConvert.Deserialize<SiteData[]>(json);
+
+                SiteData[]? o = null;
+                if (blob != null) {
+                    var json = Encoding.UTF8.GetString(blob);
+                    o = OAuchJsonConvert.Deserialize<SiteData[]>(json);
+                }
                 if (o != null) {
                     foreach (var s in o) {
                         if (s.Name == null || s.CurrentConfiguration == null) // invalid data
@@ -204,11 +224,40 @@ namespace OAuch.Controllers {
             if (site == null)
                 return NotFound();
             var data = GetSiteData(site);
-            var jsonData = Encoding.UTF8.GetBytes(OAuchJsonConvert.Serialize(data, Formatting.Indented));
+            var jsonData = Encoding.UTF8.GetBytes(OAuchJsonConvert.Serialize(new SiteData[] { data }, Formatting.Indented));
             return File(jsonData, "application/json", "export.json");
         }
+        public IActionResult ExportAll() {
+            var model = new EmptyViewModel();
+            FillMenu(model, null, PageType.ExportAll);
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult ExportAllData(Guid[]? SelectedSites) {
+            if (SelectedSites == null || SelectedSites.Length == 0)
+                return new EmptyResult();
+
+            var sites = new List<SiteData>();
+            foreach(var guid in SelectedSites) {
+                var site = GetSite(guid);
+                if (site == null)
+                    return NotFound(); // if one of the GUID's is invalid, cancel the entire operation (hack in progress?)
+                sites.Add(GetSiteData(site));
+            }
+            var jsonData = Encoding.UTF8.GetBytes(OAuchJsonConvert.Serialize(sites, Formatting.Indented));
+            var zippedData = new MemoryStream();
+            using (var archive = new ZipArchive(zippedData, ZipArchiveMode.Create, true)) {
+                var exportEntry = archive.CreateEntry("export.json");
+                using (var exportStream = exportEntry.Open()) {
+                    exportStream.Write(jsonData);
+                }
+            }
+            zippedData.Position = 0;
+
+            return File(zippedData, "application/json", "export.zip");
+        }
         [NonAction]
-        private SiteData[] GetSiteData(Site site) {
+        private SiteData GetSiteData(Site site) {
             var currentConfig = JsonConvert.DeserializeObject<SiteSettings>(site.CurrentConfigurationJson);
             CertificateInfo? certificate = null;
             if (currentConfig?.CertificateId != null) {
@@ -229,14 +278,12 @@ namespace OAuch.Controllers {
                 StateCollection = OAuchJsonConvert.Deserialize<StateCollection>(c.StateCollectionJson)!
             }).ToList();
 
-            return [
-                new SiteData {
-                    Name = site.Name,
-                    CurrentConfiguration = currentConfig!,
-                    Certificate = certificate,
-                    TestRuns = runs
-                }
-                ];
+            return new SiteData {
+                Name = site.Name,
+                CurrentConfiguration = currentConfig!,
+                Certificate = certificate,
+                TestRuns = runs
+            };
         }
 
         private class SiteData {

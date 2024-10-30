@@ -18,6 +18,7 @@ namespace OAuch.ViewModels {
         AddSite = 0b100,
         Import = 0b101,
         Export = 0b110,
+        ExportAll = 0b111,
         Other = 0b1000000000000000000000000000000
     }
 }

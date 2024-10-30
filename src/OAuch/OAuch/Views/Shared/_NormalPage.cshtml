@@ -146,7 +146,7 @@
                                 <li class="nav-item">
                                     <a href="@Url.Action("Export", "Dashboard", new { id = menuInfo.ActiveSite.SiteId })" class="nav-link@(GetActiveClass(menuInfo.ActiveSite, PageType.Export))">
                                         <i class="nav-icon fas fa-file-export"></i>
-                                        <p>Export data</p>
+                                        <p>Export site data</p>
                                     </a>
                                 </li>
                             }
@@ -179,7 +179,13 @@
                             <li class="nav-item">
                                 <a href="@Url.Action("Import", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.Import))">
                                     <i class="nav-icon fas fa-file-import"></i>
-                                    <p>Import data</p>
+                                    <p>Import site data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("ExportAll", "Dashboard")" class="nav-link@(GetActiveClass(null, PageType.ExportAll))">
+                                    <i class="nav-icon fas fa-file-export"></i>
+                                    <p>Export all data</p>
                                 </a>
                             </li>
                             @if (menuInfo?.Sites?.Count > 0) {
