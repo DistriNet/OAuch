@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Authorization servers should educate users about the risks posed by phishing attacks and should provide mechanisms that make it easy for users to confirm the authenticity of their sites."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

@@ -15,6 +15,7 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
     public class T4_4_1_9_ClickjackingTiFC : Threat {
         public override string Id => "6819_4_4_1_9";
@@ -29,5 +30,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

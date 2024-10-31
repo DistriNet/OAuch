@@ -17,5 +17,7 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The authorization server should send an error response to the client reporting an invalid authorization \"code\" and rate-limit or disallow connections from clients whose number of invalid requests exceeds a threshold."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.NetworkAttacker];
+
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

@@ -15,6 +15,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Require clients to register full redirect URI"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
     public class BCP_4_11_1_OpenRedirectionTiFC : Threat {
         public override string Id => "BCP_4_11_1";
@@ -29,6 +30,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Require clients to register full redirect URI"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 
     public class BCP_4_11_2_OpenRedirectionAC : Threat {
@@ -45,6 +47,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Don't redirect to a redirect URI if the client identifier or redirect URI can't be verified"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
     public class BCP_4_11_2_OpenRedirectionTiFC : Threat {
         public override string Description => "Authorization Server as Open Redirector";
@@ -60,5 +63,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Don't redirect to a redirect URI if the client identifier or redirect URI can't be verified"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

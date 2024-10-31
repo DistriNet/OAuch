@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The authorization server should require that the client be authenticated, i.e., confidential client"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client, InvolvedParty.TokenEndpoint];
     }
 }

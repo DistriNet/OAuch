@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint {
             "Use strong client authentication"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

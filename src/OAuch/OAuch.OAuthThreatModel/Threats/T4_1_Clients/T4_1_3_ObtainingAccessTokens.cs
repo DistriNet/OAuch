@@ -18,5 +18,6 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Keep access token lifetime short"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

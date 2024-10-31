@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ImplicitGrant {
             "Make responses non-cacheable"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.UserAgent];
     }
 }

@@ -19,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "Use short expiry time for tokens"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

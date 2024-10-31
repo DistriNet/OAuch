@@ -20,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
             "Client authentication will provide another authentication factor and thus hinder the attack."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

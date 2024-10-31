@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "The resource server could employ signed requests along with nonces and timestamps in order to uniquely identify requests"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

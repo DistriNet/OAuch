@@ -20,5 +20,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The authorization server may also limit the scope of tokens it issues to clients it cannot reliably authenticate"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint, InvolvedParty.TokenEndpoint];
     }
 }

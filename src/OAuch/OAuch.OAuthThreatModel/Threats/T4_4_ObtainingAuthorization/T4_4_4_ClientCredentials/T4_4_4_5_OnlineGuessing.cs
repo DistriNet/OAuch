@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ClientCredential
             "Use tar pit"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

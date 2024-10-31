@@ -19,5 +19,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "The impact of token leakage may be reduced by limiting scope and duration and by enforcing one-time token usage",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

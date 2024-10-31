@@ -2,7 +2,7 @@
 using OAuch.OAuthThreatModel.Consequences;
 
 namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCode {
-    public class T4_4_1_13_CodeSubstitution : Threat {
+    public class T44113CodeSubstitution : Threat {
         public override string Id => "6819_4_4_1_13";
 
         public override string Description => "Code Substitution (OAuth Login)";
@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "If possible, the client shall be authenticated beforehand."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

@@ -17,6 +17,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
     public class BCP_4_16_ClickjackingTiFC : Threat {
         public override string Id => "BCP_4_16";
@@ -33,5 +34,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "JavaScript frame-busting techniques can be used but may not be effective in all browsers"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

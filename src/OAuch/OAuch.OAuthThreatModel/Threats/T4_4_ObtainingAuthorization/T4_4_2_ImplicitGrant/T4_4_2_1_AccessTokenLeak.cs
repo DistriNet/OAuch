@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ImplicitGrant {
             "The authorization server should ensure confidentiality (e.g., using TLS) of the response to the client"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

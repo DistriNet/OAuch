@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The authorization server SHOULD NOT allow clients to influence their client_id or any claim that could cause confusion with a genuine resource owner",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

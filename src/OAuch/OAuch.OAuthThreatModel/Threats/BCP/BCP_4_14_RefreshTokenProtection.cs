@@ -18,5 +18,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Refresh tokens SHOULD expire if the client has been inactive for some time"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker, AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

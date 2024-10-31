@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ImplicitGrant {
             "Introduce one-time, per-use secrets (e.g., \"client_secret\") values that can only be used by scripts in a small time window once loaded from a server"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

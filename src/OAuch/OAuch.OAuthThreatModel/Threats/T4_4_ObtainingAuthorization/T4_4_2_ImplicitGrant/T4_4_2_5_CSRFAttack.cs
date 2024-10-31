@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ImplicitGrant {
             "Client developers and end users can be educated to not follow untrusted URLs"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

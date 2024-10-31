@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "Use one-time secrets sent out of band to the resource owner",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

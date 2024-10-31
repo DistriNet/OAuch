@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Don't redirect to a redirect URI if the client identifier or redirect URI can't be verified"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

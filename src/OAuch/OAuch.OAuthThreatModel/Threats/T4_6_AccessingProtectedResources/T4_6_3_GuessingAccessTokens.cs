@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Security can be further strengthened by using a short access token duration"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

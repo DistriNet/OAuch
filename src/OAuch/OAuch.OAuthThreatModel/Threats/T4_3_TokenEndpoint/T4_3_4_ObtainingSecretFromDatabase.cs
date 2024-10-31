@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint {
             "Ensure proper handling of credentials"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ClientCredential
             "Enforce credential storage protection best practices"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

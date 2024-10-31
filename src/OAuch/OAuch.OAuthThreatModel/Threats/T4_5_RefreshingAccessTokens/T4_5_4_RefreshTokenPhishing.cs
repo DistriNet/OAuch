@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
             "Utilize server authentication"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

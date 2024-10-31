@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "A reverse proxy MUST therefore sanitize any inbound requests to ensure the authenticity and integrity of all header values relevant for the security of the application servers."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [];
     }
 }

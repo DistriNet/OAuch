@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
             "Authenticate the client; this adds another element that the attacker has to guess"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The authorization server should include a nontrivial amount of entropy in authorization \"codes\""
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker, AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint, InvolvedParty.TokenEndpoint];
     }
 }

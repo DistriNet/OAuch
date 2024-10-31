@@ -16,6 +16,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "OpenID Connect's existing nonce parameter can protect against authorization code injection attacks"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
     public class BCP_4_5_AuthorizationCodeInjectionConfidential : Threat {
         public override string Id => "BCP_4_5";
@@ -31,5 +32,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "OpenID Connect's existing nonce parameter can protect against authorization code injection attacks"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

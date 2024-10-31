@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Mix-Up Defense via Distinct Redirect URIs"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

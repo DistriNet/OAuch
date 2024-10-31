@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Audience-Restricted Access Tokens"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker, AttackerTypes.SystemsAttacker, AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

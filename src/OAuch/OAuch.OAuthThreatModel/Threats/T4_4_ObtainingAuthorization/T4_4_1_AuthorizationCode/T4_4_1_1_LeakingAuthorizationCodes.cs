@@ -21,5 +21,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.AuthorizationCod
             "The client server may reload the target page of the redirect URI in order to automatically clean up the browser cache."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker, AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.UserAgent, InvolvedParty.AuthorizationEndpoint, InvolvedParty.TokenEndpoint];
     }
 }

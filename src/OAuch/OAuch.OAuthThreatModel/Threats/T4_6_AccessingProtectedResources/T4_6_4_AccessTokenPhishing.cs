@@ -18,5 +18,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Restrict the token scope and/or limit the token to a certain resource server"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

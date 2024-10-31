@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Authorization servers that mandate the use of PKCE in general or for particular clients implicitly implement this security measure"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.TokenEndpoint {
             "If end-to-end confidentiality cannot be guaranteed, reducing scope and expiry time for access tokens can be used to reduce the damage in case of leaks."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.NetworkAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

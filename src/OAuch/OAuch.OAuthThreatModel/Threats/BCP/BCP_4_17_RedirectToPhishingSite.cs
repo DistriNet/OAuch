@@ -15,6 +15,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The authorization server needs to decide whether it can trust the redirect URI or not. It could take into account URI analytics done internally or through some external service to evaluate the credibility and trustworthiness content behind the URI, and the source of the redirect URI and other client data.",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
     public class BCP_4_17_RedirectToPhishingSiteAC : Threat {
         public override string Id => "BCP_4_17";
@@ -29,5 +30,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The authorization server needs to decide whether it can trust the redirect URI or not. It could take into account URI analytics done internally or through some external service to evaluate the credibility and trustworthiness content behind the URI, and the source of the redirect URI and other client data.",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

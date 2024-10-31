@@ -15,5 +15,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
             "Use digest authentication instead of plaintext credential processing"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

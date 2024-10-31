@@ -16,6 +16,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Use form post response mode instead of redirect for the authorization response"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.UserAgent];
     }
     public class BCP_4_3_2_TokenInApiUri : Threat {
         public override string Id => "BCP_4_3_2_A";
@@ -30,6 +31,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
     public class BCP_4_3_2_TokenInBrowserHistory : Threat {
         public override string Id => "BCP_4_3_2_B";
@@ -44,5 +46,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "Use the authorization code grant or alternative OAuth response modes like the form post response mode"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.UserAgent];
     }
 }

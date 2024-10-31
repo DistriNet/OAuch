@@ -17,5 +17,7 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "The resource server MUST treat access tokens like other sensitive secrets and not store or transfer them in plain text"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

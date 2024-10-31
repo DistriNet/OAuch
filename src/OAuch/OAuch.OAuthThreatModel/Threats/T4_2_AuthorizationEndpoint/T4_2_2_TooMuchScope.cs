@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Narrow the scope, based on the client."
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

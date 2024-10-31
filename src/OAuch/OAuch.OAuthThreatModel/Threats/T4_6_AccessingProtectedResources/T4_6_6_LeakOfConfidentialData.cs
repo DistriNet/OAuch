@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.AccessingProtectedResources {
             "Reducing scope and expiry time for access tokens can be used to reduce the damage in case of leaks"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.ResourceServer];
     }
 }

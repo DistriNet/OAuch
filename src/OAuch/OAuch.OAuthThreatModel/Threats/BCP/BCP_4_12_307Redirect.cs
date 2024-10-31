@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "If an HTTP redirection is used for such a request, the authorization server SHOULD use HTTP status code 303"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

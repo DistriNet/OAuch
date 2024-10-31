@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.ObtainingAuthorization.ResourceOwnerPas
             "The authorization server could notify the resource owner by an appropriate medium, e.g., email, of the grant issued"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

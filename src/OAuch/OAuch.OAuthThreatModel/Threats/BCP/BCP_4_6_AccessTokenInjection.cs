@@ -14,5 +14,6 @@ namespace OAuch.OAuthThreatModel.Threats.BCP {
             "There is no way to detect such an injection attack in pure-OAuth flows, since the token is issued without any binding to the transaction or the particular user agent",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

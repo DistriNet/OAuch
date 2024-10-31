@@ -16,5 +16,6 @@ namespace OAuch.OAuthThreatModel.Threats.RefreshingAccessTokens {
             "Bind token to client id, if the attacker cannot obtain the required id and secret",
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.TokenEndpoint];
     }
 }

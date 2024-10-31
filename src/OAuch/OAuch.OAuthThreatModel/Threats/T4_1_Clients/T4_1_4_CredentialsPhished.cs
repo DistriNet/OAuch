@@ -17,5 +17,6 @@ namespace OAuch.OAuthThreatModel.Threats.Clients {
             "Client developers should not write client applications that collect authentication information directly from users and should instead delegate this task to a trusted system component, e.g., the system browser"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.SystemsAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.Client];
     }
 }

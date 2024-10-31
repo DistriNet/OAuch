@@ -19,6 +19,7 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
     /// <summary>
     /// If the client uses the authorization code grant, it can be impersonated to get the authorization code
@@ -37,5 +38,6 @@ namespace OAuch.OAuthThreatModel.Threats.AuthorizationEndpoint {
             "Authorization servers can mitigate the risks associated with automatic processing by limiting the scope of access tokens obtained through automated approvals"
             ];
         public override AttackerType[] Attackers => [AttackerTypes.WebAttacker];
+        public override InvolvedParty[] Parties => [InvolvedParty.AuthorizationEndpoint];
     }
 }

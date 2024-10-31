@@ -26,7 +26,7 @@ namespace OAuch.OAuthThreatModel.Threats {
         }
         private static List<Threat>? _allThreats;
 
-        public virtual List<StrideThreatCategories> StrideCategories { get; }
-        public virtual List<CommunicatingParty> Parties { get; }
+        public virtual StrideThreatCategories[] StrideCategories { get; }
+        public abstract InvolvedParty[] Parties { get; }
     }
 }
