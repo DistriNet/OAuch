@@ -3,6 +3,7 @@ using OAuch.OAuthThreatModel;
 using OAuch.OAuthThreatModel.Consequences;
 using OAuch.OAuthThreatModel.Enrichers;
 using OAuch.OAuthThreatModel.Flows;
+using OAuch.OAuthThreatModel.Threats;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
@@ -116,7 +117,24 @@ namespace OAuch.Compliance.Results {
                     }
                 }
             }
-            return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray());
+            // calculate risk by multiplying the completeness scores of the threats
+            float riskScore = 0;
+            bool first = true;
+            foreach (var el in orderedElements) {
+                var th = el as Threat;
+                if (th != null) {
+                    if (context.ThreatReports.TryGetValue(th.Id, out var report) && report.CompletenessScore != null) {
+                        if (first) {
+                            first = false;
+                            riskScore = 1 - report.CompletenessScore.Value;
+                        } else {
+                            riskScore = riskScore * (1 - report.CompletenessScore.Value);
+                        }
+                    }
+                }
+            }
+
+            return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray(), 1 - riskScore);
         }
         private bool BuildChain(CalculationContext context, ElementId currentChain, ConsequenceId state, LinkedList<ModelElementVectors> remainingElements, int depth) {
             var node = remainingElements.First;
@@ -316,13 +334,15 @@ namespace OAuch.Compliance.Results {
         public Dictionary<string, bool> UnmitigatedThreatResults;
     }
     public class AttackChain {
-        public AttackChain(ModelElement flow, IReadOnlyList<ModelElement> elements, IReadOnlyList<ConsequenceType> vulnerabilities) {
+        public AttackChain(ModelElement flow, IReadOnlyList<ModelElement> elements, IReadOnlyList<ConsequenceType> vulnerabilities, float risk) {
             this.Flow = flow;
             this.Elements = elements;
             this.Vulnerabilities = vulnerabilities;
+            this.RiskScore = risk;
         }
         public ModelElement Flow { get; }
         public IReadOnlyList<ModelElement> Elements { get; }
         public IEnumerable<ConsequenceType> Vulnerabilities { get; }
+        public float RiskScore { get; } // number between [0..1] that represents the risk for this attack chain (combination of the risks of the individual threats in the chain); 0 = low risk, 1 = high risk
     }
 }

@@ -47,7 +47,7 @@ namespace OAuch.Compliance.Results {
             this.StandardsCompliance = CalculateCompliance(d => d.Document.IsStandard);
             this.OverallCompliance = CalculateCompliance(d => true);
 
-            this.ThreatReports = ComplianceDatabase.AllThreats.Select(v => new ThreatReport(v, this.AllResults)).ToList();
+            this.ThreatReports = ComplianceDatabase.AllThreats.Select(v => new ThreatReport(v, _allResults)).ToList();
             this.FullyMitigatedThreats = this.ThreatReports.Count(tr => tr.Outcome == TestOutcomes.SpecificationFullyImplemented);
             this.PartiallyMitigatedThreats = this.ThreatReports.Count(tr => tr.Outcome == TestOutcomes.SpecificationPartiallyImplemented);
             this.UnmitigatedThreats = this.ThreatReports.Count(tr => tr.Outcome == TestOutcomes.SpecificationNotImplemented);
@@ -112,6 +112,7 @@ namespace OAuch.Compliance.Results {
         public SiteSettings TestSettings { get; }
         public SimpleRatings SimpleRating {
             get {
+                // TODO: change this into a calculation on attack chains and their likelihood
                 if (this.UnmitigatedThreats == 0) {
                     return SimpleRatings.APlus;
                 } else if (UnmitigatedThreats == 1) {

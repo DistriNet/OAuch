@@ -1,17 +1,8 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_BCP_4_2_2 : Threat {
@@ -23,9 +14,9 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation<IsCodeBoundToClientTest, MultipleCodeExchangesTest, TokenValidAfterMultiExchangeTest, RefreshTokenValidAfterMultiExchangeTest>();
-            AddMitigation<ReferrerPolicyEnforcedTest>();
-            AddMitigation<SupportsPostResponseModeTest>();
+            AddMitigation(Mit<IsCodeBoundToClientTest>(1), Mit<MultipleCodeExchangesTest>(1), Mit<TokenValidAfterMultiExchangeTest>(1), Mit<RefreshTokenValidAfterMultiExchangeTest>(1));
+            AddMitigation(Mit<ReferrerPolicyEnforcedTest>(1));
+            AddMitigation(Mit<SupportsPostResponseModeTest>(1));
         }
 
         public override string Id => "BCP_4_2_2";

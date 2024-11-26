@@ -1,13 +1,7 @@
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_2_1 : Threat {
@@ -19,7 +13,7 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation<HasValidCertificateTest, IsHttpsRequiredTest, IsModernTlsSupportedTest>();
+            AddMitigation(Mit<HasValidCertificateTest>(1), Mit<IsHttpsRequiredTest>(1), Mit<IsModernTlsSupportedTest>(1));
         }
 
         public override string Id => "6819_4_2_1";

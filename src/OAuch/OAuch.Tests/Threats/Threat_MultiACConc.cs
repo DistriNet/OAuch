@@ -1,23 +1,14 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Compliance.Tests.Concurrency;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_MultiACConc : Threat {
         public Threat_MultiACConc() {
             AddDependency<CodeFlowSupportedTest>();
-            AddMitigation<MultipleCodeExchangesTest, SingleFastACExchangeTest, MultiFastACExchangeTest, RefreshTokenRevokedAfterUseTest, SingleFastRefreshTest, MultiFastRefreshTest, ConcurrentTokensRevokedTest>();
+            AddMitigation(Mit<MultipleCodeExchangesTest>(1), Mit<SingleFastACExchangeTest>(1), Mit<MultiFastACExchangeTest>(1), Mit<RefreshTokenRevokedAfterUseTest>(1), Mit<SingleFastRefreshTest>(1), Mit<MultiFastRefreshTest>(1), Mit<ConcurrentTokensRevokedTest>(1));
         }
 
         public override string Id => "MultiACConc";

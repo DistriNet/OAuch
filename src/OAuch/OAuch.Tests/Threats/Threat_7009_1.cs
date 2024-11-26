@@ -1,23 +1,13 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.Revocation;
+using OAuch.Compliance.Tests.DocumentSupport;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_7009_1 : Threat {
         public Threat_7009_1() {
             AddDependency<RFC7009SupportedTest>();
-            AddMitigation<AccessRevokesRefreshTest, CanAccessTokensBeRevokedTest, CanRefreshTokensBeRevokedTest, RefreshRevokesAccessTest>();
+            AddMitigation(Mit<AccessRevokesRefreshTest>(1), Mit<CanAccessTokensBeRevokedTest>(1), Mit<CanRefreshTokensBeRevokedTest>(1), Mit<RefreshRevokesAccessTest>(1));
         }
 
         public override string Id => "7009_1";

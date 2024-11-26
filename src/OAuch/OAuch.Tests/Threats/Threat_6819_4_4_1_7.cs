@@ -1,17 +1,8 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_4_1_7 : Threat {
@@ -20,7 +11,7 @@ namespace OAuch.Compliance.Threats {
             AddDependency<CodeTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenTokenFlowSupportedTest>();
-            AddMitigation<RedirectUriPathMatchedTest, RedirectUriFullyMatchedTest, RedirectUriConfusionTest, CodePollutionTest, RedirectUriCheckedTest>();
+            AddMitigation(Mit<RedirectUriPathMatchedTest>(1), Mit<RedirectUriFullyMatchedTest>(1), Mit<RedirectUriConfusionTest>(1), Mit<CodePollutionTest>(1), Mit<RedirectUriCheckedTest>(1));
         }
 
         public override string Id => "6819_4_4_1_7";

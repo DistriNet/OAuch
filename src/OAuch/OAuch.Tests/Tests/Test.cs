@@ -24,7 +24,7 @@ namespace OAuch.Compliance {
         public override bool Equals(object? obj) {
             if (obj is not Test t)
                 return false;
-            return this.GetType().Equals(t.GetType());
+            return t.TestId == this.TestId;
         }
         public override int GetHashCode() {
             return this.GetType().GetHashCode();

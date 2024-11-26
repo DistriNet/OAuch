@@ -1,23 +1,13 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_4_3_1 : Threat {
         public Threat_6819_4_4_3_1() {
             AddDependency<PasswordFlowSupportedTest>();
-            AddMitigation<IsPasswordFlowDisabledTest>();
+            AddMitigation(Mit<IsPasswordFlowDisabledTest>(1));
         }
 
         public override string Id => "6819_4_4_3_1";

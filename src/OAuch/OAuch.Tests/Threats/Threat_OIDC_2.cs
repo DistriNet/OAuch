@@ -1,23 +1,13 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.IdTokens;
+using OAuch.Compliance.Tests.DocumentSupport;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_OIDC_2 : Threat {
         public Threat_OIDC_2() {
             AddDependency<OpenIdSupportedTest>();
-            AddMitigation<CodeHashValidTest, HasAuthorizedPartyTest, HasAzpForMultiAudienceTest, HasCorrectAudienceTest, HasCorrectIssuerTest, HasCorrectMacTest, HasRequiredClaimsTest, IsAccessTokenHashCorrectTest, IsAccessTokenHashPresentTest, IsAuthorizationCodeHashPresentTest, KeyReferencesTest, NoncePresentInTokenTest>();
+            AddMitigation(Mit<CodeHashValidTest>(1), Mit<HasAuthorizedPartyTest>(1), Mit<HasAzpForMultiAudienceTest>(1), Mit<HasCorrectAudienceTest>(1), Mit<HasCorrectIssuerTest>(1), Mit<HasCorrectMacTest>(1), Mit<HasRequiredClaimsTest>(1), Mit<IsAccessTokenHashCorrectTest>(1), Mit<IsAccessTokenHashPresentTest>(1), Mit<IsAuthorizationCodeHashPresentTest>(1), Mit<KeyReferencesTest>(1), Mit<NoncePresentInTokenTest>(1));
         }
 
         public override string Id => "OIDC_2";

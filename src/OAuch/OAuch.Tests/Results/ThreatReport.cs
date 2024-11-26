@@ -1,6 +1,7 @@
 ﻿using OAuch.Compliance.Tests;
 using OAuch.Compliance.Threats;
 using OAuch.Shared.Enumerations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,23 +10,56 @@ namespace OAuch.Compliance.Results {
         public required ThreatInstance ThreatInstance { get; init; }
         public required TestOutcomes? Outcome { get; init; }
         public required bool? IsRelevant { get; init; }
+        public float? CompletenessScore { get; init; }
     }
     public class ThreatReport {
-        public ThreatReport(Threat threat, IList<TestResult> results) {
+        public ThreatReport(Threat threat, Dictionary<string, TestResult> results) {
             this.Threat = threat;
             this.InstanceReports = threat.Instances.Select(i => new InstanceReport {
                 ThreatInstance = i,
                 IsRelevant = IsInstanceRelevant(results, i),
-                Outcome = CalculateThreatInstanceOutcome(results, i.MitigatedBy)
+                Outcome = CalculateThreatInstanceOutcome(results, i.MitigatedBy),
+                CompletenessScore = CalculateThreatInstanceCompleteness(results, i.MitigatedBy)
             }).ToList();
             this.Outcome = CalculateThreatOutcome();
+            this.CompletenessScore = CalculateCompleteness();
         }
         public Threat Threat { get; }
         /// <summary>
         /// <b>false</b> means that the vulnerability is not relevant, because the features it abuses are not enabled or present.
         /// </summary>
         public TestOutcomes? Outcome { get; }
+        public float? CompletenessScore { get; }
         public List<InstanceReport> InstanceReports { get; }
+
+        private float? CalculateThreatInstanceCompleteness(Dictionary<string, TestResult> results, List<TestCombination> mitigations) {
+            float? ret = null;
+            foreach(var tc in mitigations) {
+                var score = tc.CalculateCompletenessScore(results);
+                if (score != null) {
+                    if (ret == null) {
+                        ret = score;
+                    } else {
+                        ret = Math.Max(ret.Value, score.Value);
+                    }
+                }
+            }
+            return ret;
+        }
+        private float? CalculateCompleteness() {
+            float? ret = null;
+            foreach (var ir in this.InstanceReports) {
+                var score = ir.CompletenessScore;
+                if (score != null) {
+                    if (ret == null) {
+                        ret = score;
+                    } else {
+                        ret = Math.Max(ret.Value, score.Value);
+                    }
+                }
+            }
+            return ret;
+        }
 
         /// <summary>
         /// Check if all threat instances are mitigated
@@ -68,11 +102,10 @@ namespace OAuch.Compliance.Results {
         /// <b>true</b> if the threat instance is considered to be relevant for the test set, <b>false</b> otherwise.
         /// If the test set contains tests that haven't been executed yet or that have failed, the result is <b>null</b>.
         /// </summary>
-        private bool? IsInstanceRelevant(IEnumerable<TestResult> results, ThreatInstance instance) {
+        private bool? IsInstanceRelevant(Dictionary<string, TestResult> results, ThreatInstance instance) {
             bool? ret = false;
             foreach (var feat in instance.DependsOnFeatures) {
-                var result = results.Where(r => r.TestId == feat.TestId).FirstOrDefault();
-                if (result != null) {
+                if (results.TryGetValue(feat.TestId, out var result)) { 
                     if (result.Outcome == TestOutcomes.SpecificationFullyImplemented || result.Outcome == TestOutcomes.SpecificationPartiallyImplemented)
                         return true;
                     else if (result.Outcome == null || result.Outcome == TestOutcomes.Failed)
@@ -85,7 +118,7 @@ namespace OAuch.Compliance.Results {
         /// <summary>
         /// Check if there is any TestCombination that mitigates the threat instance
         /// </summary>
-        private TestOutcomes? CalculateThreatInstanceOutcome(IEnumerable<TestResult> results, List<TestCombination> mitigations) {
+        private TestOutcomes? CalculateThreatInstanceOutcome(Dictionary<string, TestResult> results, List<TestCombination> mitigations) {
             if (mitigations.Count == 0) // there are no mitigations for this threat; if it is relevant (i.e., if the preconditions are met, the implementation is vulnerable)
                 return TestOutcomes.SpecificationNotImplemented;
 
@@ -121,11 +154,10 @@ namespace OAuch.Compliance.Results {
         /// <summary>
         /// Check if every test in the TestCombination succeeds
         /// </summary>
-        public TestOutcomes? CalculateCombinationOutcome(TestCombination combination, IEnumerable<TestResult> results) {
+        public TestOutcomes? CalculateCombinationOutcome(TestCombination combination, Dictionary<string, TestResult> results) {
             int partials = 0, full = 0, not = 0, skipped = 0;
             foreach (var test in combination) {
-                var result = results.Where(r => r.TestId == test.TestId).FirstOrDefault();
-                if (result == null || result.Outcome == null)
+                if (!results.TryGetValue(test.TestId, out var result) || result.Outcome == null)
                     return null; // we're missing a test to calculate the result
                 switch (result.Outcome) {
                     case TestOutcomes.SpecificationFullyImplemented:

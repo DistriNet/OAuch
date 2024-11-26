@@ -1,19 +1,14 @@
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.TokenEndpoint;
+using OAuch.Compliance.Tests.Tokens;
+using OAuch.Compliance.Tests.Features;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_BCP_4_14 : Threat {
         public Threat_BCP_4_14() {
             AddDependency<HasRefreshTokensTest>();
-            AddMitigation<UsesTokenRotationTest, InvalidatedRefreshTokenTest, RefreshTokenRevokedAfterUseTest, IsRefreshBoundToClientTest, IsRefreshAuthenticationRequiredTest, RefreshTokenEntropyMinReqTest, RefreshTokenEntropySugReqTest, IsModernTlsSupportedTest, IsHttpsRequiredTest, HasValidCertificateTest>();
+            AddMitigation(Mit<UsesTokenRotationTest>(1), Mit<InvalidatedRefreshTokenTest>(1), Mit<RefreshTokenRevokedAfterUseTest>(1), Mit<IsRefreshBoundToClientTest>(1), Mit<IsRefreshAuthenticationRequiredTest>(1), Mit<RefreshTokenEntropyMinReqTest>(1), Mit<RefreshTokenEntropySugReqTest>(1), Mit<IsModernTlsSupportedTest>(1), Mit<IsHttpsRequiredTest>(1), Mit<HasValidCertificateTest>(1));
         }
 
         public override string Id => "BCP_4_14";

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using OAuch.Compliance.Tests;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace OAuch.Compliance.Threats {
@@ -14,19 +16,15 @@ namespace OAuch.Compliance.Threats {
             Debug.Assert(found);
             return result!;
         }
+        protected (Test Mitigation, float Contribution) Mit<T>(float contribution) where T : Test {
+            var t = typeof(T);
+            Debug.Assert(t.FullName != null);
+            var found = ComplianceDatabase.Tests.TryGetValue(t.FullName, out var result);
+            Debug.Assert(found);
+            return (result!, contribution);
+        }
         protected void AddDependency<T>() where T : Test => DependsOnFeatures.Add(GetTest<T>());
-        protected void AddMitigation<T>() where T : Test => MitigatedBy.Add([GetTest<T>()]);
-        protected void AddMitigation<T, U>() where T : Test where U : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>()]);
-        protected void AddMitigation<T, U, V>() where T : Test where U : Test where V : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>(), GetTest<V>()]);
-        protected void AddMitigation<T, U, V, W>() where T : Test where U : Test where V : Test where W : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>()]);
-        protected void AddMitigation<T, U, V, W, X>() where T : Test where U : Test where V : Test where W : Test where X : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>()]);
-        protected void AddMitigation<T, U, V, W, X, Y>() where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>()]);
-        protected void AddMitigation<T, U, V, W, X, Y, Z>() where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test => MitigatedBy.Add([GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>()]);
-        protected void AddMitigation<S, T, U, V, W, X, Y, Z>() where S : Test where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test => MitigatedBy.Add([GetTest<S>(), GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>()]);
-        protected void AddMitigation<S, T, U, V, W, X, Y, Z, Q>() where S : Test where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test where Q : Test => MitigatedBy.Add([GetTest<S>(), GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>(), GetTest<Q>()]);
-        protected void AddMitigation<S, T, U, V, W, X, Y, Z, Q, R>() where S : Test where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test where Q : Test where R : Test => MitigatedBy.Add([GetTest<S>(), GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>(), GetTest<Q>(), GetTest<R>()]);
-        protected void AddMitigation<S, T, U, V, W, X, Y, Z, Q, R, A>() where S : Test where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test where Q : Test where R : Test where A : Test => MitigatedBy.Add([GetTest<S>(), GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>(), GetTest<Q>(), GetTest<R>(), GetTest<A>()]);
-        protected void AddMitigation<S, T, U, V, W, X, Y, Z, Q, R, A, B>() where S : Test where T : Test where U : Test where V : Test where W : Test where X : Test where Y : Test where Z : Test where Q : Test where R : Test where A : Test where B : Test => MitigatedBy.Add([GetTest<S>(), GetTest<T>(), GetTest<U>(), GetTest<V>(), GetTest<W>(), GetTest<X>(), GetTest<Y>(), GetTest<Z>(), GetTest<Q>(), GetTest<R>(), GetTest<A>(), GetTest<B>()]);
+        protected void AddMitigation(params (Test, float)[] v) => MitigatedBy.Add(new TestCombination(v));
 
         public abstract string Id { get; }
         public abstract string Title { get; }
@@ -41,9 +39,39 @@ namespace OAuch.Compliance.Threats {
         // for backward compatibility
         public List<ThreatInstance> Instances => [new ThreatInstance { ExtraDescription = ExtraDescription, DependsOnFeatures = DependsOnFeatures, MitigatedBy = MitigatedBy }];
     }
-    public class TestCombination : List<Test> {
+
+    public class TestCombination : IEnumerable<Test> {
+        public TestCombination(params (Test Test, float Contribution)[] tests) {
+            _testsWithContributions = new Dictionary<Test, float>();
+            foreach(var t in tests) {
+                _testsWithContributions[t.Test] = t.Contribution;
+            }
+        }
         // this represents an AND-list of tests
         // ALL tests must (partially) succeed (or skipped - this means the test is irrelevant)
+        // every test has an importance that contributes to the value that determines how well this list of tests is implemented
+
+        public float? CalculateCompletenessScore(Dictionary<string, TestResult> testResults) { // value that represents how complete this testcombination has been implemented according to the given test results (value between [0..1], with 0 = not implemented, 1 = fully implemented)
+            float max = 0, score = 0;
+            foreach(var t in _testsWithContributions) {
+                if (testResults.TryGetValue(t.Key.TestId, out var result)) {
+                    if (result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationFullyImplemented || result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationPartiallyImplemented || result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationNotImplemented) {
+                        // we have tested the specification, so it contributes to the completeness score
+                        max += t.Value;
+                        score += result.ImplementationScore!.Value;
+                    }
+                }
+            }
+            if (max == 0)
+                return null;
+            return score / max;
+        }
+
+        private Dictionary<Test, float> _testsWithContributions;
+
+        public IEnumerator<Test> GetEnumerator() => _testsWithContributions.Keys.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _testsWithContributions.Keys.GetEnumerator();
+        public int Count => _testsWithContributions.Count;
     }
     public class ThreatInstance {
         public string? ExtraDescription { get; init; }

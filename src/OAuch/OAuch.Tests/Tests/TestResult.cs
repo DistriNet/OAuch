@@ -25,6 +25,21 @@ namespace OAuch.Compliance.Tests {
         public LoggedTest TestLog { get; set; }
 
         [JsonIgnore]
+        public virtual float? ImplementationScore {
+            get {
+                // This is the default implementation of the implementation score, which is valid for most test cases;
+                // however, some test cases may return a number between [0..1] if the test case is not fully implemented,
+                // but not completely unmitigated either (e.g., entropy of token is not 128 bit but 90 bit)
+                if (this.Outcome == TestOutcomes.SpecificationNotImplemented)
+                    return 0f;
+                else if (this.Outcome == TestOutcomes.SpecificationFullyImplemented)
+                    return 1f;
+                Debug.Assert(this.Outcome != TestOutcomes.SpecificationPartiallyImplemented); // should not occur in test results?
+                return null; // Failed, Skipped
+            }
+        }
+
+        [JsonIgnore]
         public abstract Type ImplementationType { get; }
         [JsonIgnore]
         private ParameterInfo[] ConstructorParameters {

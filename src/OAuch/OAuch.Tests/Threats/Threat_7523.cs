@@ -1,23 +1,12 @@
-using OAuch.Compliance.Tests.ApiEndpoint;
-using OAuch.Compliance.Tests.AuthEndpoint;
-using OAuch.Compliance.Tests.Concurrency;
-using OAuch.Compliance.Tests.DeviceAuthEndpoint;
-using OAuch.Compliance.Tests.DocumentSupport;
-using OAuch.Compliance.Tests.Features;
-using OAuch.Compliance.Tests.IdTokens;
-using OAuch.Compliance.Tests.Jwt;
-using OAuch.Compliance.Tests.Pkce;
-using OAuch.Compliance.Tests.Revocation;
-using OAuch.Compliance.Tests.TokenEndpoint;
-using OAuch.Compliance.Tests.Tokens;
 using System;
 using System.Collections.Generic;
+using OAuch.Compliance.Tests.Jwt;
 
 namespace OAuch.Compliance.Threats {
     public class Threat_7523 : Threat {
         public Threat_7523() {
             AddDependency<SupportsJwtClientAuthenticationTest>();
-            AddMitigation<IsSignatureCheckedTest, IsSignatureRequiredTest, HasAudienceClaimTest, HasIssuerClaimTest, HasSubjectClaimTest, IsExpirationCheckedTest, IsIssuedAtCheckedTest, IsJwtReplayDetectedTest, IsNotBeforeCheckedTest>();
+            AddMitigation(Mit<IsSignatureCheckedTest>(1), Mit<IsSignatureRequiredTest>(1), Mit<HasAudienceClaimTest>(1), Mit<HasIssuerClaimTest>(1), Mit<HasSubjectClaimTest>(1), Mit<IsExpirationCheckedTest>(1), Mit<IsIssuedAtCheckedTest>(1), Mit<IsJwtReplayDetectedTest>(1), Mit<IsNotBeforeCheckedTest>(1));
         }
 
         public override string Id => "7523";
