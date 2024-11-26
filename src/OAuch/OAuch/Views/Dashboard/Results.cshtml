@@ -113,10 +113,10 @@
     }
     string FormatImprovements(MitigationImprovement report) {
         if (report.FullyMitigatesCount > 0 && report.PartiallyMitigatesCount > 0)
-            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s) and partially mitigate {report.PartiallyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
+            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s) and partially mitigate {report.PartiallyMitigatesCount} threat(s)";
         else if (report.FullyMitigatesCount > 0)
-            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
-        return $"Implementing this countermeasure could partially mitigate {report.PartiallyMitigatesCount} threat(s) [score: {report.Score.ToString("F2")}]";
+            return $"Implementing this countermeasure could fully mitigate {report.FullyMitigatesCount} threat(s)";
+        return $"Implementing this countermeasure could partially mitigate {report.PartiallyMitigatesCount} threat(s)";
     }
     int GetSortIndex(string threatId) {
         if (threatId.StartsWith("6819_")) {
@@ -433,6 +433,9 @@
                                                                 }
                                                             </ul>
                                                             <p>&nbsp;</p>
+                                                        }
+                                                        if (threatReport.CompletenessScore != null) {
+                                                            <p>The threat implementation score is @threatReport.CompletenessScore.Value.ToString("P0")</p>
                                                         }
                                                     }
                                                 }

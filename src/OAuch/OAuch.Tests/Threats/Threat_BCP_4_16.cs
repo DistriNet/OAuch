@@ -13,7 +13,8 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation(Mit<HasFrameOptionsTest>(1), Mit<HasContentSecurityPolicyTest>(1));
+            AddMitigation(Mit<HasFrameOptionsTest>(1));
+            AddMitigation(Mit<HasContentSecurityPolicyTest>(1));
         }
 
         public override string Id => "BCP_4_16";

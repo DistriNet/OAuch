@@ -38,6 +38,11 @@
         sb.Append('.');
         return sb.ToString();
     }
+    string CompletenessScore(ThreatReport ot) {
+        if (ot.CompletenessScore != null)
+            return $" (implementation score {ot.CompletenessScore:P0})";
+        return "";
+    }
 }
 @if (Model.AttackReport != null && Model.AttackReport.AttackChains.Count == 0) {
     <p>No potential attack scenarios could be found.</p>
@@ -118,7 +123,7 @@ for (int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
                 </button>
             </div>
             <h3 class="card-title">
-                <strong>Attack Scenario #@(i + 1)</strong><br />
+                <strong>Attack Scenario #@(i + 1)</strong> (risk score @chain.RiskScore.ToString("P0"))<br />
                 <em>Uses @(chain.Elements.Count(c => c is Threat)) step(s) to attack the @chain.Flow.Description</em>
             </h3>
         </div>
@@ -133,34 +138,32 @@ for (int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
                         var bg = "bg-warning"; // default to partially mitigated
                         var ot = Model.ThreatReports?[el.Id];
                         if (ot != null) {
-                        if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) { // unmitigated threat
-                            bg = "bg-red";
-                        }
-                        <div class="tic">
-                            <i class="fas fa-unlock @bg"></i>
-                            <div class="timeline-item">
-                                <h3 class="timeline-header bg-lightgray"><strong>@el.Description</strong> @Html.ActionLink($"[{el.Id}]", "Info", "Threats", new { id = el.Id }, new { target = "_blank" })</h3>
-                                <div class="timeline-body">
-                                    <p>@ot.Threat.Description</p>
-                                    <p>
-                                    @if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) {
-                                        <text>This threat is <strong>NOT</strong> mitigated.</text>
-                                    } else if (ot.Outcome == TestOutcomes.SpecificationPartiallyImplemented) {
-                                        <text>This threat is <strong>PARTIALLY</strong> mitigated.</text>
-                                    }
-                                    @if (el is Threat) {
-                                        <text> @GetAttackerTypes((Threat)el)</text>
-                                    }
-                                    </p>
-                                    <p>If the attacker succeeds in exploiting this threat, they will gain the following advantage:</p>
-                                    <ul>
-                                        @foreach (var c in el.Consequences) {
-                                            <li>@c.Name</li>
+                            if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) { // unmitigated threat
+                                bg = "bg-red";
+                            }
+                            <div class="tic">
+                                <i class="fas fa-unlock @bg"></i>
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header bg-lightgray"><strong>@el.Description</strong> @Html.ActionLink($"[{el.Id}]", "Info", "Threats", new { id = el.Id }, new { target = "_blank" })</h3>
+                                    <div class="timeline-body">
+                                        <p>@ot.Threat.Description</p>
+                                        <p>
+                                        @if (ot.Outcome == TestOutcomes.SpecificationNotImplemented) {
+                                            <text>This threat is <strong>NOT</strong> mitigated.</text>
+                                        } else if (ot.Outcome == TestOutcomes.SpecificationPartiallyImplemented) {
+                                            <text>This threat is <strong>PARTIALLY</strong> mitigated@(CompletenessScore(ot)).</text>
                                         }
-                                    </ul>
+                                        @GetAttackerTypes((Threat)el)
+                                        </p>
+                                        <p>If the attacker succeeds in exploiting this threat, they will gain the following advantage:</p>
+                                        <ul>
+                                            @foreach (var c in el.Consequences) {
+                                                <li>@c.Name</li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         }
                     }
                 }

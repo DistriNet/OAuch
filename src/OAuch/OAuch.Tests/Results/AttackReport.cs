@@ -88,7 +88,7 @@ namespace OAuch.Compliance.Results {
                 if (c != null)
                     chains.Add(c);
             }
-            _chains = chains;
+            _chains = chains.OrderByDescending(c => c.RiskScore).ToList();
             this.Context = context;
         }
         private static AttackChain? CreateAttackChain(CalculationContext context, ElementId currentChain) {
@@ -134,7 +134,7 @@ namespace OAuch.Compliance.Results {
                 }
             }
 
-            return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray(), 1 - riskScore);
+            return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray(), riskScore);
         }
         private bool BuildChain(CalculationContext context, ElementId currentChain, ConsequenceId state, LinkedList<ModelElementVectors> remainingElements, int depth) {
             var node = remainingElements.First;
