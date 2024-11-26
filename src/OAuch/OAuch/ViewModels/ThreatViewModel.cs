@@ -1,4 +1,4 @@
-﻿using OAuch.Compliance;
+﻿using OAuch.Compliance.Threats;
 using System.Linq;
 
 namespace OAuch.ViewModels {

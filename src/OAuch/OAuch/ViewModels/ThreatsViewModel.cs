@@ -1,4 +1,4 @@
-﻿using OAuch.Compliance;
+﻿using OAuch.Compliance.Threats;
 using System.Collections.Generic;
 
 namespace OAuch.ViewModels {
