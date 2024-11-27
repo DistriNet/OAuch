@@ -13,6 +13,13 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class RefreshTokenEntropyMinReqTestResult : TestResult<EntropyInfo> {
         public RefreshTokenEntropyMinReqTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(RefreshTokenEntropyMinReqTestImplementation);
+        public override float? ImplementationScore {
+            get {
+                if (ExtraInfo?.AverageEntropy == null)
+                    return base.ImplementationScore;
+                return Math.Min((float)(ExtraInfo.AverageEntropy.Value / 128f), 1f);
+            }
+        }
     }
     public class RefreshTokenEntropyMinReqTestImplementation : EntropyTestImplementationBase {
         public RefreshTokenEntropyMinReqTestImplementation(TestRunContext context, RefreshTokenEntropyMinReqTestResult result, HasSupportedFlowsTestResult supportedFlows)

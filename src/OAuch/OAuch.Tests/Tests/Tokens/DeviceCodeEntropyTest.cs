@@ -13,6 +13,13 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class DeviceCodeEntropyTestResult : TestResult<EntropyInfo> {
         public DeviceCodeEntropyTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(DeviceCodeEntropyTestImplementation);
+        public override float? ImplementationScore {
+            get {
+                if (ExtraInfo?.AverageEntropy == null)
+                    return base.ImplementationScore;
+                return Math.Min((float)(ExtraInfo.AverageEntropy.Value / 128f), 1f);
+            }
+        }
     }
     public class DeviceCodeEntropyTestImplementation : EntropyTestImplementationBase {
         public DeviceCodeEntropyTestImplementation(TestRunContext context, DeviceCodeEntropyTestResult result, HasSupportedFlowsTestResult supportedFlows)

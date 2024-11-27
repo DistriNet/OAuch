@@ -13,6 +13,13 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
     public class ClientSecretEntropyMinReqTestResult : TestResult<ClientSecretEntropyInfo> {
         public ClientSecretEntropyMinReqTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(ClientSecretEntropyMinReqTestImplementation);
+        public override float? ImplementationScore {
+            get {
+                if (ExtraInfo?.Entropy == null)
+                    return base.ImplementationScore;
+                return Math.Min((float)(ExtraInfo.Entropy.Value / 128f), 1f);
+            }
+        }
     }
     public class ClientSecretEntropyMinReqTestImplementation : ClientSecretEntropyTestImplementationBase {
         public ClientSecretEntropyMinReqTestImplementation(TestRunContext context, ClientSecretEntropyMinReqTestResult result, HasSupportedFlowsTestResult supportedFlows)

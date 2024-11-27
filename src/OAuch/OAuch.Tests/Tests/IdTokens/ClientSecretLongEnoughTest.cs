@@ -5,6 +5,8 @@ using OAuch.Protocols.OAuth2;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using System;
+using System.Collections.Generic;
+using System.Security.Authentication;
 
 namespace OAuch.Compliance.Tests.IdTokens {
     public class ClientSecretLongEnoughTest : Test {
@@ -13,9 +15,20 @@ namespace OAuch.Compliance.Tests.IdTokens {
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(ClientSecretLongEnoughTestResult);
     }
-    public class ClientSecretLongEnoughTestResult : TestResult {
+    public class ClientSecretLongEnoughTestResult : TestResult<ClientSecretLongEnoughExtraInfo> {
         public ClientSecretLongEnoughTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(ClientSecretLongEnoughTestImplementation);
+        public override float? ImplementationScore {
+            get {
+                if (this.ExtraInfo?.HashBits == null || this.ExtraInfo.SecretBits == null)
+                    return base.ImplementationScore;
+                return Math.Min(this.ExtraInfo.SecretBits.Value / this.ExtraInfo.HashBits.Value, 1f);
+            }
+        }
+    }
+    public class ClientSecretLongEnoughExtraInfo {
+        public float? SecretBits { get; set; }
+        public float? HashBits { get; set; }
     }
     public class ClientSecretLongEnoughTestImplementation : IdTokenInspectionTestImplementationBase {
         public ClientSecretLongEnoughTestImplementation(TestRunContext context, ClientSecretLongEnoughTestResult result, OpenIdSupportedTestResult oidc) : base(context, result, oidc) { }

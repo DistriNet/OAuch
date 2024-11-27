@@ -13,6 +13,13 @@ namespace OAuch.Compliance.Tests.Tokens {
     public class AccessTokenEntropyMinReqTestResult : TestResult<EntropyInfo> {
         public AccessTokenEntropyMinReqTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(AccessTokenEntropyMinReqTestImplementation);
+        public override float? ImplementationScore {
+            get {
+                if (ExtraInfo?.AverageEntropy == null)
+                    return base.ImplementationScore;
+                return Math.Min((float)(ExtraInfo.AverageEntropy.Value / 128f), 1f);
+            }
+        }
     }
     public class AccessTokenEntropyMinReqTestImplementation : EntropyTestImplementationBase {
         public AccessTokenEntropyMinReqTestImplementation(TestRunContext context, AccessTokenEntropyMinReqTestResult result, HasSupportedFlowsTestResult supportedFlows)
