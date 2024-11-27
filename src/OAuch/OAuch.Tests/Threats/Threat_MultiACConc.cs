@@ -8,7 +8,13 @@ namespace OAuch.Compliance.Threats {
     public class Threat_MultiACConc : Threat {
         public Threat_MultiACConc() {
             AddDependency<CodeFlowSupportedTest>();
-            AddMitigation(Mit<MultipleCodeExchangesTest>(1), Mit<SingleFastACExchangeTest>(1), Mit<MultiFastACExchangeTest>(1), Mit<RefreshTokenRevokedAfterUseTest>(1), Mit<SingleFastRefreshTest>(1), Mit<MultiFastRefreshTest>(1), Mit<ConcurrentTokensRevokedTest>(1));
+            AddMitigation(Mit<MultipleCodeExchangesTest>(1), 
+                Mit<SingleFastACExchangeTest>(1), 
+                Mit<MultiFastACExchangeTest>(1), 
+                Mit<RefreshTokenRevokedAfterUseTest>(1), 
+                Mit<SingleFastRefreshTest>(1), 
+                Mit<MultiFastRefreshTest>(1), 
+                Mit<ConcurrentTokensRevokedTest>(1));
         }
 
         public override string Id => "MultiACConc";
@@ -22,5 +28,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "";
 
         public override string? ExtraDescription => "A malicious client can exchange an authorization code multiple times.";
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

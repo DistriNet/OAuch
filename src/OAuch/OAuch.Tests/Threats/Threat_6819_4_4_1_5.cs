@@ -10,7 +10,8 @@ namespace OAuch.Compliance.Threats {
             AddDependency<CodeTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenTokenFlowSupportedTest>();
-            AddMitigation(Mit<IsCodeBoundToClientTest>(1), Mit<IsClientAuthenticationRequiredTest>(1));
+            AddMitigation(Mit<IsCodeBoundToClientTest>(1), 
+                Mit<IsClientAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "6819_4_4_1_5";
@@ -24,5 +25,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.4.1.5.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

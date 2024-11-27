@@ -35,11 +35,14 @@
                 @for (int i = 0; i < Model.Instance.MitigatedBy.Count; i++) {
                     var mit = Model.Instance.MitigatedBy[i];
                     <li style="list-style:none; margin-left: -26px;"><strong>Set #@(i + 1)</strong></li>
-                    foreach (var cm in mit) {
-                        <li><a href="/Tests/Info/@cm.TestId">@HelperMethods.ShortenTestId(cm.TestId)</a></li>
+                    var totalImpact = mit.MaxImpact;
+                    foreach (var cm in mit)
+                    {
+                        <li><a href="/Tests/Info/@cm.TestId">@HelperMethods.ShortenTestId(cm.TestId)</a> (impact factor: @(((mit.GetImpact(cm) ?? 0f) / totalImpact).ToString("P0")))</li>
                     }
                 }
             </ul>
+            <p>The impact factor is a measure that indicates how important a given countermeasure is towards mitigating a threat.</p>
         } else {
             <p>This threat has no countermeasures that can be used to mitigate it. The only way to protect against it is by making 
                 sure that the prerequisites are not met(e.g., by disabling certain authorization grants or deprecated features).</p>

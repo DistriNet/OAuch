@@ -7,7 +7,18 @@ namespace OAuch.Compliance.Threats {
     public class Threat_OIDC_2 : Threat {
         public Threat_OIDC_2() {
             AddDependency<OpenIdSupportedTest>();
-            AddMitigation(Mit<CodeHashValidTest>(1), Mit<HasAuthorizedPartyTest>(1), Mit<HasAzpForMultiAudienceTest>(1), Mit<HasCorrectAudienceTest>(1), Mit<HasCorrectIssuerTest>(1), Mit<HasCorrectMacTest>(1), Mit<HasRequiredClaimsTest>(1), Mit<IsAccessTokenHashCorrectTest>(1), Mit<IsAccessTokenHashPresentTest>(1), Mit<IsAuthorizationCodeHashPresentTest>(1), Mit<KeyReferencesTest>(1), Mit<NoncePresentInTokenTest>(1));
+            AddMitigation(Mit<CodeHashValidTest>(1),
+                Mit<HasAuthorizedPartyTest>(1),
+                Mit<HasAzpForMultiAudienceTest>(1), 
+                Mit<HasCorrectAudienceTest>(1), 
+                Mit<HasCorrectIssuerTest>(1), 
+                Mit<HasCorrectMacTest>(1), 
+                Mit<HasRequiredClaimsTest>(1), 
+                Mit<IsAccessTokenHashCorrectTest>(1), 
+                Mit<IsAccessTokenHashPresentTest>(1), 
+                Mit<IsAuthorizationCodeHashPresentTest>(1),
+                Mit<KeyReferencesTest>(1), 
+                Mit<NoncePresentInTokenTest>(1));
         }
 
         public override string Id => "OIDC_2";
@@ -21,5 +32,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

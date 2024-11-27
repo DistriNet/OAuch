@@ -3,6 +3,7 @@ using OAuch.Compliance.Threats;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace OAuch.Compliance.Results {
@@ -34,7 +35,7 @@ namespace OAuch.Compliance.Results {
 
         private float? CalculateThreatInstanceCompleteness(Dictionary<string, TestResult> results, List<TestCombination> mitigations) {
             float? ret = null;
-            foreach(var tc in mitigations) {
+            foreach (var tc in mitigations) {
                 var score = tc.CalculateCompletenessScore(results);
                 if (score != null) {
                     if (ret == null) {

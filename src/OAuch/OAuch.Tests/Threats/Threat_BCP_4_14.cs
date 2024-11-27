@@ -8,7 +8,17 @@ namespace OAuch.Compliance.Threats {
     public class Threat_BCP_4_14 : Threat {
         public Threat_BCP_4_14() {
             AddDependency<HasRefreshTokensTest>();
-            AddMitigation(Mit<UsesTokenRotationTest>(1), Mit<InvalidatedRefreshTokenTest>(1), Mit<RefreshTokenRevokedAfterUseTest>(1), Mit<IsRefreshBoundToClientTest>(1), Mit<IsRefreshAuthenticationRequiredTest>(1), Mit<RefreshTokenEntropyMinReqTest>(1), Mit<RefreshTokenEntropySugReqTest>(1), Mit<IsModernTlsSupportedTest>(1), Mit<IsHttpsRequiredTest>(1), Mit<HasValidCertificateTest>(1));
+            AddMitigation(Mit<UsesTokenRotationTest>(1), 
+                Mit<InvalidatedRefreshTokenTest>(0.1f), 
+                Mit<RefreshTokenRevokedAfterUseTest>(1), 
+                Mit<IsRefreshBoundToClientTest>(1), 
+                Mit<RefreshTokenEntropyMinReqTest>(1), 
+                Mit<RefreshTokenEntropySugReqTest>(0.1f), 
+                Mit<IsModernTlsSupportedTest>(1), 
+                Mit<IsHttpsRequiredTest>(1), 
+                Mit<HasValidCertificateTest>(1));
+            AddMitigation(Mit<IsRefreshBoundToClientTest>(1),
+                Mit<IsRefreshAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "BCP_4_14";
@@ -22,5 +32,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.14.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

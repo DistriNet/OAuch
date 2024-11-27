@@ -24,5 +24,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.1.1.";
 
         public override string? ExtraDescription => "A malicious client can impersonate another client and obtain access to protected resources if the impersonated client fails to, or is unable to, keep its client credentials confidential.";
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }

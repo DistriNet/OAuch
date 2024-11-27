@@ -7,7 +7,8 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_4_1_13 : Threat {
         public Threat_6819_4_4_1_13() {
             AddDependency<OpenIdSupportedTest>();
-            AddMitigation(Mit<IsCodeBoundToClientTest>(1), Mit<IsClientAuthenticationRequiredTest>(1));
+            AddMitigation(Mit<IsCodeBoundToClientTest>(1), 
+                Mit<IsClientAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "6819_4_4_1_13";
@@ -21,5 +22,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.4.1.13.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

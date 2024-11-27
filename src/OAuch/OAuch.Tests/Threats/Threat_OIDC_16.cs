@@ -7,7 +7,8 @@ namespace OAuch.Compliance.Threats {
     public class Threat_OIDC_16 : Threat {
         public Threat_OIDC_16() {
             AddDependency<OpenIdSupportedTest>();
-            AddMitigation(Mit<ClientSecretLongEnoughTest>(1), Mit<IsSignedTest>(1));
+            AddMitigation(Mit<ClientSecretLongEnoughTest>(0.75f), 
+                Mit<IsSignedTest>(1));
         }
 
         public override string Id => "OIDC_16";
@@ -21,5 +22,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "16.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }

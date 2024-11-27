@@ -13,7 +13,9 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation(Mit<HasValidCertificateTest>(1), Mit<IsHttpsRequiredTest>(1), Mit<IsModernTlsSupportedTest>(1));
+            AddMitigation(Mit<HasValidCertificateTest>(1), 
+                Mit<IsHttpsRequiredTest>(1),
+                Mit<IsModernTlsSupportedTest>(1));
         }
 
         public override string Id => "6819_4_2_1";
@@ -27,5 +29,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.2.1.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

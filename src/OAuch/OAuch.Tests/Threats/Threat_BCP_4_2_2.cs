@@ -14,7 +14,10 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation(Mit<IsCodeBoundToClientTest>(1), Mit<MultipleCodeExchangesTest>(1), Mit<TokenValidAfterMultiExchangeTest>(1), Mit<RefreshTokenValidAfterMultiExchangeTest>(1));
+            AddMitigation(Mit<IsCodeBoundToClientTest>(1), 
+                Mit<MultipleCodeExchangesTest>(1), 
+                Mit<TokenValidAfterMultiExchangeTest>(1), 
+                Mit<RefreshTokenValidAfterMultiExchangeTest>(1));
             AddMitigation(Mit<ReferrerPolicyEnforcedTest>(1));
             AddMitigation(Mit<SupportsPostResponseModeTest>(1));
         }
@@ -30,5 +33,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.2.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

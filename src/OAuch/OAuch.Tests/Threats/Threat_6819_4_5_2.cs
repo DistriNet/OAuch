@@ -7,7 +7,8 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_5_2 : Threat {
         public Threat_6819_4_5_2() {
             AddDependency<HasRefreshTokensTest>();
-            AddMitigation(Mit<IsRefreshBoundToClientTest>(1), Mit<IsRefreshAuthenticationRequiredTest>(1));
+            AddMitigation(Mit<IsRefreshBoundToClientTest>(1),
+                Mit<IsRefreshAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "6819_4_5_2";
@@ -21,5 +22,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.5.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

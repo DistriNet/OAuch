@@ -8,7 +8,12 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_1_2 : Threat {
         public Threat_6819_4_1_2() {
             AddDependency<HasRefreshTokensTest>();
-            AddMitigation(Mit<UsesTokenRotationTest>(1), Mit<InvalidatedRefreshTokenTest>(1), Mit<RefreshTokenRevokedAfterUseTest>(1), Mit<IsRefreshBoundToClientTest>(1), Mit<IsRefreshAuthenticationRequiredTest>(1), Mit<CanRefreshTokensBeRevokedTest>(1));
+            AddMitigation(Mit<UsesTokenRotationTest>(1), 
+                Mit<RefreshTokenRevokedAfterUseTest>(1),
+                Mit<IsRefreshBoundToClientTest>(1),
+                Mit<InvalidatedRefreshTokenTest>(0.3f),
+                Mit<CanRefreshTokensBeRevokedTest>(0.1f));
+            AddMitigation(Mit<IsRefreshAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "6819_4_1_2";
@@ -22,5 +27,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.1.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

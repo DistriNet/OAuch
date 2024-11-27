@@ -9,7 +9,14 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_3_1 : Threat {
         public Threat_6819_4_3_1() {
             AddDependency<HasSupportedFlowsTest>();
-            AddMitigation(Mit<Tests.TokenEndpoint.HasValidCertificateTest>(1), Mit<Tests.TokenEndpoint.IsModernTlsSupportedTest>(1), Mit<Tests.TokenEndpoint.IsHttpsRequiredTest>(1), Mit<Tests.Revocation.IsModernTlsSupportedTest>(1), Mit<Tests.Revocation.IsRevocationEndpointSecureTest>(1), Mit<Tests.DeviceAuthEndpoint.HasValidCertificateTest>(1), Mit<Tests.DeviceAuthEndpoint.IsHttpsRequiredTest>(1), Mit<Tests.DeviceAuthEndpoint.IsModernTlsSupportedTest>(1));
+            AddMitigation(Mit<Tests.TokenEndpoint.HasValidCertificateTest>(1),
+                Mit<Tests.TokenEndpoint.IsModernTlsSupportedTest>(1), 
+                Mit<Tests.TokenEndpoint.IsHttpsRequiredTest>(1), 
+                Mit<Tests.Revocation.IsModernTlsSupportedTest>(1), 
+                Mit<Tests.Revocation.IsRevocationEndpointSecureTest>(1), 
+                Mit<Tests.DeviceAuthEndpoint.HasValidCertificateTest>(1), 
+                Mit<Tests.DeviceAuthEndpoint.IsHttpsRequiredTest>(1), 
+                Mit<Tests.DeviceAuthEndpoint.IsModernTlsSupportedTest>(1));
         }
 
         public override string Id => "6819_4_3_1";
@@ -23,5 +30,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.3.1.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

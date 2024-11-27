@@ -7,7 +7,9 @@ namespace OAuch.Compliance.Threats {
     public class Threat_BCP_4_5 : Threat {
         public Threat_BCP_4_5() {
             AddDependency<CodeFlowSupportedTest>();
-            AddMitigation(Mit<IsPkceImplementedTest>(1), Mit<HashedPkceDisabledTest>(1), Mit<IsPkceRequiredTest>(1));
+            AddMitigation(Mit<IsPkceImplementedTest>(1), 
+                Mit<HashedPkceDisabledTest>(0.3f), 
+                Mit<IsPkceRequiredTest>(0.8f));
         }
 
         public override string Id => "BCP_4_5";
@@ -21,5 +23,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.5.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }

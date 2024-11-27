@@ -11,7 +11,9 @@ namespace OAuch.Compliance.Threats {
             AddDependency<CodeIdTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenTokenFlowSupportedTest>();
             AddMitigation(Mit<RedirectUriFullyMatchedTest>(1));
-            AddMitigation(Mit<RedirectUriPathMatchedTest>(1), Mit<RedirectUriConfusionTest>(1), Mit<FragmentFixTest>(1));
+            AddMitigation(Mit<RedirectUriPathMatchedTest>(1), 
+                Mit<RedirectUriConfusionTest>(1), 
+                Mit<FragmentFixTest>(0.1f));
         }
 
         public override string Id => "BCP_4_1_2";
@@ -25,5 +27,8 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.1.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
+        public override string? AliasOf => "6819_4_1_5";
     }
 }

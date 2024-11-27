@@ -7,7 +7,9 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_6_2 : Threat {
         public Threat_6819_4_6_2() {
             AddDependency<TestUriSupportedTest>();
-            AddMitigation(Mit<HasValidCertificateTest>(1), Mit<IsModernTlsSupportedTest>(1), Mit<IsHttpsRequiredTest>(1));
+            AddMitigation(Mit<HasValidCertificateTest>(1), 
+                Mit<IsModernTlsSupportedTest>(1), 
+                Mit<IsHttpsRequiredTest>(1));
         }
 
         public override string Id => "6819_4_6_2";
@@ -21,5 +23,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.6.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

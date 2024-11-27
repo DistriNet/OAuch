@@ -13,7 +13,10 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation(Mit<RedirectUriPathMatchedTest>(1), Mit<RedirectUriFullyMatchedTest>(1), Mit<RedirectUriConfusionTest>(1), Mit<CodePollutionTest>(1));
+            AddMitigation(Mit<RedirectUriPathMatchedTest>(1), 
+                Mit<RedirectUriConfusionTest>(1),
+                Mit<CodePollutionTest>(1));
+            AddMitigation(Mit<RedirectUriFullyMatchedTest>(1));
         }
 
         public override string Id => "6819_4_1_5";
@@ -27,5 +30,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.1.5.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

@@ -12,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+using ExDiff = OAuch.Compliance.Threats.ExecutionDifficulties;
 using ConsequenceId = System.Runtime.Intrinsics.Vector128<byte>;
 using ConsequenceIdOps = System.Runtime.Intrinsics.Vector128;
 using ElementId = System.Runtime.Intrinsics.Vector256<byte>;
@@ -117,24 +118,31 @@ namespace OAuch.Compliance.Results {
                     }
                 }
             }
-            // calculate risk by multiplying the completeness scores of the threats
+
+            // calculate risk by multiplying the completeness scores of the threats (corrected for difficulty of execution)
             float riskScore = 0;
             bool first = true;
             foreach (var el in orderedElements) {
-                var th = el as Threat;
-                if (th != null) {
+                if (el is Threat th) {
                     if (context.ThreatReports.TryGetValue(th.Id, out var report) && report.CompletenessScore != null) {
                         if (first) {
                             first = false;
-                            riskScore = 1 - report.CompletenessScore.Value;
+                            riskScore = (1 - report.CompletenessScore.Value) * DifficultyScore(report.Threat.ExecutionDifficulty);
                         } else {
-                            riskScore = riskScore * (1 - report.CompletenessScore.Value);
+                            riskScore = riskScore * (1 - report.CompletenessScore.Value) * DifficultyScore(report.Threat.ExecutionDifficulty);
                         }
                     }
                 }
             }
 
             return new AttackChain(flow, orderedElements, state.Where(c => c.IsVulnerability).ToArray(), riskScore);
+
+            float DifficultyScore(ExDiff difficulty) => difficulty switch {
+                ExDiff.Easy => 1,
+                ExDiff.Reasonable => 0.9f,
+                ExDiff.Hard => 0.75f,
+                _ => 0 // should not happen
+            };
         }
         private bool BuildChain(CalculationContext context, ElementId currentChain, ConsequenceId state, LinkedList<ModelElementVectors> remainingElements, int depth) {
             var node = remainingElements.First;

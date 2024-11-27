@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace OAuch.Compliance.Threats {
     public abstract class Threat {
@@ -35,6 +36,7 @@ namespace OAuch.Compliance.Threats {
         public List<Test> DependsOnFeatures { get; } // if any of these tests (partially) succeeds, the vulnerability is considered relevant
         public List<TestCombination> MitigatedBy { get; } // if any of these tests (partially) succeeds, the vulnerability is considered (partially) mitigated
         public virtual string? AliasOf => null; //used for BCP threats that are an alias of threats in RFC6819
+        public abstract ExecutionDifficulties ExecutionDifficulty { get; } // how difficult is it for an attacker to set up an exploit for the threat (assuming the threat is not mitigated)
 
         // for backward compatibility
         public List<ThreatInstance> Instances => [new ThreatInstance { ExtraDescription = ExtraDescription, DependsOnFeatures = DependsOnFeatures, MitigatedBy = MitigatedBy }];
@@ -58,13 +60,23 @@ namespace OAuch.Compliance.Threats {
                     if (result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationFullyImplemented || result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationPartiallyImplemented || result.Outcome == Shared.Enumerations.TestOutcomes.SpecificationNotImplemented) {
                         // we have tested the specification, so it contributes to the completeness score
                         max += t.Value;
-                        score += result.ImplementationScore!.Value;
+                        score += result.ImplementationScore!.Value * t.Value;
                     }
                 }
             }
             if (max == 0)
                 return null;
             return score / max;
+        }
+        public float MaxImpact { 
+            get {
+                return _testsWithContributions.Sum(c => c.Value);
+            }
+        }
+        public float? GetImpact(Test test) { 
+            if (_testsWithContributions.TryGetValue(test, out var ret)) 
+                return ret;
+            return null;
         }
 
         private Dictionary<Test, float> _testsWithContributions;
@@ -77,5 +89,10 @@ namespace OAuch.Compliance.Threats {
         public string? ExtraDescription { get; init; }
         public required List<Test> DependsOnFeatures { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered relevant
         public required List<TestCombination> MitigatedBy { get; init; } // if any of these tests (partially) succeeds, the vulnerability is considered (partially) mitigated
+    }
+    public enum ExecutionDifficulties { 
+        Easy, // can be initiated by attacker
+        Reasonable, // requires access to some public system or requires lots of resources
+        Hard // requires access to some private system or relies on redirecting network traffic
     }
 }

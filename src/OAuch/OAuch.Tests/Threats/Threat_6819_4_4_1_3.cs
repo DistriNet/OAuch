@@ -11,7 +11,12 @@ namespace OAuch.Compliance.Threats {
             AddDependency<CodeTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenFlowSupportedTest>();
             AddDependency<CodeIdTokenTokenFlowSupportedTest>();
-            AddMitigation(Mit<AuthorizationCodeEntropyMinReqTest>(1), Mit<AuthorizationCodeEntropySugReqTest>(1), Mit<AuthorizationCodeTimeoutTest>(1), Mit<IsCodeBoundToClientTest>(1), Mit<IsClientAuthenticationRequiredTest>(1), Mit<RedirectUriCheckedTest>(1));
+            AddMitigation(Mit<AuthorizationCodeEntropyMinReqTest>(1), 
+                Mit<AuthorizationCodeEntropySugReqTest>(0.1f), 
+                Mit<AuthorizationCodeTimeoutTest>(1), 
+                Mit<IsCodeBoundToClientTest>(1),
+                Mit<RedirectUriCheckedTest>(1));
+            AddMitigation(Mit<IsClientAuthenticationRequiredTest>(1));
         }
 
         public override string Id => "6819_4_4_1_3";
@@ -25,5 +30,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.4.1.3.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }

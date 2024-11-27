@@ -23,7 +23,10 @@
   <ItemGroup>
     <None Remove="oauch.db" />
     <None Remove="oauch.db-shm" />
+    <None Remove="oauch.db-shm.org" />
     <None Remove="oauch.db-wal" />
+    <None Remove="oauch.db-wal.org" />
+    <None Remove="oauch.db.org" />
   </ItemGroup>
 	
   <ItemGroup>

@@ -21,5 +21,8 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.3.2.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
+        public override string? AliasOf => "6819_4_6_7";
     }
 }

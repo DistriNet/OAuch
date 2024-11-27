@@ -7,7 +7,10 @@ namespace OAuch.Compliance.Threats {
     public class Threat_7009_1 : Threat {
         public Threat_7009_1() {
             AddDependency<RFC7009SupportedTest>();
-            AddMitigation(Mit<AccessRevokesRefreshTest>(1), Mit<CanAccessTokensBeRevokedTest>(1), Mit<CanRefreshTokensBeRevokedTest>(1), Mit<RefreshRevokesAccessTest>(1));
+            AddMitigation(//Mit<AccessRevokesRefreshTest>(1), 
+                Mit<CanAccessTokensBeRevokedTest>(0.5f), 
+                Mit<CanRefreshTokensBeRevokedTest>(1), 
+                Mit<RefreshRevokesAccessTest>(0.5f));
         }
 
         public override string Id => "7009_1";
@@ -21,5 +24,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "2.1.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

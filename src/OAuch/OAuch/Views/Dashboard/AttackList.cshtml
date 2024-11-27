@@ -31,7 +31,9 @@
         for(int i = 0; i < t.Attackers.Length; i++) {
             if (i == t.Attackers.Length - 1 && t.Attackers.Length > 1)
                 sb.Append("and ");
+            sb.Append("<strong>");
             sb.Append(t.Attackers[i].Name);
+            sb.Append("</strong>");
             if (i < t.Attackers.Length - 1)
                 sb.Append(", ");
         }
@@ -153,12 +155,13 @@ for (int i = 0; i < Model.AttackReport.AttackChains.Count; i++) {
                                         } else if (ot.Outcome == TestOutcomes.SpecificationPartiallyImplemented) {
                                             <text>This threat is <strong>PARTIALLY</strong> mitigated@(CompletenessScore(ot)).</text>
                                         }
-                                        @GetAttackerTypes((Threat)el)
+                                        @Html.Raw(GetAttackerTypes((Threat)el))
                                         </p>
+                                            <p>Assuming that the attacker can bypass the mitigations, exploiting this threat is considered <strong>@ot.Threat.ExecutionDifficulty.ToString()</strong>.</p>
                                         <p>If the attacker succeeds in exploiting this threat, they will gain the following advantage:</p>
                                         <ul>
                                             @foreach (var c in el.Consequences) {
-                                                <li>@c.Name</li>
+                                                <li><strong>@c.Name</strong></li>
                                             }
                                         </ul>
                                     </div>

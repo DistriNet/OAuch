@@ -13,7 +13,8 @@ namespace OAuch.Compliance.Threats {
             AddDependency<TokenFlowSupportedTest>();
             AddDependency<IdTokenTokenFlowSupportedTest>();
             AddDependency<IdTokenFlowSupportedTest>();
-            AddMitigation(Mit<AutomaticRedirectInvalidScopeTest>(1), Mit<AutomaticRedirectInvalidResponseTypeTest>(1));
+            AddMitigation(Mit<AutomaticRedirectInvalidScopeTest>(1), 
+                Mit<AutomaticRedirectInvalidResponseTypeTest>(1));
         }
 
         public override string Id => "BCP_4_17";
@@ -27,5 +28,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.17.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Easy;
     }
 }

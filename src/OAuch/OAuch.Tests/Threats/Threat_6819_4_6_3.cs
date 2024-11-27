@@ -7,7 +7,9 @@ namespace OAuch.Compliance.Threats {
     public class Threat_6819_4_6_3 : Threat {
         public Threat_6819_4_6_3() {
             AddDependency<TestUriSupportedTest>();
-            AddMitigation(Mit<TokenTimeoutTest>(1), Mit<AccessTokenEntropyMinReqTest>(1), Mit<AccessTokenEntropySugReqTest>(1));
+            AddMitigation(Mit<TokenTimeoutTest>(1), 
+                Mit<AccessTokenEntropyMinReqTest>(1), 
+                Mit<AccessTokenEntropySugReqTest>(0.1f));
         }
 
         public override string Id => "6819_4_6_3";
@@ -21,5 +23,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.6.3.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }

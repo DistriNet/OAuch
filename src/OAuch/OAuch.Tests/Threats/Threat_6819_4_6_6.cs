@@ -13,7 +13,10 @@ namespace OAuch.Compliance.Threats {
             AddDependency<ClientCredentialsFlowSupportedTest>();
             AddDependency<DeviceFlowSupportedTest>();
             AddDependency<PasswordFlowSupportedTest>();
-            AddMitigation(Mit<HasCacheControlHeaderTest>(1), Mit<HasPragmaHeaderTest>(1));
+            // cache control is superior (applies to requests and responses; pragma technically only to requests, though most servers treat it the same as cache control no-cache)
+            // so if the server only has cache control, it's better than having only pragma
+            AddMitigation(Mit<HasCacheControlHeaderTest>(1), Mit<HasPragmaHeaderTest>(0.1f));
+            AddMitigation(Mit<HasCacheControlHeaderTest>(0.4f), Mit<HasPragmaHeaderTest>(0.6f));
         }
 
         public override string Id => "6819_4_6_6";
@@ -27,5 +30,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.6.6.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Hard;
     }
 }

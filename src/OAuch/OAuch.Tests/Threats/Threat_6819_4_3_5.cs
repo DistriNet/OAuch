@@ -13,7 +13,8 @@ namespace OAuch.Compliance.Threats {
             AddDependency<ClientCredentialsFlowSupportedTest>();
             AddDependency<DeviceFlowSupportedTest>();
             AddDependency<PasswordFlowSupportedTest>();
-            AddMitigation(Mit<ClientSecretEntropyMinReqTest>(1), Mit<ClientSecretEntropySugReqTest>(1));
+            AddMitigation(Mit<ClientSecretEntropyMinReqTest>(1), 
+                Mit<ClientSecretEntropySugReqTest>(0.1f));
             AddMitigation(Mit<IsAsymmetricClientAuthenticationUsedTest>(1));
         }
 
@@ -28,5 +29,7 @@ namespace OAuch.Compliance.Threats {
         public override string LocationInDocument => "4.3.5.";
 
         public override string? ExtraDescription => null;
+
+        public override ExecutionDifficulties ExecutionDifficulty => ExecutionDifficulties.Reasonable;
     }
 }
