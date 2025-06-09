@@ -8,16 +8,16 @@
     </div>
     <div class="col-lg-10 col-xl-6 offset-lg-1 offset-xl-2">
         <p>
-            The OAuth 2.0 protocol is a popular and widely adopted authorization protocol. It has been proven secure in a comprehensive formal security analysis,
-            yet new vulnerabilities continue to appear in popular OAuth implementations. OAuch tries to improve the security of the OAuth 
-            landscape by measuring how well individual authorization servers implement the security specifications defined in the OAuth standards, and by
-            providing detailed and targeted feedback to the operators to improve the compliance of their service.
-            OAuch tests and analyzes authorization servers according to the guidelines of the OAuth 2.0 standards and security best practices.
+            The OAuth 2.0 protocol is a popular and widely adopted authorization framework. Although it has been proven secure through comprehensive
+            formal security analyses, new vulnerabilities continue to emerge in widely used OAuth implementations. OAuch aims to improve the overall
+            security of the OAuth ecosystem by evaluating how well individual authorization servers adhere to the security specifications defined in
+            the OAuth standards. It also provides detailed, targeted feedback to operators to help enhance the compliance and security of their services.
+            OAuch tests and analyzes authorization servers based on the guidelines of the OAuth 2.0 standards and established security best practices.
         </p>
         <p>
-            OAuch is developed by <a href="https://distrinet.cs.kuleuven.be/" target="_blank">the Distrinet Research Group</a> in the context of a research project
-            on API security. It is available for free and the source code can be found
-            <a href="https://github.com/DistriNet/OAuch" target="_blank">on GitHub</a>. Contact the OAuch team at <a href="mailto:info@oauch.io">info@oauch.io</a>.
+            OAuch is developed by <a href="https://distrinet.cs.kuleuven.be/" target="_blank">the Distrinet Research Group</a> as part of a research initiative
+            focused on API security. It is available for free and the source code can be accessed
+            <a href="https://github.com/DistriNet/OAuch" target="_blank">on GitHub</a>. For inquiries, contact the OAuch team at <a href="mailto:info@oauch.io">info@oauch.io</a>.
         </p>
     </div>
     <div class="d-none d-xl-block col-xl-2">
@@ -26,7 +26,8 @@
 </div>
 <div class="row">
     <div class="col-xl-6 offset-xl-2 col-lg-8 offset-lg-2">
-        <strong>PUBLISHED PAPERS</strong><br />
+        <strong>PUBLISHED RESEARCH PAPERS</strong><br />
+        <p>Several research papers have been published on OAuch, documenting the project and its development.</p>
         <!-- RAID -->
         <div class="small-box bg-info">
             <div class="inner">
@@ -95,7 +96,7 @@
                                 </button>
                             </div>
                             <div class="modal-body cb fw">
-<pre>@@inproceedings{philippaerts2022oauch,
+<pre>@@inproceedings{philippaerts2023oauchrevisit,
     author = {Philippaerts, Pieter and Preuveneers, Davy and Joosen, Wouter},
     booktitle = {2023 IEEE European Symposium on Security and Privacy Workshops (EuroS&PW)},
     title = {Revisiting OAuth 2.0 Compliance: A Two-Year Follow-Up Study},
@@ -142,7 +143,7 @@
                                 </button>
                             </div>
                             <div class="modal-body cb fw">
-<pre>@@inproceedings{philippaerts2022oauch,
+<pre>@@inproceedings{philippaerts2024oauthmiddleware,
     author = {Philippaerts, Pieter and Vanhoof, Jan and Van Cutsem, Tom and Joosen, Wouter},
     booktitle = {2024 IEEE Global Communications Conference (GLOBECOM)},
     title = {Is Your OAuth Middleware Vulnerable? Evaluating Open-Source Identity Providers' Security},
@@ -166,6 +167,57 @@
                 Read the paper <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
+        <!-- CODASPY -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h5>Enhanced Threat Modeling and Attack Scenario Generation for OAuth 2.0 Implementations: Data/Toolset paper</h5>
+                <p>
+                    Authors: Pieter Philippaerts, Stef Verreydt, Wouter Joosen<br />
+                    Published in the proceedings of the Fifteenth ACM Conference on Data and Application Security and Privacy (CODASPY), June 4--6, 2025, Pittsburgh, USA
+                    <strong>[<a href="#" class="cw u" data-toggle="modal" data-target="#codaspyModal">BibTeX</a>]</strong>
+                </p>
+                <div class="modal fade" id="codaspyModal" tabindex="-1" role="dialog" aria-labelledby="codaspyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title cb" id="codaspyModalLabel">BibTeX</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body cb fw">
+<pre>@@inproceedings{philippaerts2025attackscen,
+author = {Philippaerts, Pieter and Verreydt, Stef and Joosen, Wouter},
+title = {Enhanced Threat Modeling and Attack Scenario Generation for OAuth 2.0 Implementations: Data/Toolset paper},
+year = {2025},
+isbn = {9798400714764},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3714393.3726005},
+doi = {10.1145/3714393.3726005},
+booktitle = {Proceedings of the Fifteenth ACM Conference on Data and Application Security and Privacy},
+pages = {54–59},
+numpages = {6},
+keywords = {OAuth 2.0, attack scenario, authorization, threat model},
+location = {Pittsburgh, PA, USA},
+series = {CODASPY '25}
+}</pre>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <a href="https://dl.acm.org/doi/10.1145/3714393.3726005" target="_blank" class="small-box-footer">
+                Read the paper <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+        <p>In addition to these research papers, OAuch has been cited in <a href="https://scholar.google.com/scholar?cites=12437253451988804662" target="_blank">several other studies</a> related to OAuth 2.0 and web security.</p>
     </div>
 </div>
 <div class="row">
