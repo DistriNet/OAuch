@@ -1436,7 +1436,7 @@ namespace OAuch.Compliance {
                                 },
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Tokens.AuthorizationCodeEntropySugReqTest"],
-                                     RequirementLevel = RequirementLevels.Must,
+                                     RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 new TestRequirementLevel {
@@ -1446,7 +1446,7 @@ namespace OAuch.Compliance {
                                 },
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Tokens.RefreshTokenEntropySugReqTest"],
-                                     RequirementLevel = RequirementLevels.Must,
+                                     RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 new TestRequirementLevel {
@@ -1456,7 +1456,7 @@ namespace OAuch.Compliance {
                                 },
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Tokens.AccessTokenEntropySugReqTest"],
-                                     RequirementLevel = RequirementLevels.Must,
+                                     RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 new TestRequirementLevel {
