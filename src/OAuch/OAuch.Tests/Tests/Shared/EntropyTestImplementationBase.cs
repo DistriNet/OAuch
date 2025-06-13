@@ -10,7 +10,6 @@ namespace OAuch.Compliance.Tests.Shared {
     public class EntropyInfo {
         public double? ResponseCount { get; set; }
         public double? AverageEntropy { get; set; }
-        public double? StdDev { get; set; }
     }
     public abstract class EntropyTestImplementationBase : TestImplementation<EntropyInfo> {
         public EntropyTestImplementationBase(TestRunContext context, TestResult<EntropyInfo> result, TestResult<EntropyInfo>? dependsOn, string name, double minEntropy, Func<ValidToken, string?> selector, HasSupportedFlowsTestResult supportedFlows) : base(context, result, supportedFlows) {
@@ -30,14 +29,14 @@ namespace OAuch.Compliance.Tests.Shared {
                 return Task.CompletedTask;
             }
 
-            var entropies = TokenHelper.GetAllTokenResults(Context).Select(tr => tr != null ? _selector(tr) : null).Where(sv => sv != null).Select(sv => sv!.CalculateEntropy() * sv!.Length).ToList();
-
-            if (entropies.Count == 0) {
+            var values = TokenHelper.GetAllTokenResults(Context).Select(tr => tr != null ? _selector(tr) : null).Where(sv => sv != null).ToList();
+            if (values.Count == 0) {
                 LogInfo("No relevant and valid authorization responses registered");
                 Result.Outcome = TestOutcomes.Skipped;
             } else {
-                (var average, var stddev) = entropies.GetStatistics();
-                LogInfo($"Out of {entropies.Count} valid authorization responses, the average calculated entropy for the {_name} was {average:F1} (±{stddev:F1}) bits");
+                var c = string.Concat(values);
+                var average = (c.CalculateEntropy() * c.Length) / values.Count;
+                LogInfo($"Out of {values.Count} valid authorization responses, the average calculated entropy for the {_name} was {average:F1} bits");
                 if (average < _minEntropy) {
                     LogInfo($"The average entropy is below the required {_minEntropy} bits");
                     Result.Outcome = TestOutcomes.SpecificationNotImplemented;
@@ -45,9 +44,8 @@ namespace OAuch.Compliance.Tests.Shared {
                     LogInfo($"The average entropy is above the required {_minEntropy} bits");
                     Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
                 }
-                ExtraInfo.ResponseCount = entropies.Count;
+                ExtraInfo.ResponseCount = values.Count;
                 ExtraInfo.AverageEntropy = average;
-                ExtraInfo.StdDev = stddev;
             }
             return Task.CompletedTask;
         }
