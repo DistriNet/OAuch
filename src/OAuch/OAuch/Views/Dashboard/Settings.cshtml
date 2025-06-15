@@ -9,8 +9,8 @@
 
     IHtmlContent CreateDocumentOption(OAuthDocument doc) {
         var isDocumentSelected = Model.Settings.SelectedStandards?.Any(d => d == doc.Id) ?? false;
-        string dataContent = $"<div class='od'><strong>{ doc.Id }</strong><br/><em>{ doc.Name }</em></div>";
-        return new HtmlString($"<option value=\"{ doc.Id }\" title=\"{ doc.Id }\" data-content=\"{ dataContent }\"{ (isDocumentSelected ? " selected" : "") }></option>");
+        string dataContent = $"<div class='od'><strong>{ doc.FriendlyId }</strong><br/><em>{ doc.Name }</em></div>";
+        return new HtmlString($"<option value=\"{ doc.Id }\" title=\"{ doc.FriendlyId }\" data-content=\"{ dataContent }\"{ (isDocumentSelected ? " selected" : "") }></option>");
     }
     IHtmlContent CreateFlowOption(string flow) {
         var isDocumentSelected = Model.Settings.ExcludedFlows?.Any(d => d == flow) ?? false;

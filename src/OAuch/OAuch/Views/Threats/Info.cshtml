@@ -23,7 +23,7 @@
         @{
             var sect = GetSection(Model.Threat.LocationInDocument);
         }
-        <p><a href="@Model.Threat.Document.Url#section-@sect" target="_blank">@Model.Threat.Document.Name</a> (@Model.Threat.Document.Id, section @sect)</p>
+        <p><a href="@Model.Threat.Document.Url#section-@sect" target="_blank">@Model.Threat.Document.Name</a> (@Model.Threat.Document.FriendlyId, section @sect)</p>
         @if (Model.Instance.MitigatedBy.Count > 0) {
             <h5><strong>Mitigations</strong></h5>
             @if(Model.Instance.MitigatedBy.Count > 1) {

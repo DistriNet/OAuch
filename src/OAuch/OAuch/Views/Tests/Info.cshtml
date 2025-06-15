@@ -41,7 +41,7 @@
             <ul>
                 @foreach (var req in Model.Requirements) {
                     var sect = GetSection(req.Value.LocationInDocument);
-                    <li><a href="@req.Key.Url#section-@sect" target="_blank">@req.Key.Name</a> (@req.Key.Id), section @sect  (@RequirementLevelToString(req.Value.RequirementLevel))</li>
+                    <li><a href="@req.Key.Url#section-@sect" target="_blank">@req.Key.Name</a> (@req.Key.FriendlyId), section @sect  (@RequirementLevelToString(req.Value.RequirementLevel))</li>
                 }
             </ul>
         }

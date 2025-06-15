@@ -696,7 +696,7 @@
         <ul>
             @foreach (var doc in Model.Result.DocumentCompliance) {
                 if (doc.IsDocumentSupported) {
-                    <li><em>@doc.Document.Name</em> (<strong>@doc.Document.Id</strong>)</li>
+                    <li><em>@doc.Document.Name</em> (<strong>@doc.Document.FriendlyId</strong>)</li>
                 }
             }
         </ul>
@@ -759,7 +759,7 @@
                 @foreach (var doc in Model.Result.DocumentCompliance) {
                     if (doc.IsDocumentSupported) {
                         <tr>
-                            <td class="leftHeader">@doc.Document.Id</td>
+                            <td class="leftHeader">@doc.Document.FriendlyId</td>
                             <td>@FormatResultValue(doc.MustScore.FailedTests, doc.MustScore.FailureRate)</td>
                             <td>@FormatResultValue(doc.ShouldScore.FailedTests, doc.ShouldScore.FailureRate)</td>
                             <td>@FormatResultValue(doc.MayScore.FailedTests, doc.MayScore.FailureRate)</td>
@@ -932,11 +932,11 @@
                             <li>
                                 @(test.Title): <strong>@test.ResultFormatter.Format(deprecatedFeature.TestResult.Outcome)</strong><br />
                                 @{
-                                    string docName = deprecatedFeature.Document.Id;
+                                    string docName = deprecatedFeature.Document.FriendlyId;
                                     switch (docName) {
-                                        case "SecBCP":
-                                            docName = "the <em>Security Best Current Practices</em> document";
-                                            break;
+                                        //case "SecBCP":
+                                        //    docName = "the <em>Security Best Current Practices</em> document";
+                                        //    break;
                                         case "OIDC":
                                             docName = "the <em>OpenID Connect</em> standard";
                                             break;
@@ -1073,7 +1073,7 @@
                     <h3>Requirement Level(s)</h3>
                     <ul>
                         @foreach (var rl in requirementLevels) {
-                            <li>@rl.Key.Id: <strong>@rl.Value.RequirementLevel.ToString()</strong></li>
+                            <li>@rl.Key.FriendlyId: <strong>@rl.Value.RequirementLevel.ToString()</strong></li>
                         }
                     </ul>
 

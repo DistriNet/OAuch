@@ -13,7 +13,7 @@
         </p>
         <ul>
             @foreach (var doc in Model.Documents) {
-                <li><a href="/Documents/Info/@doc.Id">@doc.Name</a> (@doc.Id)</li>
+                <li><a href="/Documents/Info/@doc.Id">@doc.Name</a> (@doc.FriendlyId)</li>
             }
         </ul>
     </div>

@@ -201,11 +201,6 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "3.1.2.2. Registration Requirements"
                                  },
                                  new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
-                                     RequirementLevel = RequirementLevels.Should,
-                                     LocationInDocument = "3.1.2.2. Registration Requirements"
-                                 },
-                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "3.1.2.4. Invalid Endpoint"
@@ -773,11 +768,6 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
                                  },
                                  new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
-                                     RequirementLevel = RequirementLevels.Should,
-                                     LocationInDocument = "5.2.3.3.  Issue a 'client_id' Only in Combination with 'redirect_uri'"
-                                 },
-                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.InvalidRedirectTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "5.2.3.5.  Validate Pre-Registered 'redirect_uri'"
@@ -947,12 +937,13 @@ namespace OAuch.Compliance {
                         //},
                         new OAuthDocument {
                             Id = "SecBCP",
-                            Name = "OAuth 2.0 Security Best Current Practice (draft 25)",
-                            Description = "This document describes best current security practice for OAuth 2.0. It updates and extends the OAuth 2.0 Security Threat Model to incorporate practical experiences gathered since OAuth 2.0 was published and covers new threats relevant due to the broader application of OAuth 2.0.",
-                            Url = "https://tools.ietf.org/html/draft-ietf-oauth-security-topics",
+                            FriendlyId = "RFC9700",
+                            Name = "Best Current Practice for OAuth 2.0 Security", // "OAuth 2.0 Security Best Current Practice (draft 25)",
+                            Description = "This document describes best current security practice for OAuth 2.0. It updates and extends the threat model and security advice given in RFCs 6749, 6750, and 6819 to incorporate practical experiences gathered since OAuth 2.0 was published and covers new threats relevant due to the broader application of OAuth 2.0. Further, it deprecates some modes of operation that are deemed less secure or even insecure.",
+                            Url = "https://datatracker.ietf.org/doc/html/rfc9700",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
-                            IsStandard = false,
-                            DocumentCategory = DocumentCategories.Draft,
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OAuth2,
                             DeprecatedFeatures  = [
                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.Features.TokenFlowSupportedTest"],
@@ -1410,11 +1401,6 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "5.2.2. Authorization server"
                                 },
                                 new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
-                                     RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = "5.2.2. Authorization server"
-                                },
-                                new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriFullyMatchedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "5.2.2. Authorization server"
@@ -1558,7 +1544,7 @@ namespace OAuch.Compliance {
                         new OAuthDocument {
                             Id = "AttsDefs",
                             Name = "OAuth2 Attacks & Defenses",
-                            Description = "This document contains a small set of test cases for attacks on OAuth implementations that are not covered by the other documents.",
+                            Description = "This document contains a set of test cases for attacks on OAuth implementations that are not covered by the other documents. In most cases, these attacks are made possible by exploiting implementation errors such as race conditions, instead of protocol-related errors.",
                             Url = "",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC6749SupportedTest",
                             IsStandard = false,
@@ -1619,7 +1605,12 @@ namespace OAuch.Compliance {
                                      Test  = Tests["OAuch.Compliance.Tests.Revocation.CanRefreshTokensBeRevokedTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = ""
-                                 }
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.RedirectUriConfusionTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                }
                              ]
                         }
                     ];

@@ -3,6 +3,15 @@
 namespace OAuch.Compliance {
     public class OAuthDocument {
         public required string Id { get; init; }
+        private string? _friendlyId;
+        public string FriendlyId { // We use this for when a document has changed Id, e.g., if it is supported as a draft first and then at some point makes it into an RFC
+            get {
+                return _friendlyId ?? Id;
+            }
+            init {
+                _friendlyId = value;
+            }
+        }
         public required string Name { get; init; }
         public required string Description { get; init; }
         public required string Url { get; init; }

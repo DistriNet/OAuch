@@ -8,9 +8,9 @@
         var isDocumentSelected = Model.SelectedInitialDocuments == id;
         string docText;
         if (docs.Count() == ComplianceDatabase.AllDocuments.Count) {
-            docText = "This includes tests from all the standards documents that are supported in OAuch";
+            docText = "This includes tests from all the standards documents supported by OAuch, as well as tests for specific implementation bugs and the latest vulnerabilities reported in academic research.";
         } else {
-            docText = $"This includes tests from the following documents: {string.Join(", ", docs.Select(d => d.Id))}";
+            docText = $"This includes tests from the following documents: {string.Join(", ", docs.Select(d => d.FriendlyId))}";
         }
         string dataContent = $"<div class='od'><strong>{title}</strong><br/><em>{docText}</em></div>";
         return new HtmlString($"<option value=\"{id}\" title=\"{title}\" data-content=\"{dataContent}\"{(isDocumentSelected ? " selected" : "")}></option>");
