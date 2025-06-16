@@ -1117,16 +1117,16 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "4.15. Clickjacking"
                                  },
-                                 new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidScopeTest"],
-                                     RequirementLevel = RequirementLevels.Should,
-                                     LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
-                                 },
-                                 new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidResponseTypeTest"],
-                                     RequirementLevel = RequirementLevels.Should,
-                                     LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
-                                 },
+                                 //new TestRequirementLevel { // removed in final version of RFC9700
+                                 //    Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.AutomaticRedirectInvalidScopeTest"],
+                                 //    RequirementLevel = RequirementLevels.Should,
+                                 //    LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
+                                 //},
+                                 //new TestRequirementLevel { // removed in final version of RFC9700
+                                 //    Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.(AutomaticRedirectInvalidResponseTypeTest)"],
+                                 //    RequirementLevel = RequirementLevels.Should,
+                                 //    LocationInDocument = "4.17. Authorization Server Redirecting to Phishing Site"
+                                 //},
                             ]
                         },
                         new OAuthDocument {
