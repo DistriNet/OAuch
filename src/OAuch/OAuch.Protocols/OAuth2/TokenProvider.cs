@@ -87,7 +87,8 @@ namespace OAuch.Protocols.OAuth2 {
         DeviceAuthorizationUri,
         TokenUri,
         VerificationUri,
-        RevocationUri
+        RevocationUri,
+        ParUri
     }
 
     public class TokenResult {

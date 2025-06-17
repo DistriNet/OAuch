@@ -39,6 +39,7 @@ namespace OAuch.Shared.Settings {
         public string? CallbackUri { get; set; }
         public string? RevocationUri { get; set; }
         public string? JwksUri { get; set; }
+        public string? ParUri { get; set; }
 
         // Client settings
         public ClientSettings DefaultClient { get; set; }

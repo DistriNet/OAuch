@@ -176,6 +176,10 @@
                             <text>To complete the results, please @Html.ActionLink("resume the test run", "Resume", new { id = Model.ResultId }).</text>
                         }
                     </p>
+                    if (Model.SettingsChanged)
+                    {
+                        <p class="text-danger">Please note: The site settings have been modified since the tests were initiated. Any tests still pending will proceed using the prior configuration.</p>
+                    }
                 }
                 @if (Model.Result.FailedTests > 0) {
                     <p>One or more test cases have crashed while testing the site. The results presented here may be incomplete. Please see the log file for details.</p>

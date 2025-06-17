@@ -358,6 +358,7 @@ namespace OAuch.Controllers {
                             settings.TestUri = metadata.UserinfoEndpoint;
                             settings.OpenIdIssuer = metadata.Issuer;
                             settings.JwksUri = metadata.JwksUri;
+                            settings.ParUri = metadata.PushedAuthorizationRequestEndpoint;
 
                             if (metadata.CodeChallengeMethodsSupported != null && metadata.CodeChallengeMethodsSupported.Count > 0) {
                                 if (metadata.CodeChallengeMethodsSupported.Contains("S256"))
@@ -543,6 +544,10 @@ namespace OAuch.Controllers {
             if (serializedTestRun == null || serializedTestRun.SiteId != site.SiteId /* user tries to access a result of someone else */)
                 return RedirectToAction("Overview", new { id });
 
+            var currentSiteSettings = OAuchJsonConvert.Deserialize<SiteSettings>(site.CurrentConfigurationJson);
+            if (currentSiteSettings == null)
+                return NotFound();
+
             var model = new ResultsViewModel {
                 SiteId = id,
                 ResultId = rid!.Value,
@@ -553,7 +558,8 @@ namespace OAuch.Controllers {
                     When = tr.StartedAt
                 })
             };
-
+            model.SettingsChanged = serializedTestRun.ConfigurationJson != site.CurrentConfigurationJson;
+            
             FillMenu(model, site, PageType.Results);
             return View(model);
         }

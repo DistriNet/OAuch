@@ -17,6 +17,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new AddResponseMode(ResponseModes.Fragment))
                 .Then(new AddNonce())
                 .Then(new RewriteAsJwt())
+                .Then(new PushAuthorizationRequest())
                 .Then(new BuildAuthorizationUrl())
                 .Then(new SendAuthorizationRedirect())
                 .Then(new GetServerResponseFromCallback(ResponseModes.Fragment))

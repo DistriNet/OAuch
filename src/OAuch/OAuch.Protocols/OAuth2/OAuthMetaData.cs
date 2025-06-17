@@ -31,6 +31,12 @@ namespace OAuch.Protocols.OAuth2 {
         [JsonProperty("registration_endpoint")]
         public string? RegistrationEndpoint { get; set; }
 
+        [JsonProperty("pushed_authorization_request_endpoint")]
+        public string? PushedAuthorizationRequestEndpoint { get; set; }
+
+        [JsonProperty("require_pushed_authorization_requests")]
+        public bool? RequirePushedAuthorizationRequests { get; set; }      
+
         [JsonProperty("scopes_supported")]
         public List<string>? ScopesSupported { get; set; }
 

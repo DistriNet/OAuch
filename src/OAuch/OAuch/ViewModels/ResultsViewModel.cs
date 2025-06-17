@@ -13,6 +13,7 @@ namespace OAuch.ViewModels {
         public DateTime StartedAt { get; set; }
         public required ComplianceResult Result { get; set; }
         public required IEnumerable<HistoryEntry> History { get; set; }
+        public bool SettingsChanged { get; set; }
     }
     public class HistoryEntry {
         public Guid HistoryId { get; set; }

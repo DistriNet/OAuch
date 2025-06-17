@@ -80,31 +80,36 @@
                         </div>
                         <div class="tab-pane text-left fade active show" id="tab-basic" role="tabpanel" aria-labelledby="label-basic">
                             <div class="form-group">
-                                <label for="AuthorizationUri">Authorization URI</label>
+                                <label for="AuthorizationUri">Authorization Endpoint</label>
                                 @Html.TextBoxFor(c => c.Settings.AuthorizationUri, new { @class = "form-control", aria_describedby = "AuthorizationUriHelp" })
                                 <small id="AuthorizationUriHelp" class="form-text text-muted">This is the authorization URI that is used for the implicit and authorization code grants.</small>
                             </div>
                             <div class="form-group">
-                                <label for="CallbackUrl">Callback URI</label>
+                                <label for="RevocationUri">Pushed Authorization Request (PAR) Endpoint</label>
+                                @Html.TextBoxFor(c => c.Settings.ParUri, new { @class = "form-control" })
+                                <small id="DeviceAuthorizationUriHelp" class="form-text text-muted">If this PAR URI is present, OAuch will push the authorization requests to the authorization server (as defined in <a href="https://datatracker.ietf.org/doc/html/rfc9126" target="_blank">RFC9126</a>).</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="CallbackUrl">Callback Uri</label>
                                 @Html.TextBoxFor(c => c.Settings.CallbackUri, new { @class = "form-control", aria_describedby = "CallbackUrlHelp" })
                                 <small id="CallbackUrlHelp" class="form-text text-muted">
                                     This is the callback url for the implicit and authorization code grants.
                                     The default URI is <code>@OAuchHelper.CallbackUri</code>. If you wish, you can specify a custom callback url. This can be any
                                     url, including urls on different domains. In order for different domains to work, you will need to modify your local HOSTS file
-                                    to override the IP address of the custom domain to make it point to the IP address of OAuch.io.
+                                    to override the IP address of the custom domain to make it point to the IP address OAuch is running on.
                                 </small>
                             </div>
                             <div class="form-group">
-                                <label for="TokenUri">Token URI</label>
+                                <label for="TokenUri">Token Endpoint</label>
                                 @Html.TextBoxFor(c => c.Settings.TokenUri, new { @class = "form-control" })
                             </div>
                             <div class="form-group">
-                                <label for="DeviceAuthorizationUri">Device Authorization URI</label>
+                                <label for="DeviceAuthorizationUri">Device Authorization Endpoint</label>
                                 @Html.TextBoxFor(c => c.Settings.DeviceAuthorizationUri, new { @class = "form-control", aria_describedby = "DeviceAuthorizationUriHelp" })
                                 <small id="DeviceAuthorizationUriHelp" class="form-text text-muted">This is the authorization URI that is used for the device authorization grant.</small>
                             </div>
                             <div class="form-group">
-                                <label for="RevocationUri">Revocation URI</label>
+                                <label for="RevocationUri">Revocation Endpoint</label>
                                 @Html.TextBoxFor(c => c.Settings.RevocationUri, new { @class = "form-control" })
                             </div>
                         </div>
@@ -199,7 +204,7 @@
                             <p>
                                 Enter the details of an API method that can be used to test the validity of an access token. The test API method is preferably
                                 a simple method that quickly returns a limited amount of data. Note that this should be a non-public API
-                                (i.e. a call should fail without proper authorization). The method will be called with a bearer token that
+                                (i.e., a call should fail without proper authorization). The method will be called with an access token that
                                 has been received through one of the OAuth grants.
                             </p>
                             <p>
@@ -307,12 +312,12 @@
                                 @Html.DropDownListFor(c => c.Settings.ResponseMode, Html.GetEnumSelectList<ResponseModes>(), null, new { @class = "form-control" })
                             </div>
                             <div class="form-group">
-                                <label for="UseRequestParameter">Use a Request Parameter (JAR)</label>
+                                <label for="UseRequestParameter">Use JWT-Secured Authorization Requests (JAR)</label>
                                 <div class="form-check">
                                     @Html.CheckBoxFor(c => c.Settings.UseRequestParameter, new { data_toggle = "toggle", data_size = "sm" })
                                 </div>
                                 <small id="UseRequestParameterInfo" class="form-text text-muted">
-                                    Send authorization parameters as a single JSON Web Token in the 'request' parameter. This may be required in high-security settings.
+                                    Send authorization parameters as a single JSON Web Token in the 'request' parameter, according to the specifications of <a href="https://datatracker.ietf.org/doc/html/rfc9101" target="_blank">RFC9101</a>. This may be required in high-security settings.
                                     If a client signing key is specified (see below), it will be used to sign the JWT.
                                 </small>
                             </div>
@@ -372,7 +377,7 @@
                             <div class="form-group">
                                 <label for="SiteName">Delete Site</label>
                                 <p>
-                                    If you wish to delete this site from our database, click the button below. This will remove the site's settings and all the
+                                    If you wish to delete this site from OAuch's database, click the button below. This will remove the site's settings and all the
                                     test results that are associated with it. CAUTION: this action cannot be undone.
                                 </p>
                                 <p>
@@ -432,12 +437,19 @@
             hasGrid: true
         });
         $(function () {
-            $('.selectpicker').selectpicker(
+            @*$('#Settings_SelectedStandards').selectpicker(
                 {
                     tickIcon: 'fa-check',
                     iconBase: 'fas',
+                    tickIcon: 'bi bi-check-lg',
                     selectedTextFormat: 'count > 3'
-                });
+                });*@
+            $('.selectpicker').selectpicker(
+                {
+                    tickIcon: 'fa-star',
+                    iconBase: 'fas',                    
+                    selectedTextFormat: 'count > 3'
+                });                
         });
         function validate() {
             @* Check validity of site name *@

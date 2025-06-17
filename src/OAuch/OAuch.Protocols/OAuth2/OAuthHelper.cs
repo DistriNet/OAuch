@@ -96,15 +96,15 @@ namespace OAuch.Protocols.OAuth2 {
         }
 
         public static void RewriteAsJwt(SiteSettings settings, Dictionary<string, string?> keys) {
-            if (!settings.UseRequestParameter)
+            if (!settings.UseRequestParameter) // use JAR?
                 return;
 
             var builder = new JwtTokenBuilder();
-            Copy("response_type");
-            Copy("client_id");
-            Copy("scope");
-            Copy("code_challenge");
-            Copy("code_challenge_method");
+            Copy("client_id"); // only required parameter, in addition to the 'request' parameter
+            Move("response_type");
+            Move("scope");
+            Move("code_challenge");
+            Move("code_challenge_method");
             Move("redirect_uri");
             Move("state");
             Move("nonce");

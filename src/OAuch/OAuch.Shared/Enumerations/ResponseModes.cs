@@ -12,7 +12,7 @@ namespace OAuch.Shared.Enumerations {
         Fragment = 4,
         [Display(Name = "Response JWT (default)")]
         Jwt = 9,
-        [Display(Name = "Resonse JWT (form post)")]
+        [Display(Name = "Response JWT (form post)")]
         FormPostJwt = 10,
         [Display(Name = "Response JWT (fragment)")]
         FragmentJwt = 11,
