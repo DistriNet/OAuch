@@ -6,16 +6,16 @@ using System.Collections.Generic;
 namespace OAuch.Protocols.OAuth2 {
     public static class TokenHelper {
         public static void RegisterTokenResult(TokenProvider provider, TokenResult result) {
-            var dictionary = provider.Context.State.Get<Dictionary<string, List<ValidToken>>>(StateKeys.TokenCache);
-            if (!dictionary.TryGetValue(provider.FlowType, out var list)) {
-                list = [];
-                dictionary[provider.FlowType] = list;
-            }
             if (result.UnexpectedError == null && (result.IdentityToken != null || result.AccessToken != null)) {
+                var dictionary = provider.Context.State.Get<Dictionary<string, List<ValidToken>>>(StateKeys.TokenCache);
+                if (!dictionary.TryGetValue(provider.FlowType, out var list)) {
+                    list = [];
+                    dictionary[provider.FlowType] = list;
+                }
                 var dict = new Dictionary<string, string>();
                 CopyDictionary(result.AuthorizationResponse?.Items, dict);
                 CopyDictionary(result.TokenResponse?.Items, dict);
-                list.Add(new ValidToken(provider.FlowType, DateTime.Now, dict));
+                list.Add(new ValidToken(provider.FlowType, DateTime.Now, result.ParRequestUri, dict));
             }
 
             static void CopyDictionary(IDictionary<string, string>? src, IDictionary<string, string> dest) {
@@ -40,9 +40,10 @@ namespace OAuch.Protocols.OAuth2 {
     }
     public class ValidToken {
         [JsonConstructor]
-        public ValidToken(string flowType, DateTime issuedAt, Dictionary<string, string> items) {
+        public ValidToken(string flowType, DateTime issuedAt, string? requestUri, Dictionary<string, string> items) {
             this.FlowType = flowType;
             this.IssuedAt = issuedAt;
+            this.ParRequestUri = requestUri;
             this.Items = items;
         }
 
@@ -52,6 +53,8 @@ namespace OAuch.Protocols.OAuth2 {
         public Dictionary<string, string> Items { get; }
         [JsonProperty]
         public string FlowType { get; }
+        [JsonProperty]
+        public string? ParRequestUri { get; }
 
 
         public string? GetItem(string key) {

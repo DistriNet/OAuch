@@ -95,6 +95,7 @@ namespace OAuch.Protocols.OAuth2 {
         public TokenResult() {
             //
         }
+        public string? ParRequestUri { get; set; }
         public ServerResponse? AuthorizationResponse { get; set; }
         public HttpServerResponse? TokenResponse { get; set; }
         public IList<string> AllAccessTokens {

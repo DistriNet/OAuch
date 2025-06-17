@@ -10,7 +10,7 @@ namespace OAuch.Compliance.Tests.ApiEndpoint {
     public class IsHttpsRequiredTest : Test {
         public override string Title => "Is HTTPS required at the API endpoint";
         public override string Description => "This test checks whether the API endpoint enforces HTTPS connections.";
-        public override TestResultFormatter ResultFormatter => TestResultFormatter.YesBadNoGood;
+        public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
         public override Type ResultType => typeof(IsHttpsRequiredTestResult);
     }
     public class IsHttpsRequiredTestResult : TestResult {

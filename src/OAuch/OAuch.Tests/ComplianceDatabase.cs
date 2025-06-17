@@ -1063,6 +1063,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "4.1.3. Countermeasures"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsParRequiredTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "4.1.3. Countermeasures"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.ReferrerPolicyEnforcedTest"],
                                      RequirementLevel = RequirementLevels.May,
                                      LocationInDocument = "4.2.4. Countermeasures"
@@ -1540,6 +1545,34 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "8.5. TLS considerations"
                                 },
                             ]
+                        },
+                        new OAuthDocument {
+                            Id = "RFC9126",
+                            Name = "OAuth 2.0 Pushed Authorization Requests",
+                            Description = "This document defines the pushed authorization request (PAR) endpoint, which allows clients to push the payload of an OAuth 2.0 authorization request to the authorization server via a direct request and provides them with a request URI that is used as reference to the data in a subsequent call to the authorization endpoint.",
+                            Url = "https://datatracker.ietf.org/doc/html/rfc9126",
+                            IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC9126SupportedTest",
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OAuth2,
+                            DeprecatedFeatures  = [],
+                             Countermeasures= [
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsHttpsRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2. Pushed Authorization Request Endpoint"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequestUriEntropyMinReqTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "2.2. Successful Response"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequestUriEntropySugReqTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.2. Successful Response"
+                                 },
+                                 // check PAR-mixup between multiple clients
+                             ]
                         },
                         new OAuthDocument {
                             Id = "AttsDefs",

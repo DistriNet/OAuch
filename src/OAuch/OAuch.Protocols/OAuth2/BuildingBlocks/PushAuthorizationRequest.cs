@@ -56,6 +56,7 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
                 this.Succeeded = false;
                 return newParameters;
             }
+            tokenResult.ParRequestUri = uri; // register it
 
             string? expiry = null;
             sr.Items.TryGetValue("expires_in", out expiry);
