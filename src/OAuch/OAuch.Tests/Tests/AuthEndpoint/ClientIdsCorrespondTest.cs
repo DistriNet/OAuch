@@ -12,18 +12,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Compliance.Tests.AuthEndpoint {
-    public class JarParametersInRequestTest : Test {
-        public override string Title => "Server requires all parameters to be in request object";
-        public override string Description => "This test checks whether the server requires all parameters related to the authorization to be included in the request object.";
+    public class ClientIdsCorrespondTest : Test {
+        public override string Title => "Check mismatched client_id parameters";
+        public override string Description => "This test checks that the authenticated client id corresponds to the client id in the request object.";
         public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
-        public override Type ResultType => typeof(JarParametersInRequestTestResult);
+        public override Type ResultType => typeof(ClientIdsCorrespondTestResult);
     }
-    public class JarParametersInRequestTestResult : TestResult {
-        public JarParametersInRequestTestResult(string testId) : base(testId) { }
-        public override Type ImplementationType => typeof(JarParametersInRequestTestImplementation);
+    public class ClientIdsCorrespondTestResult : TestResult {
+        public ClientIdsCorrespondTestResult(string testId) : base(testId) { }
+        public override Type ImplementationType => typeof(ClientIdsCorrespondTestImplementation);
     }
-    public class JarParametersInRequestTestImplementation : TestImplementation {
-        public JarParametersInRequestTestImplementation(TestRunContext context, JarParametersInRequestTestResult result, HasSupportedFlowsTestResult flows, IsJarSupportedTestResult jar) : base(context, result, flows, jar) { }
+    public class ClientIdsCorrespondTestImplementation : TestImplementation {
+        public ClientIdsCorrespondTestImplementation(TestRunContext context, ClientIdsCorrespondTestResult result, HasSupportedFlowsTestResult flows, IsJarSupportedTestResult jar) : base(context, result, flows, jar) { }
 
         public async override Task Run() {
             if (HasFailed<IsJarSupportedTestResult>()) { // no JAR support
@@ -42,30 +42,29 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var prov = flows.CreateProviderWithStage<PushAuthorizationRequest, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
+            var prov = flows.CreateProviderWithStage<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
             if (prov == null) {
                 Result.Outcome = TestOutcomes.Skipped; // no providers that support the PAR standard (weird, should not happen here, because we know PAR is supported)
                 return;
             }
-            prov.Pipeline.Replace<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new MoveResponseType());
+            prov.Pipeline.Replace<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new ChangeClientInRequest());
 
             var result = await prov.GetToken();
             if (result.AccessToken == null && result.IdentityToken == null) {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
-                LogInfo("The server detected the missing response_type from the request object.");
+                LogInfo("The server detected the invalid client id.");
             } else {
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
-                LogInfo("The server did not detect the missing response_type from the request object.");
+                LogInfo("The server issued a valid token to the wrong client.");
             }
         }
     }
 
-    public class MoveResponseType : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+    public class ChangeClientInRequest : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            var responseType = value["response_type"];
-            value.Remove("response_type");
+            value["client_id"] = provider.Context.SiteSettings.AlternativeClient.ClientId;
             OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
-            value["response_type"] = responseType;
+            value["client_id"] = provider.Context.SiteSettings.DefaultClient.ClientId;
             return Task.FromResult(value);
         }
     }

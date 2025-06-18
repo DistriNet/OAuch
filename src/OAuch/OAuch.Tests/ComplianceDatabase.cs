@@ -1593,6 +1593,27 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "3. The 'request' Request Parameter"
                                  },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureCheckedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "3. The 'request' Request Parameter"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "3. The 'request' Request Parameter"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.ClientIdsCorrespondTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "3. The 'request' Request Parameter"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequestUriTimeoutTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "4. Authorization Request"
+                                 },
+                                 
                              ]
                         },
                         new OAuthDocument { // This document has not been finished yet
@@ -1618,7 +1639,7 @@ namespace OAuch.Compliance {
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureCheckedTest"],
                                      RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = ""
+                                     LocationInDocument = "6.2. "
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureRequiredTest"],
@@ -1629,7 +1650,13 @@ namespace OAuch.Compliance {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.JarParametersInRequestTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = ""
-                                 },                             ]
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.ClientIdsCorrespondTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                             ]
                         },
                         new OAuthDocument {
                             Id = "AttsDefs",

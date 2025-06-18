@@ -100,7 +100,7 @@ namespace OAuch.Protocols.OAuth2 {
                 return;
 
             var builder = new JwtTokenBuilder();
-            Copy("client_id"); // only required parameter, in addition to the 'request' parameter
+            Copy("client_id"); // only required parameter (depending on client authentication method), in addition to the 'request' parameter
             Move("response_type");
             Move("scope");
             Move("code_challenge");

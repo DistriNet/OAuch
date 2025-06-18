@@ -56,11 +56,17 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
                 this.Succeeded = false;
                 return newParameters;
             }
-            tokenResult.ParRequestUri = uri; // register it
 
-            string? expiry = null;
-            sr.Items.TryGetValue("expires_in", out expiry);
-            provider.Context.Log.Log($"The authorization parameters were pushed to the uri '{uri}' (expiry time (s): {expiry ?? "unknown"})", LoggedStringTypes.Info);
+            int? expiry = null;
+            if (sr.Items.TryGetValue("expires_in", out var expiryString) && expiryString != null) {
+                if (int.TryParse(expiryString, out int ex))
+                    expiry = ex;
+            }
+
+            tokenResult.ParRequestUri = uri; // register it
+            tokenResult.ParRequestUriTimeout = expiry;
+
+            provider.Context.Log.Log($"The authorization parameters were pushed to the uri '{uri}' (expiry time (s): {expiry?.ToString() ?? "unknown"})", LoggedStringTypes.Info);
 
             newParameters["client_id"] = value["client_id"];
             newParameters["request_uri"] = uri;
