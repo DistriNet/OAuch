@@ -1,4 +1,6 @@
-﻿using OAuch.Compliance.Threats;
+﻿using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.ParEndpoint;
+using OAuch.Compliance.Threats;
 using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
@@ -1068,6 +1070,11 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "4.1.3. Countermeasures"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSupportedTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "4.1.3. Countermeasures"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.ReferrerPolicyEnforcedTest"],
                                      RequirementLevel = RequirementLevels.May,
                                      LocationInDocument = "4.2.4. Countermeasures"
@@ -1548,7 +1555,7 @@ namespace OAuch.Compliance {
                         },
                         new OAuthDocument {
                             Id = "RFC9126",
-                            Name = "OAuth 2.0 Pushed Authorization Requests",
+                            Name = "Pushed Authorization Requests",
                             Description = "This document defines the pushed authorization request (PAR) endpoint, which allows clients to push the payload of an OAuth 2.0 authorization request to the authorization server via a direct request and provides them with a request URI that is used as reference to the data in a subsequent call to the authorization endpoint.",
                             Url = "https://datatracker.ietf.org/doc/html/rfc9126",
                             IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC9126SupportedTest",
@@ -1571,8 +1578,58 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.2. Successful Response"
                                  },
-                                 // check PAR-mixup between multiple clients
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsClientBoundToUriTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.2. Successful Response"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSupportedTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "3. The 'request' Request Parameter"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.JarParametersInRequestTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "3. The 'request' Request Parameter"
+                                 },
                              ]
+                        },
+                        new OAuthDocument { // This document has not been finished yet
+                            Id = "RFC9101", 
+                            Name = "JWT-Secured Authorization Request",
+                            Description = "This document introduces the ability to send request parameters in a JSON Web Token (JWT) instead, which allows the request to be signed with JSON Web Signature (JWS) and encrypted with JSON Web Encryption (JWE) so that the integrity, source authentication, and confidentiality properties of the authorization request are attained. Note that OAuch currently only supports JWS.",
+                            Url = "https://datatracker.ietf.org/doc/html/rfc9101",
+                            IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC9101SupportedTest",
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OAuth2,
+                            DeprecatedFeatures  = [],
+                             Countermeasures= [
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarRequiredTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureCheckedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = ""
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.JarParametersInRequestTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = ""
+                                 },                             ]
                         },
                         new OAuthDocument {
                             Id = "AttsDefs",
