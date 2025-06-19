@@ -56,17 +56,15 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 LogInfo("The server issued a valid token despite an invalid signature.");
             }
         }
-    }
+        class ModifyJarSignature : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+            public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
+                var settings = provider.SiteSettings with {
+                    UseRequestParameter = true
+                };
+                OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
 
-    public class ModifyJarSignature : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
-        public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            var settings = provider.SiteSettings with {
-                UseRequestParameter = true
-            };
-            OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
-
-            // re-sign the token with a different (dummy) key
-            var dummyKey = JsonWebKey.Create("""
+                // re-sign the token with a different (dummy) key
+                var dummyKey = JsonWebKey.Create("""
                 {
                     "p": "3Um8kbDzpLPghGY3RBOn8DYSG1xqzqSNG2KeVRYJD7IfE7JDNh71q7QECmV1J2RGkXE5jyrCs4X7PBu_R2Vy8g3WtqWBsCVN82pz8eolL1nFw0PpVovgOdM8jSuiwMBklJbBhUaAj25Ejwr9tP7BfBIdMebUwYNy694LLjxwKI8",
                     "kty": "RSA",
@@ -82,10 +80,11 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 }
                 """);
 
-            var builder = JwtTokenBuilder.CreateFromToken(value["request"]);
-            value["request"] = builder!.Build(dummyKey!.TokenKey);
+                var builder = JwtTokenBuilder.CreateFromToken(value["request"]);
+                value["request"] = builder!.Build(dummyKey!.TokenKey);
 
-            return Task.FromResult<Dictionary<string, string?>?>(value);
+                return Task.FromResult<Dictionary<string, string?>?>(value);
+            }
         }
     }
 }

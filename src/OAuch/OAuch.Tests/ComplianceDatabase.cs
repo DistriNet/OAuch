@@ -1569,10 +1569,15 @@ namespace OAuch.Compliance {
                                      LocationInDocument = "2. Pushed Authorization Request Endpoint"
                                  },
                                  new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsParAuthenticationRequiredTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "2. Pushed Authorization Request Endpoint"
+                                 },
+                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequestUriEntropyMinReqTest"],
                                      RequirementLevel = RequirementLevels.Should,
                                      LocationInDocument = "2.2. Successful Response"
-                                 },
+                                 },                                 
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequestUriEntropySugReqTest"],
                                      RequirementLevel = RequirementLevels.Must,
@@ -1582,6 +1587,16 @@ namespace OAuch.Compliance {
                                      Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsClientBoundToUriTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "2.2. Successful Response"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.AcceptsNewRedirectUriTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "2.4. Management of Client Redirect URIs"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.RequiresNewRedirectUriAuthTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "2.4. Management of Client Redirect URIs"
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSupportedTest"],
@@ -1613,7 +1628,17 @@ namespace OAuch.Compliance {
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "4. Authorization Request"
                                  },
-                                 
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsRequestUriRevokedTest"],
+                                     RequirementLevel = RequirementLevels.Should,
+                                     LocationInDocument = "4. Authorization Request"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.ParEndpoint.IsParRequiredTest"],
+                                     RequirementLevel = RequirementLevels.May,
+                                     LocationInDocument = "4. Authorization Request"
+                                 },
+
                              ]
                         },
                         new OAuthDocument { // This document has not been finished yet

@@ -1,30 +1,26 @@
-﻿using OAuch.Compliance.Tests.Features;
+﻿using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.Features;
+using OAuch.Compliance.Tests.Shared;
 using OAuch.Protocols.OAuth2;
 using OAuch.Protocols.OAuth2.BuildingBlocks;
 using OAuch.Protocols.OAuth2.Pipeline;
 using OAuch.Shared;
 using OAuch.Shared.Enumerations;
 using OAuch.Shared.Interfaces;
+using OAuch.Shared.Settings;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace OAuch.Compliance.Tests.AuthEndpoint {
-    public class RedirectUriPathMatchedTest : Test {
-        public override string Title => "Does the authorization server exactly match the hostname and path of the redirect uri";
-        public override string Description => "This test checks whether the authorization server exactly matches the hostname and path of the redirect uri.";
-        public override TestResultFormatter ResultFormatter => TestResultFormatter.YesGoodNoBad;
-        public override Type ResultType => typeof(RedirectUriPathMatchedTestResult);
-    }
-    public class RedirectUriPathMatchedTestResult : TestResult<RedirectUriFullyMatchedTestInfo> {
-        public RedirectUriPathMatchedTestResult(string testId) : base(testId) { }
-        public override Type ImplementationType => typeof(RedirectUriPathMatchedTestImplementation);
-    }
-    public class RedirectUriPathMatchedTestImplementation : TestImplementation<RedirectUriFullyMatchedTestInfo> {
-        public RedirectUriPathMatchedTestImplementation(TestRunContext context, RedirectUriPathMatchedTestResult result, HasSupportedFlowsTestResult flows) : base(context, result, flows) { }
+namespace OAuch.Compliance.Tests.ParEndpoint {
+    public abstract class AcceptsNewRedirectUriImplBase : TestImplementation<RedirectUriFullyMatchedTestInfo> {
+        public AcceptsNewRedirectUriImplBase(TestRunContext context, TestResult<RedirectUriFullyMatchedTestInfo> result, params TestResult[] dependencies) : base(context, result, dependencies) {}
 
-        public async override Task Run() {
-            if (this.Context.SiteSettings.ParUri != null) {
-                Result.Outcome = TestOutcomes.Skipped; // If we use PAR, dynamically registering a new callback in the authorization request can be allowed
+        public async Task Execute(SiteSettings settings) {
+            if (HasFailed<IsParSupportedTestResult>()) {
+                Result.Outcome = TestOutcomes.Skipped; // no PAR support
                 return;
             }
 
@@ -37,10 +33,10 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             string callbackUriBase = new Uri(this.Context.SiteSettings.CallbackUri).GetLeftPart(UriPartial.Path);
             if (callbackUriBase.EndsWith('/'))
                 callbackUriBase = callbackUriBase.TrimEnd('/');
-            callbackUriBase += "/Wrong";
+            callbackUriBase += "/Modified";
 
             var modContext = this.Context with {
-                SiteSettings = this.Context.SiteSettings with {
+                SiteSettings = settings with {
                     CallbackUri = callbackUriBase
                 }
             };
@@ -57,23 +53,21 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             var result = await provider.GetToken();
             ExtraInfo.WrongRedirect = redirectResultProcessor.WrongRedirect;
             if (redirectResultProcessor.WrongRedirect == null) {
-                Result.Outcome = TestOutcomes.SpecificationFullyImplemented; // user clicked 'stalled test'
                 ExtraInfo.Result = RedirectUriMatchedResults.UserNotified;
             } else if (result.AccessToken == null) {
                 LogInfo("The authorization server denied the request");
-                Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
                 ExtraInfo.Result = RedirectUriMatchedResults.RequestDenied;
             } else if (redirectResultProcessor.WrongRedirect == false) {
-                LogInfo("The authorization server ignored the extra parameter");
-                Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
+                LogInfo("The authorization server ignored the modified redirect URI");
                 ExtraInfo.Result = RedirectUriMatchedResults.ParameterIgnored;
             } else {
-                LogInfo("The authorization server included the extra parameter");
-                Result.Outcome = TestOutcomes.SpecificationNotImplemented;
+                LogInfo("The authorization server used the modified redirect URI");
+                //Result.Outcome = TestOutcomes.SpecificationNotImplemented;
                 ExtraInfo.Result = RedirectUriMatchedResults.RequestAllowed;
             }
         }
-        public class RedirectPathResultProcessor : Processor<ICallbackResult?, ICallbackResult?> {
+
+        class RedirectPathResultProcessor : Processor<ICallbackResult?, ICallbackResult?> {
             public RedirectPathResultProcessor(string originalCallback) {
                 this.OriginalCallback = originalCallback;
             }

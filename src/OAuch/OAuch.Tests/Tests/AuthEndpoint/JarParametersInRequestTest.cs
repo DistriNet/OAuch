@@ -58,15 +58,14 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 LogInfo("The server did not detect the missing response_type from the request object.");
             }
         }
-    }
-
-    public class MoveResponseType : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
-        public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            var responseType = value["response_type"];
-            value.Remove("response_type");
-            OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
-            value["response_type"] = responseType;
-            return Task.FromResult(value);
+        class MoveResponseType : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+            public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
+                var responseType = value["response_type"];
+                value.Remove("response_type");
+                OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
+                value["response_type"] = responseType;
+                return Task.FromResult(value);
+            }
         }
     }
 }

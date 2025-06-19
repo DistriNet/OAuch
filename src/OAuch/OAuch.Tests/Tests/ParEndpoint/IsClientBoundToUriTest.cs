@@ -57,13 +57,12 @@ namespace OAuch.Compliance.Tests.ParEndpoint {
                 LogInfo("The server issued a valid token to the wrong client.");
             }
         }
-    }
-
-    public class ChangeClientToAlternative : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
-        public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            value["client_id"] = provider.Context.SiteSettings.AlternativeClient.ClientId;
-            value["client_secret"] = provider.Context.SiteSettings.AlternativeClient.ClientSecret;
-            return Task.FromResult(value);
+        class ChangeClientToAlternative : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+            public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
+                value["client_id"] = provider.Context.SiteSettings.AlternativeClient.ClientId;
+                value["client_secret"] = provider.Context.SiteSettings.AlternativeClient.ClientSecret;
+                return Task.FromResult(value);
+            }
         }
     }
 }

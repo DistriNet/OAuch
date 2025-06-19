@@ -53,11 +53,10 @@ namespace OAuch.Compliance.Tests.ParEndpoint {
                 LogInfo("The request succeeded without PAR");
             }
         }
-    }
-
-    public class DummyPushAuthorizationRequest : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
-        public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            return Task.FromResult(value); // do nothing (i.e., disable PAR)
+        class DummyPushAuthorizationRequest : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+            public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
+                return Task.FromResult(value); // do nothing (i.e., disable PAR)
+            }
         }
-    }
+    }   
 }

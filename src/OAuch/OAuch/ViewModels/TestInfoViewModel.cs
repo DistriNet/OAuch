@@ -16,7 +16,9 @@ namespace OAuch.ViewModels {
             ["IdTokens"] = "Identity Tokens",
             ["Jwt"] = "JWTs",
             ["Pkce"] = "PKCE",
-            ["Revocation"] = "Revocation"
+            ["Revocation"] = "Revocation",
+            ["ParEndpoint"] = "Pushed Authorization Endpoint",
+            ["Concurrency"] = "Concurrency",
         };
 
         public TestInfoViewModel(Test test) {

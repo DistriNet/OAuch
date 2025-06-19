@@ -53,16 +53,15 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 LogInfo("The server issued a valid token despite a missing signature.");
             }
         }
-    }
-
-    public class RemoveJarSignature : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
-        public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
-            var settings = provider.SiteSettings with { 
-                UseRequestParameter = true, // force JAR (if it's not enabled by default)
-                RequestSigningKey = null    // without a signature
-            };
-            OAuthHelper.RewriteAsJwt(settings, value);
-            return Task.FromResult<Dictionary<string, string?>?>(value);
+        class RemoveJarSignature : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
+            public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
+                var settings = provider.SiteSettings with {
+                    UseRequestParameter = true, // force JAR (if it's not enabled by default)
+                    RequestSigningKey = null    // without a signature
+                };
+                OAuthHelper.RewriteAsJwt(settings, value);
+                return Task.FromResult<Dictionary<string, string?>?>(value);
+            }
         }
     }
 }

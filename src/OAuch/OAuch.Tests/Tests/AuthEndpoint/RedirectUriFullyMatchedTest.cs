@@ -36,6 +36,11 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
         public RedirectUriFullyMatchedTestImplementation(TestRunContext context, RedirectUriFullyMatchedTestResult result, HasSupportedFlowsTestResult flows) : base(context, result, flows) { }
 
         public async override Task Run() {
+            if (this.Context.SiteSettings.ParUri != null) {
+                Result.Outcome = TestOutcomes.Skipped; // If we use PAR, dynamically registering a new callback in the authorization request can be allowed
+                return;
+            }
+
             var flows = GetDependency<HasSupportedFlowsTestResult>(true);
             if (flows == null) {
                 Result.Outcome = TestOutcomes.Skipped;
@@ -44,7 +49,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
 
             var modContext = this.Context with {
                 SiteSettings = this.Context.SiteSettings with {
-
                     CallbackUri = this.Context.SiteSettings.CallbackUri?.AddQueryParameter("extra", "oauch")
                 }
             };
