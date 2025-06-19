@@ -29,7 +29,7 @@ namespace OAuch.Compliance.Tests.ParEndpoint {
             }
 
             if (HasSucceeded<IsParAuthenticationRequiredTestResult>()) {
-                Result.Outcome = TestOutcomes.Skipped; // PAR without authentication is not allowed
+                Result.Outcome = TestOutcomes.SpecificationFullyImplemented; // PAR without authentication is not allowed
                 return;
             }
 

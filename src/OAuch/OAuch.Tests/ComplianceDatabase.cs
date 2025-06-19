@@ -107,7 +107,10 @@ namespace OAuch.Compliance {
                     new Threat_7009_2(),
                     new Threat_OIDC_2(),
                     new Threat_OIDC_16(),
-                    new Threat_MultiACConc()
+                    new Threat_MultiACConc(),
+                    new Threat_9126_7_2(),
+                    new Threat_9126_7_3(),
+                    new Threat_9126_7_5()
                     ];
                 return _threats;
             }

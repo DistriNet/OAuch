@@ -28,11 +28,6 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
         public RedirectUriConfusionTestImplementation(TestRunContext context, RedirectUriConfusionTestResult result, HasSupportedFlowsTestResult flows, RedirectUriPathMatchedTestResult match) : base(context, result, flows, match) { }
 
         public async override Task Run() {
-            if (this.Context.SiteSettings.ParUri != null) {
-                Result.Outcome = TestOutcomes.Skipped; // If we use PAR, dynamically registering a new callback in the authorization request can be allowed
-                return;
-            }
-
             var flows = GetDependency<HasSupportedFlowsTestResult>(true);
             if (flows == null || string.IsNullOrEmpty(this.Context.SiteSettings.CallbackUri)) {
                 Result.Outcome = TestOutcomes.Skipped;
