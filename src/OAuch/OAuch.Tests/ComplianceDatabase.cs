@@ -1655,34 +1655,29 @@ namespace OAuch.Compliance {
                             DeprecatedFeatures  = [],
                              Countermeasures= [
                                  new TestRequirementLevel {
-                                     Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSupportedTest"],
-                                     RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = ""
-                                 },
-                                 new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarRequiredTest"],
-                                     RequirementLevel = RequirementLevels.May,
-                                     LocationInDocument = ""
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5. Authorization Request"
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureCheckedTest"],
                                      RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = "6.2. "
+                                     LocationInDocument = "6.2. JWS-Signed Request Object"
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.IsJarSignatureRequiredTest"],
-                                     RequirementLevel = RequirementLevels.Should,
-                                     LocationInDocument = ""
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5. Authorization Request"
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.JarParametersInRequestTest"],
                                      RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = ""
+                                     LocationInDocument = "4. Request Object"
                                  },
                                  new TestRequirementLevel {
                                      Test  = Tests["OAuch.Compliance.Tests.AuthEndpoint.ClientIdsCorrespondTest"],
                                      RequirementLevel = RequirementLevels.Must,
-                                     LocationInDocument = ""
+                                     LocationInDocument = "5. Authorization Request"
                                  },
                              ]
                         },
