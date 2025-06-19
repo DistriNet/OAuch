@@ -13,29 +13,29 @@ To build and run the source code in this repository, please follow the following
 
 (1) Clone or download the repository
 
-(2) Open the project in Visual Studio 2022. You can download a free version of Visual Studio 2022 at:
-    https://visualstudio.microsoft.com/vs/community/
-    Building the project manually (dotnet build/msbuild) or using VS Code will also work, but might
-    require more effort.
+(2) Open the project in Visual Studio 2022. You can download [a free version of Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/).
+  Building the project manually (using dotnet build/msbuild) or using VS Code will also work, but might
+  require more effort.
 
 (3) (optional) Modify the connection string for the database. By default, OAuch stores its data in
-    a SQLite database file. The connection string can be modified in the 'appsettings.json' file of
-    the 'OAuch' project.
-    If you wish to store the data in LocalDB (a database based on MS SQL Server that is installed
-    together with Visual Studio), you could use the following connection string:
-    "Server=(localdb)\\mssqllocaldb;Database=OAuch;Trusted_Connection=True;MultipleActiveResultSets=true"
+  a SQLite database file. The connection string can be modified in the `appsettings.json` file of
+  the `OAuch` project.
+  If you wish to store the data in LocalDB (a database based on MS SQL Server that is installed
+  together with Visual Studio), you could use the following connection string:
+  `Server=(localdb)\\mssqllocaldb;Database=OAuch;Trusted_Connection=True;MultipleActiveResultSets=true`
 
-(4) (optional) Modify Windows' HOSTS file to override the DNS resolution of oauch.io. Go to the directory
-    C:\Windows\System32\drivers\etc and open the 'hosts' file in a text editor. Make sure the text editor
-    has administrative privileges (i.e., it has been started via the 'Run as administrator' option). Add
-    the following line to the file and save it:  
-        `127.0.0.1   oauch.io`  
-    Make sure you close all your browser windows after this change. Many browsers use an internal DNS cache
-    that is only reset after you close the browser.
+(4) (optional) Modify Windows' `hosts` file to override the DNS resolution of oauch.io. Go to the directory
+  `C:\Windows\System32\drivers\etc` and open the `hosts` file in a text editor. Make sure the text editor
+  has administrative privileges (i.e., it has been started via the 'Run as administrator' option). Add
+  the following line to the file and save it:
 
-(5) Run the project. A web browser window will open and will redirect to https://oauch.io/. If you have
-    not made the changes from step (4), you will need to change this address to https://localhost/.
-    You are now ready to use OAuch on your local computer!
+    127.0.0.1   oauch.io
 
+  Make sure you close all your browser windows after this change. Many browsers use an internal DNS cache
+  that is only reset after you close the browser.
 
-Alternatively, you can try OAuch on https://oauch.io/
+(5)  Run the project. A web browser window will open and will redirect to https://oauch.io/. If you have
+  not made the changes from step (4), you will need to change this address to https://localhost/.
+  You are now ready to use OAuch on your local computer!
+
+Alternatively, you can try OAuch on <https://oauch.io/> or [get it from Docker](https://oauch.io/Home/Docker).
