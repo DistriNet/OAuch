@@ -47,6 +47,7 @@
                         <a class="nav-link" id="label-client" data-toggle="pill" href="#tab-client" role="tab" aria-controls="tab-client" aria-selected="false">Client Settings</a>
                         <a class="nav-link" id="label-overrides" data-toggle="pill" href="#tab-overrides" role="tab" aria-controls="tab-overrides" aria-selected="false">Grant-specific Overrides</a>
                         <a class="nav-link" id="label-api" data-toggle="pill" href="#tab-api" role="tab" aria-controls="tab-api" aria-selected="true">API Settings</a>
+                        <a class="nav-link" id="label-senderconstrained" data-toggle="pill" href="#tab-senderconstrained" role="tab" aria-controls="tab-senderconstrained" aria-selected="true">Constrained Tokens</a>
                         <a class="nav-link" id="label-oidc" data-toggle="pill" href="#tab-oidc" role="tab" aria-controls="tab-oidc" aria-selected="true">OpenID Connect</a>
                         <a class="nav-link" id="label-advanced" data-toggle="pill" href="#tab-advanced" role="tab" aria-controls="tab-advanced" aria-selected="true">Advanced Settings</a>
                         <a class="nav-link" id="label-docs" data-toggle="pill" href="#tab-docs" role="tab" aria-controls="tab-docs" aria-selected="false">Documents</a>
@@ -123,11 +124,14 @@
                                 @Html.TextBoxFor(c => c.Settings.DefaultClient.ClientSecret, new { @class = "form-control" })
                             </div>
                             <div class="form-group">
-                                <label for="ClientCertificate">Client certificate</label>
+                                <label for="ClientCertificate">Client Authentication Certificate</label>
                                 @Html.DropDownListFor(c => c.Settings.CertificateId, Model.Certificates, "(none)", new { @class = "form-control", aria_describedby = "ClientCertificateHelp" })
                                 <small id="ClientCertificateHelp" class="form-text text-muted">
-                                    You must upload client certificates first, before you can select them from this list. To upload a
-                                    client certificate, click on <em>Client Certificates</em> in the left navigation bar.
+                                    If a client certificate is selected, OAuch will use mutual TLS (as defined in
+                                    <a href="https://datatracker.ietf.org/doc/html/rfc8705" target="_blank">RFC8705</a>)
+                                    for client authentication. If you see no certificates in the dropdown, make sure you have 
+                                    uploaded your client certificate(s) first. To upload a client certificate, click on 
+                                    <em>Client Certificates</em> in the left navigation bar.
                                 </small>
                             </div>
                             <div class="form-group">
@@ -196,8 +200,6 @@
                                         </div>
                                     }
                                 }
-
-
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab-api" role="tabpanel" aria-labelledby="label-api">
@@ -266,6 +268,33 @@
                                 </small>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="tab-senderconstrained" role="tabpanel" aria-labelledby="label-senderconstrained">
+                            <p>
+                                OAuch supports the use of sender-constrained tokens, either through mTLS or DPoP. Sender-constrained tokens allow the resource
+                                server (i.e., the server that handles the API requests) to verify that the client is authorized to use the presented access
+                                token. This improves security by limiting an attacker's ability to reuse stolen access tokens.
+                            </p>
+                            <div class="form-group">
+                                <label for="ApiCertificateId">Mutual-TLS Client Certificate</label>
+                                @Html.DropDownListFor(c => c.Settings.ApiCertificateId, Model.Certificates, "(none)", new { @class = "form-control", aria_describedby = "ApiCertificateHelp" })
+                                <small id="ApiCertificateHelp" class="form-text text-muted">
+                                    If a client certificate is selected, OAuch will use mutual TLS (as defined in
+                                    <a href="https://datatracker.ietf.org/doc/html/rfc8705" target="_blank">RFC8705</a>)
+                                    for API requests. If you see no certificates in the dropdown, make sure you have 
+                                    uploaded your client certificate(s) first. To upload a client certificate, click on 
+                                    <em>Client Certificates</em> in the left navigation bar.
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="DPoPSigningKey">DPoP Signing Key</label>
+                                @Html.TextAreaFor(c => c.Settings.DPoPSigningKey, new { @class = "form-control", aria_describedby = "DPoPSigningKeyInfo" })
+                                <small id="DPoPSigningKeyInfo" class="form-text text-muted">
+                                    This is the secret key that is used for DPoP sender-constrained tokens. This parameter is required if you want to use DPoP.
+                                    The contents of this parameter should be a single JSON Web Key (both the public and private key components,
+                                    <em>and</em> the encryption algorithm to use with it [the <em>alg</em> property]).
+                                </small>
+                            </div>
+                        </div>                        
                         <div class="tab-pane fade" id="tab-oidc" role="tabpanel" aria-labelledby="label-oidc">
                             <p>
                                 OAuch has specific tests for the OpenID Connect 1.0 protocol. To enable support for OpenID Connect,
@@ -325,7 +354,7 @@
                                 <label for="RequestSigningKey">Client Signing Key</label>
                                 @Html.TextAreaFor(c => c.Settings.RequestSigningKey, new { @class = "form-control", aria_describedby = "RequestSigningKeyInfo" })
                                 <small id="RequestSigningKeyInfo" class="form-text text-muted">
-                                    The secret key of the client to sign token requests. This parameter is required if you want to use a 'request' parameter
+                                    The secret key of the client to sign token requests. This parameter is required if you want to use JWT-secured authorization requests (JAR)
                                     or if you select the 'private_key_jwt' client authentication mechanism. The contents of this parameter should be a single
                                     JSON Web Key (both the public and private key components, <em>and</em> the encryption algorithm to use with it [the <em>alg</em> property]).
                                 </small>
@@ -353,7 +382,7 @@
                                 security and performance or between security and compatibility.
                             </p>
                             <div id="selectedStandards" class="form-group">
-                                <label>Standard Documents</label>
+                                <label>Selected Standards and Other Documents</label>
                                 <select id="Settings_SelectedStandards" name="Settings.SelectedStandards" class="selectpicker show-tick" data-width="100%" multiple="multiple">
                                     @{
                                         var docCats = new DocumentCategories[] { DocumentCategories.OAuth2, DocumentCategories.OpenIDConnect, DocumentCategories.Draft, DocumentCategories.Other };

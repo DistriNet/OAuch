@@ -20,6 +20,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new NotifyUser())
                 .Then(new GetClaimParameters())
                 .Then(new CreateTokenRequest())
+                .Then(new AddDPoPHeader())
                 .Then(new PollForToken())
                 .FinishTokenResponse();
         }

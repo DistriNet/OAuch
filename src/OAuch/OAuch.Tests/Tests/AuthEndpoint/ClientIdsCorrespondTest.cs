@@ -42,12 +42,12 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var prov = flows.CreateProviderWithStage<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
+            var prov = flows.CreateProviderWithStage<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
             if (prov == null) {
                 Result.Outcome = TestOutcomes.Skipped; // no providers that support the PAR standard (weird, should not happen here, because we know PAR is supported)
                 return;
             }
-            prov.Pipeline.Replace<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new ChangeClientInRequest());
+            prov.Pipeline.Replace<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new ChangeClientInRequest());
 
             var result = await prov.GetToken();
             if (result.AccessToken == null && result.IdentityToken == null) {
@@ -63,7 +63,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
     public class ChangeClientInRequest : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
             value["client_id"] = provider.Context.SiteSettings.AlternativeClient.ClientId;
-            OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
+            OAuthHelper.RewriteAsJarJwt(provider.SiteSettings, value);
             value["client_id"] = provider.Context.SiteSettings.DefaultClient.ClientId;
             return Task.FromResult(value);
         }

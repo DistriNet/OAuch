@@ -6,6 +6,7 @@ using OAuch.Shared.Enumerations;
 using OAuch.Shared.Settings;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -95,7 +96,7 @@ namespace OAuch.Protocols.OAuth2 {
                 return false;
         }
 
-        public static void RewriteAsJwt(SiteSettings settings, Dictionary<string, string?> keys) {
+        public static void RewriteAsJarJwt(SiteSettings settings, Dictionary<string, string?> keys) {
             if (!settings.UseRequestParameter) // use JAR?
                 return;
 
@@ -136,6 +137,40 @@ namespace OAuch.Protocols.OAuth2 {
                     builder.Claims.Add(key, value);
                     keys.Remove(key);
                 }
+            }
+        }
+
+        public static string? CreateDPoPToken(SiteSettings settings, HttpRequest request, string? accessToken, string? nonce) {
+            if (settings.DPoPSigningKey == null) // use DPoP?
+                return null;
+            JsonWebKey? key = JsonWebKey.Create(settings.DPoPSigningKey);
+            if (key == null || key.Algorithm == null || !key.Algorithm.IsAsymmetric) {
+                return null;
+            }
+
+            var builder = new JwtTokenBuilder();
+            builder.Header["typ"] = "dpop+jwt";
+            builder.Header["alg"] = key.Algorithm.Name;
+            builder.Header["jwk"] = key.TokenKey.ExportPublicKey();
+
+            var index = request.Url.IndexOf('?');
+            if (index == -1)
+                builder.Claims["htu"] = request.Url;
+            else
+                builder.Claims["htu"] = request.Url.Substring(0, index);
+            builder.Claims["jti"] = Guid.NewGuid().ToString("N");
+            builder.Claims["htm"] = request.Method.Name;
+            builder.Claims["iat"] = DateTimeOffset.Now.ToUnixTimeSeconds();
+            if (accessToken != null)
+                builder.Claims["iat"] = HashAccessToken();
+            if (nonce != null)
+                builder.Claims["nonce"] = nonce;
+
+            return builder.Build(key.Algorithm, key.TokenKey);
+
+            string HashAccessToken() {
+                var hashed = SHA256.HashData(Encoding.ASCII.GetBytes(accessToken));
+                return EncodingHelper.Base64UrlEncode(hashed);
             }
         }
 

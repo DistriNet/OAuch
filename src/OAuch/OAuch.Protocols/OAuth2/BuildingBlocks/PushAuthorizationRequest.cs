@@ -28,7 +28,7 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
             request.Headers[HttpRequestHeaders.UserAgent] = "OAuch";
             request.Headers[HttpRequestHeaders.ContentType] = "application/x-www-form-urlencoded";
             if (parUri.IsSecure())
-                request.ClientCertificates = settings.Certificates;
+                request.ClientCertificates = settings.ClientCertificates;
             OAuthHelper.AddClientAuthentication(settings, request.Headers, value);
 
             if (value.ContainsKey("request_uri"))

@@ -11,6 +11,7 @@ namespace OAuch.Protocols.Http {
         public static readonly HttpRequestHeaders CacheControl = new(4, "Cache-Control");
         public static readonly HttpRequestHeaders AcceptEncoding = new(5, "Accept-Encoding");
         public static readonly HttpRequestHeaders UserAgent = new(6, "User-Agent");
+        public static readonly HttpRequestHeaders DPoP = new(7, "DPoP");
 
         private HttpRequestHeaders(int id, string name) : base(id, name) { }
 
@@ -23,6 +24,7 @@ namespace OAuch.Protocols.Http {
                 CacheControl,
                 AcceptEncoding,
                 UserAgent,
+                DPoP,
             ];
         }
 

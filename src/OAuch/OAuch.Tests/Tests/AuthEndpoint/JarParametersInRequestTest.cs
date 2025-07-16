@@ -47,7 +47,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 Result.Outcome = TestOutcomes.Skipped; // no providers that support the PAR standard (weird, should not happen here, because we know PAR is supported)
                 return;
             }
-            prov.Pipeline.Replace<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new MoveResponseType());
+            prov.Pipeline.Replace<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new MoveResponseType());
 
             var result = await prov.GetToken();
             if (result.AccessToken == null && result.IdentityToken == null) {
@@ -62,7 +62,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
             public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
                 var responseType = value["response_type"];
                 value.Remove("response_type");
-                OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
+                OAuthHelper.RewriteAsJarJwt(provider.SiteSettings, value);
                 value["response_type"] = responseType;
                 return Task.FromResult(value);
             }

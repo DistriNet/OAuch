@@ -16,7 +16,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new AddScope())
                 .Then(new AddResponseMode(ResponseModes.Fragment))
                 .Then(new AddNonce())
-                .Then(new RewriteAsJwt())
+                .Then(new RewriteAsJarJwt())
                 .Then(new PushAuthorizationRequest())
                 .Then(new BuildAuthorizationUrl())
                 .Then(new SendAuthorizationRedirect())

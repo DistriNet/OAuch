@@ -34,7 +34,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return Task.CompletedTask;
             }
 
-            if (Context.SiteSettings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.PrivateKeyJwt || Context.SiteSettings.Certificates.Count > 0) {
+            if (Context.SiteSettings.ClientAuthenticationMechanism == ClientAuthenticationMechanisms.PrivateKeyJwt || Context.SiteSettings.ClientCertificates.Count > 0) {
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
             } else {
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;

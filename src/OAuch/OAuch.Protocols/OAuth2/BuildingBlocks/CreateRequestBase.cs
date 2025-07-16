@@ -22,7 +22,7 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
             request.Headers[HttpRequestHeaders.UserAgent] = "OAuch";
             request.Headers[HttpRequestHeaders.ContentType] = "application/x-www-form-urlencoded";
             if (uri.IsSecure())
-                request.ClientCertificates = tokenProvider.SiteSettings.Certificates;
+                request.ClientCertificates = tokenProvider.SiteSettings.ClientCertificates;
             AddClientAuthenticationMethod(tokenProvider, request, parameters);
             request.Content = EncodingHelper.FormUrlEncode(parameters);
             return Task.FromResult<HttpRequest?>(request);

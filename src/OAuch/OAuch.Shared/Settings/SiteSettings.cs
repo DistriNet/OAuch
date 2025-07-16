@@ -96,15 +96,12 @@ namespace OAuch.Shared.Settings {
 
         public Guid? CertificateId { get; set; }
         [JsonIgnore]
-        public X509CertificateCollection Certificates {
+        public X509CertificateCollection ClientCertificates {
             get {
                 if (_certificates == null) {
-                    if (this.CertificateId != null) {
-                        var resolver = ServiceLocator.Resolve<ICertificateResolver>();
-                        _certificates = resolver?.FindCertificate(this.CertificateId.Value);
-                        if (_certificates == null)
-                            this.CertificateId = null; // certificate doesn't exist anymore (deleted?)
-                    }
+                    _certificates = GetCertificate(this.CertificateId);
+                    if (_certificates == null)
+                        this.CertificateId = null; // certificate doesn't exist anymore (deleted?)
                     _certificates ??= [];
                 }
                 return _certificates;
@@ -114,6 +111,34 @@ namespace OAuch.Shared.Settings {
             }
         }
         private X509CertificateCollection? _certificates;
+
+        public Guid? ApiCertificateId { get; set; }
+        [JsonIgnore]
+        public X509CertificateCollection ApiCertificates {
+            get {
+                if (_apiCertificates == null) {
+                    _apiCertificates = GetCertificate(this.ApiCertificateId);
+                    if (_apiCertificates == null)
+                        this.ApiCertificateId = null; // certificate doesn't exist anymore (deleted?)
+                    _apiCertificates ??= [];
+                }
+                return _apiCertificates;
+            }
+            set {
+                _apiCertificates = value;
+            }
+        }
+        private X509CertificateCollection? _apiCertificates;
+
+        private static X509CertificateCollection? GetCertificate(Guid? id) {
+            if (id != null) {
+                var resolver = ServiceLocator.Resolve<ICertificateResolver>();
+                var certificates = resolver?.FindCertificate(id.Value);
+                if (certificates != null)
+                    return certificates;
+            }
+            return null;
+        }
 
         [JsonIgnore]
         public bool IsConfidentialClient {
@@ -127,5 +152,7 @@ namespace OAuch.Shared.Settings {
                 return false;
             }
         }
+
+        public string? DPoPSigningKey { get; set; }
     }
 }

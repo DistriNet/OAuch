@@ -37,7 +37,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             // if we're using mTLS...
             if (this.Context.SiteSettings.CertificateId != null) {
                 // ... check every certificate in the client authentication chain
-                var certs = this.Context.SiteSettings.Certificates;
+                var certs = this.Context.SiteSettings.ClientCertificates;
                 foreach (var cert in certs) {
                     if (cert is X509Certificate2 x509) {
                         var rsa = x509.PublicKey.GetRSAPublicKey();

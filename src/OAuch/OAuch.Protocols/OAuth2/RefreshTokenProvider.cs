@@ -28,6 +28,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new CheckTokenUri())
                 .Then(new GetClaimParameters(true))
                 .Then(new CreateTokenRequest())
+                .Then(new AddDPoPHeader())
                 .Then(new SendRequest(UriTypes.TokenUri))
                 .Then(new GetServerResponseFromHttpResponse())
                 .FinishTokenResponse();

@@ -49,7 +49,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                     .Then(new AddPKCEChallenge(provider.SiteSettings.PKCEDefault))
                     .Then(new AddResponseMode(provider.DefaultResponseMode))
                     .Then(new AddNonce())
-                    .Then(new RewriteAsJwt())
+                    .Then(new RewriteAsJarJwt())
                     .Then(new BuildAuthorizationUrl())
                     .Then(new SendAuthorizationRedirect())
                     .Then(new GetServerResponseFromCallback(provider.DefaultResponseMode))

@@ -35,7 +35,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
                 .Then(new AddPKCEChallenge(this.Context.SiteSettings.PKCEDefault))
                 .Then(new AddResponseMode(ResponseModes.Query))
                 .Then(new AddNonce())
-                .Then(new RewriteAsJwt())
+                .Then(new RewriteAsJarJwt())
                 .Then(new BuildAuthorizationUrl())
                 .Then(new SendAuthorizationRedirect())
                 .Then(new GetServerResponseFromCallback(ResponseModes.Query))

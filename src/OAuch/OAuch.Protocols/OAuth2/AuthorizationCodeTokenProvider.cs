@@ -36,7 +36,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new AddPKCEChallenge(SiteSettings.PKCEDefault))
                 .Then(new AddResponseMode(DefaultResponseMode))
                 .Then(new AddNonce())
-                .Then(new RewriteAsJwt())
+                .Then(new RewriteAsJarJwt())
                 .Then(new PushAuthorizationRequest())
                 .Then(new BuildAuthorizationUrl())
                 .Then(new SendAuthorizationRedirect())
@@ -46,6 +46,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new AddRedirectUri())
                 .Then(new AddPKCEVerifier(SiteSettings.PKCEDefault))
                 .Then(new CreateTokenRequest())
+                .Then(new AddDPoPHeader())
                 .Then(new SendRequest(UriTypes.TokenUri))
                 .Then(new GetServerResponseFromHttpResponse())
                 .FinishTokenResponse();

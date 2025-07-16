@@ -31,7 +31,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 return Task.CompletedTask;
             }
 
-            if (Context.SiteSettings.Certificates.Count > 0) {
+            if (Context.SiteSettings.ClientCertificates.Count > 0) {
                 // sender-constrained tokens do not need token rotation
                 Result.Outcome = TestOutcomes.Skipped;
             } else {

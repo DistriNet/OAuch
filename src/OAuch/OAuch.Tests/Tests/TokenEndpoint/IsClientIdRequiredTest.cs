@@ -35,7 +35,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
             var basicContext = this.Context with {
                 SiteSettings = this.Context.SiteSettings with {
                     ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretPost, // force post authentication
-                    Certificates = []
+                    ClientCertificates = []
                 }
             };
             var provider = flows.CreateProviderWithStage<CreateTokenRequest, Dictionary<string, string?>, HttpRequest>(basicContext,

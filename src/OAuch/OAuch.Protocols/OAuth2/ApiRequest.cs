@@ -63,7 +63,8 @@ namespace OAuch.Protocols.OAuth2 {
                     line = sr.ReadLine();
                 }
             }
-            req.ClientCertificates = Settings.Certificates;
+            if (uri.IsSecure())
+                req.ClientCertificates = Settings.ApiCertificates;
             if (!hasAddedTokenToUrl && !hasAddedTokenToBody && !hasAddedTokenToHeaders && accessToken.Length > 0)
                 req.Headers[HttpRequestHeaders.Authorization] = $"Bearer {accessToken}";
             req.ServerCertificateValidationCallback = RemoteCertificateValidationCallback;

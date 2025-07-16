@@ -52,7 +52,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
                 am = ClientAuthenticationMechanisms.ClientSecretBasic;
             var postSettings = this.Context.SiteSettings with {
                 ClientAuthenticationMechanism = am,
-                Certificates = [],
+                ClientCertificates = [],
                 DefaultClient = Context.SiteSettings.AlternativeClient
             };
             var refreshProvider = provider.CreateRefreshProvider(postSettings);

@@ -1,4 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using Newtonsoft.Json;
+using OAuch.Shared;
+using System;
+using System.Security.Cryptography;
+using static System.Security.Cryptography.ECCurve;
 
 namespace OAuch.Protocols.JWT {
     public abstract class TokenKey {
@@ -6,6 +10,7 @@ namespace OAuch.Protocols.JWT {
         public static TokenKey FromRsa(RSA value) => new RsaTokenKey(value);
         public static TokenKey FromECDsa(ECDsa value) => new ECDsaTokenKey(value);
         public static TokenKey Empty => new EmptyTokenKey();
+        public virtual object ExportPublicKey() => throw new NotSupportedException();
     }
     public class BytesTokenKey : TokenKey {
         public BytesTokenKey(byte[] value) {
@@ -21,11 +26,56 @@ namespace OAuch.Protocols.JWT {
             this.Value = value;
         }
         public RSA Value { get; }
+        public override object ExportPublicKey() => new RsaPublicKey(this.Value);
+        private class RsaPublicKey { 
+            public RsaPublicKey(RSA rsa) {
+                var p = rsa.ExportParameters(false);
+                this.Modulus = EncodingHelper.Base64UrlEncode(p.Modulus!);
+                this.Exponent = EncodingHelper.Base64UrlEncode(p.Exponent!);
+            }
+
+            [JsonProperty("n")]
+            public string Modulus { get; set; }
+
+            [JsonProperty("e")]
+            public string Exponent { get; set; }
+        }
     }
     public class ECDsaTokenKey : TokenKey {
         public ECDsaTokenKey(ECDsa value) {
             this.Value = value;
         }
         public ECDsa Value { get; }
+        public override object ExportPublicKey() => new EcPublicKey(this.Value);
+        private class EcPublicKey {
+            public EcPublicKey(ECDsa ec) {
+                var p = ec.ExportParameters(false);
+                this.Curve = CurveName();
+                this.X = EncodingHelper.Base64UrlEncode(p.Q.X!);
+                this.Y = EncodingHelper.Base64UrlEncode(p.Q.Y!);
+
+                string CurveName() {
+                    switch (p.Curve.Oid.Value) {
+                        case "1.2.840.10045.3.1.7": // nistP256
+                            return "P-256";
+                        case "1.3.132.0.34": // nistP384
+                            return "P-384";
+                        case "1.3.132.0.35": // nistP521
+                            return "P-521";
+                        default:
+                            throw new NotSupportedException($"Unsupported curve OID: {p.Curve.Oid.Value}");
+                    }
+                }
+            }
+
+            [JsonProperty("crv")]
+            public string Curve { get; set; }
+
+            [JsonProperty("x")]
+            public string X { get; set; }
+
+            [JsonProperty("y")]
+            public string Y { get; set; }
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                     UseRequestParameter = true
                 }
             };
-            var prov = flows.CreateProviderWithStage<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(context);
+            var prov = flows.CreateProviderWithStage<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(context);
             if (prov == null) {
                 Result.Outcome = TestOutcomes.Skipped; // no providers that intrinsically support the JAR standard
                 return;

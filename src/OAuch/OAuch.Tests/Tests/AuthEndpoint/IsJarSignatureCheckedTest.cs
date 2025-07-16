@@ -40,12 +40,12 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 return;
             }
 
-            var prov = flows.CreateProviderWithStage<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
+            var prov = flows.CreateProviderWithStage<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(Context);
             if (prov == null) {
                 Result.Outcome = TestOutcomes.Skipped; // no providers that support the JAR standard (weird, should not happen here, because we know JAR is supported)
                 return;
             }
-            prov.Pipeline.Replace<RewriteAsJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new ModifyJarSignature());
+            prov.Pipeline.Replace<RewriteAsJarJwt, Dictionary<string, string?>, Dictionary<string, string?>>(new ModifyJarSignature());
 
             var result = await prov.GetToken();
             if (result.AccessToken == null && result.IdentityToken == null) {
@@ -61,7 +61,7 @@ namespace OAuch.Compliance.Tests.AuthEndpoint {
                 var settings = provider.SiteSettings with {
                     UseRequestParameter = true
                 };
-                OAuthHelper.RewriteAsJwt(provider.SiteSettings, value);
+                OAuthHelper.RewriteAsJarJwt(provider.SiteSettings, value);
 
                 // re-sign the token with a different (dummy) key
                 var dummyKey = JsonWebKey.Create("""

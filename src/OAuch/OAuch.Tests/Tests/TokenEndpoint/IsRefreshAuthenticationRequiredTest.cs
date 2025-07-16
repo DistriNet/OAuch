@@ -48,7 +48,7 @@ namespace OAuch.Compliance.Tests.TokenEndpoint {
 
             var postSettings = this.Context.SiteSettings with {
                 ClientAuthenticationMechanism = ClientAuthenticationMechanisms.ClientSecretPost, // force post authentication
-                Certificates = []
+                ClientCertificates = []
             };
             var refreshProvider = provider.CreateRefreshProvider(postSettings);
             var processor = new NoAuthentication();

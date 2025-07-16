@@ -18,7 +18,7 @@ namespace OAuch.Compliance.Tests.DocumentSupport {
     public class RFC8705SupportedTestImplementation : TestImplementation {
         public RFC8705SupportedTestImplementation(TestRunContext context, RFC8705SupportedTestResult result, HasSupportedFlowsTestResult supportedFlows) : base(context, result, supportedFlows) { }
         public override Task Run() {
-            if (HasFailed<HasSupportedFlowsTestResult>() || Context.SiteSettings.Certificates.Count == 0)
+            if (HasFailed<HasSupportedFlowsTestResult>() || Context.SiteSettings.ClientCertificates.Count == 0)
                 Result.Outcome = TestOutcomes.SpecificationNotImplemented;
             else
                 Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
