@@ -15,6 +15,7 @@ namespace OAuch.LogConverters {
                 IdentityTokens = item.AllIdentityTokens,
                 RefreshToken = item.RefreshToken,
                 AuthorizationCode = item.AuthorizationCode,
+                TokenType = item.TokenResponse?.TokenType,
                 AuthorizationResponse = item.AuthorizationResponse?.OriginalContents,
                 TokenResponse = item.TokenResponse?.OriginalContents,
                 Exception = exception

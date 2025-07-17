@@ -1,6 +1,7 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Compliance.Tests.TokenEndpoint;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
     public class SingleFastACExchangeTestResult : TestResult<ConcurrencyInfo> {
         public SingleFastACExchangeTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(SingleFastACExchangeTestImplementation);
+        public override float? ImplementationScore => this.Outcome == TestOutcomes.SpecificationPartiallyImplemented ? 0f : base.ImplementationScore;
     }
     public class SingleFastACExchangeTestImplementation : FastACExchangeTestImplementation {
         public SingleFastACExchangeTestImplementation(TestRunContext context, SingleFastACExchangeTestResult result, HasSupportedFlowsTestResult flows, MultipleCodeExchangesTestResult multi, TestUriSupportedTestResult testUri) : base(context, result, flows, multi, testUri) { }

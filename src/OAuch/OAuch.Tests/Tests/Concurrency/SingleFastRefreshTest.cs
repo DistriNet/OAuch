@@ -18,6 +18,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
     public class SingleFastRefreshTestResult : TestResult<ConcurrencyInfo> {
         public SingleFastRefreshTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(SingleFastRefreshTestImplementation);
+        public override float? ImplementationScore => this.Outcome == TestOutcomes.SpecificationPartiallyImplemented ? 0f : base.ImplementationScore;
     }
     public class SingleFastRefreshTestImplementation : FastRefreshTestImplementation {
         public SingleFastRefreshTestImplementation(TestRunContext context, SingleFastRefreshTestResult result, HasSupportedFlowsTestResult flows, TestUriSupportedTestResult testUri, RefreshTokenRevokedAfterUseTestResult refreshRevoked) : base(context, result, flows, testUri) {

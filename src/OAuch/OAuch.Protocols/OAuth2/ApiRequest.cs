@@ -29,6 +29,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
 
         protected virtual HttpRequest GetRequest(string uri, TokenResult token) {
+            bool usesDPoP = string.Equals(token.TokenResponse?.TokenType, "DPoP", StringComparison.OrdinalIgnoreCase);
             string accessToken = token.AccessToken ?? "";
             string url = uri;
             bool hasAddedTokenToUrl = FixString(ref url, accessToken);
@@ -65,8 +66,14 @@ namespace OAuch.Protocols.OAuth2 {
             }
             if (uri.IsSecure())
                 req.ClientCertificates = Settings.ApiCertificates;
-            if (!hasAddedTokenToUrl && !hasAddedTokenToBody && !hasAddedTokenToHeaders && accessToken.Length > 0)
-                req.Headers[HttpRequestHeaders.Authorization] = $"Bearer {accessToken}";
+            if (!hasAddedTokenToUrl && !hasAddedTokenToBody && !hasAddedTokenToHeaders && accessToken.Length > 0) {
+                req.Headers[HttpRequestHeaders.Authorization] = $"{(usesDPoP ? "DPoP" : "Bearer")} {accessToken}";
+                if (usesDPoP) {
+                    var dpop = OAuthHelper.CreateDPoPToken(Settings, req, accessToken, token.ApiDPoPNonce);
+                    if (dpop != null)
+                        req.Headers[HttpRequestHeaders.DPoP] = dpop;
+                }
+            }
             req.ServerCertificateValidationCallback = RemoteCertificateValidationCallback;
             this.ManualAccessTokenInUrl = hasAddedTokenToUrl;
             this.ManualAccessTokenInBody = hasAddedTokenToBody;
@@ -98,6 +105,21 @@ namespace OAuch.Protocols.OAuth2 {
 
                 var request = GetRequest(Settings.TestUri, token);
                 var response = await Http.SendRequest(request);
+
+                var dpopNonce = response.Headers.Get("DPoP-Nonce");
+                if (response.StatusCode == HttpStatusCode.Unauthorized && dpopNonce != null) { // check if it is related to DPoP
+                    // retry sending the request with the updated nonce
+                    var dpop = OAuthHelper.CreateDPoPToken(Settings, request, token.AccessToken, dpopNonce);
+                    if (dpop != null)
+                        request.Headers[HttpRequestHeaders.DPoP] = dpop;
+                    response = await Http.SendRequest(request);
+                    dpopNonce = response.Headers.Get("DPoP-Nonce") ?? dpopNonce;
+                }
+
+                // update the DPoP nonce
+                if (dpopNonce != null) {
+                    token.ApiDPoPNonce = dpopNonce;
+                }
 
                 // check if there is a failure indicator
                 if (!string.IsNullOrWhiteSpace(Context.SiteSettings.TestFailureIndicator)) {

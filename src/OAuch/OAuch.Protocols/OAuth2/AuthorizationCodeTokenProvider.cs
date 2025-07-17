@@ -36,6 +36,7 @@ namespace OAuch.Protocols.OAuth2 {
                 .Then(new AddPKCEChallenge(SiteSettings.PKCEDefault))
                 .Then(new AddResponseMode(DefaultResponseMode))
                 .Then(new AddNonce())
+                .Then(new AddDPoPThumbprint())
                 .Then(new RewriteAsJarJwt())
                 .Then(new PushAuthorizationRequest())
                 .Then(new BuildAuthorizationUrl())

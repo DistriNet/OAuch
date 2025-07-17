@@ -217,7 +217,8 @@ namespace OAuch.Helpers {
                         AuthorizationCode = e.AuthorizationCode,
                         RefreshToken = e.RefreshToken,
                         AccessTokens = e.AccessTokens,
-                        IdentityTokens = e.IdentityTokens
+                        IdentityTokens = e.IdentityTokens,
+                        TokenType = e.TokenType
                     };
                     string json = OAuchJsonConvert.Serialize(fo, Formatting.Indented);
                     _output.Append(CreateTimelineItem("Token result", "<pre>" + EncodingHelper.HtmlEncode(json) + "</pre>", "bg-warning", "fas fa-cookie"));
@@ -236,6 +237,8 @@ namespace OAuch.Helpers {
                 public IList<string>? AccessTokens { get; set; }
                 [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
                 public IList<string>? IdentityTokens { get; set; }
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+                public string? TokenType { get; set; }
             }
 
             //public override void VisitTokenResult(TokenResultLogEntry e) {

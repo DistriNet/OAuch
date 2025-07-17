@@ -139,9 +139,17 @@ namespace OAuch.Protocols.OAuth2 {
                 }
             }
         }
-
+        public static string? GetDPoPThumbprint(SiteSettings settings) {
+            if (string.IsNullOrWhiteSpace(settings.DPoPSigningKey))
+                return null;
+            JsonWebKey? key = JsonWebKey.Create(settings.DPoPSigningKey);
+            if (key == null || key.Algorithm == null || !key.Algorithm.IsAsymmetric) {
+                return null;
+            }
+            return EncodingHelper.Base64UrlEncode(key.TokenKey.ExportPublicKey().GetThumbprint());
+        }
         public static string? CreateDPoPToken(SiteSettings settings, HttpRequest request, string? accessToken, string? nonce) {
-            if (settings.DPoPSigningKey == null) // use DPoP?
+            if (string.IsNullOrWhiteSpace(settings.DPoPSigningKey)) // use DPoP?
                 return null;
             JsonWebKey? key = JsonWebKey.Create(settings.DPoPSigningKey);
             if (key == null || key.Algorithm == null || !key.Algorithm.IsAsymmetric) {
@@ -162,7 +170,7 @@ namespace OAuch.Protocols.OAuth2 {
             builder.Claims["htm"] = request.Method.Name;
             builder.Claims["iat"] = DateTimeOffset.Now.ToUnixTimeSeconds();
             if (accessToken != null)
-                builder.Claims["iat"] = HashAccessToken();
+                builder.Claims["ath"] = HashAccessToken();
             if (nonce != null)
                 builder.Claims["nonce"] = nonce;
 

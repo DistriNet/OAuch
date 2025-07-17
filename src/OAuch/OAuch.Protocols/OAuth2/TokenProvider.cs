@@ -121,6 +121,8 @@ namespace OAuch.Protocols.OAuth2 {
         public string? RefreshToken => IsValid ? (TokenResponse?.RefreshToken ?? AuthorizationResponse?.RefreshToken) : null;
         public int? ExpiresIn => TokenResponse?.ExpiresIn ?? AuthorizationResponse?.ExpiresIn;
         public bool IsValid => (AuthorizationResponse == null || AuthorizationResponse.IsValid) && (TokenResponse == null || TokenResponse.IsValid);
+        public string? AuthorizationDPoPNonce { get; set; }
+        public string? ApiDPoPNonce { get; set; }
         public Exception? UnexpectedError {
             get {
                 if (_unexpected != null)

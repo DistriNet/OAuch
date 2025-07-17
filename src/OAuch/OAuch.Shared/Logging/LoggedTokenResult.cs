@@ -10,6 +10,7 @@ namespace OAuch.Shared.Logging {
         public string? RefreshToken { get; set; }
         public IList<string>? AccessTokens { get; set; }
         public IList<string>? IdentityTokens { get; set; }
+        public string? TokenType { get; set; }
 
         public string? AuthorizationResponse { get; set; }
 

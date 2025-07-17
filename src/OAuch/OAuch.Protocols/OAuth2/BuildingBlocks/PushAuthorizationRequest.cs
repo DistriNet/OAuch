@@ -35,6 +35,11 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
                 value.Remove("request_uri"); // this is explicitly forbidden in the RFC9126
 
             request.Content = EncodingHelper.FormUrlEncode(value);
+            // add DPoP header (if necessary)
+            var dpop = OAuthHelper.CreateDPoPToken(provider.SiteSettings, request, null, tokenResult.AuthorizationDPoPNonce);
+            if (dpop != null) {
+                request.Headers[HttpRequestHeaders.DPoP] = dpop;
+            }
 
             // send the PAR request
             var tokenProvider = provider as TokenProvider;
@@ -61,6 +66,12 @@ namespace OAuch.Protocols.OAuth2.BuildingBlocks {
             if (sr.Items.TryGetValue("expires_in", out var expiryString) && expiryString != null) {
                 if (int.TryParse(expiryString, out int ex))
                     expiry = ex;
+            }
+
+            // check for new DPoP nonce
+            var dpopNonce = response.Headers.Get("DPoP-Nonce");
+            if (dpopNonce != null ) {
+                tokenResult.AuthorizationDPoPNonce = dpopNonce;
             }
 
             tokenResult.ParRequestUri = uri; // register it

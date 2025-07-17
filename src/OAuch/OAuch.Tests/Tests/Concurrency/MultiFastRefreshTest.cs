@@ -1,5 +1,6 @@
 ﻿using OAuch.Compliance.Tests.Features;
 using OAuch.Shared;
+using OAuch.Shared.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace OAuch.Compliance.Tests.Concurrency {
     public class MultiFastRefreshTestResult : TestResult<ConcurrencyInfo> {
         public MultiFastRefreshTestResult(string testId) : base(testId) { }
         public override Type ImplementationType => typeof(MultiFastRefreshTestResultImplementation);
+        public override float? ImplementationScore => this.Outcome == TestOutcomes.SpecificationPartiallyImplemented ? 0f : base.ImplementationScore;
     }
     public class MultiFastRefreshTestResultImplementation : FastRefreshTestImplementation {
         public MultiFastRefreshTestResultImplementation(TestRunContext context, MultiFastRefreshTestResult result, HasSupportedFlowsTestResult flows, SingleFastRefreshTestResult singlefast, TestUriSupportedTestResult testUri) : base(context, result, flows, testUri) {
