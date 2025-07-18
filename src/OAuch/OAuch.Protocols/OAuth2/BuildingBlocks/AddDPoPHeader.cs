@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
-    internal class AddDPoPHeader : Processor<HttpRequest, HttpRequest> {
+    public class AddDPoPHeader : Processor<HttpRequest, HttpRequest> {
         public override Task<HttpRequest?> Process(HttpRequest value, IProvider tokenProvider, TokenResult tokenResult) {
             var dpop = OAuthHelper.CreateDPoPToken(tokenProvider.SiteSettings, value, null, tokenResult.AuthorizationDPoPNonce);
             if (dpop != null) {

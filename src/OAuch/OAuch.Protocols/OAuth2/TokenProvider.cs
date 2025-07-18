@@ -343,6 +343,7 @@ namespace OAuch.Protocols.OAuth2 {
         public bool HasIdentityTokens { get; set; }
         public bool HasAuthorizationCodes { get; set; }
         public bool HasRefreshTokens { get; set; }
+        public bool HasDPoPTokens { get; set; }
     }
 
     public class TokenProviderFactory {
@@ -360,6 +361,7 @@ namespace OAuch.Protocols.OAuth2 {
         public bool HasIdentityTokens => Info.HasIdentityTokens;
         public bool HasAuthorizationCodes => Info.HasAuthorizationCodes;
         public bool HasRefreshTokens => Info.HasRefreshTokens;
+        public bool HasDPoPTokens => Info.HasDPoPTokens;
 
         public TokenProvider CreateProvider(TestRunContext context) {
             if (Info.Settings == null)

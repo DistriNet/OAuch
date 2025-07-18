@@ -1645,6 +1645,28 @@ namespace OAuch.Compliance {
                              ]
                         },
                         new OAuthDocument { // This document has not been finished yet
+                            Id = "RFC9449",
+                            Name = "Demonstrating Proof of Possession",
+                            Description = "This document describes a mechanism for sender-constraining OAuth 2.0 tokens via a proof-of-possession mechanism on the application level. This mechanism allows for the detection of replay attacks with access and refresh tokens.",
+                            Url = "https://datatracker.ietf.org/doc/html/rfc9449",
+                            IsSupportedTest = "OAuch.Compliance.Tests.DocumentSupport.RFC9449SupportedTest",
+                            IsStandard = true,
+                            DocumentCategory = DocumentCategories.OAuth2,
+                            DeprecatedFeatures  = [],
+                             Countermeasures= [
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.DPoP.IsDPoPSupportedTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "5. DPoP Access Token Request"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.DPoP.IsDPoPTokenRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "7. Protected Resource Access"
+                                 },
+                             ]
+                        },
+                        new OAuthDocument { // This document has not been finished yet
                             Id = "RFC9101", 
                             Name = "JWT-Secured Authorization Request",
                             Description = "This document introduces the ability to send request parameters in a JSON Web Token (JWT) instead, which allows the request to be signed with JSON Web Signature (JWS) and encrypted with JSON Web Encryption (JWE) so that the integrity, source authentication, and confidentiality properties of the authorization request are attained. Note that OAuch currently only supports JWS.",

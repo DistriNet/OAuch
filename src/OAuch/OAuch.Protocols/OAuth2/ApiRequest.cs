@@ -29,7 +29,7 @@ namespace OAuch.Protocols.OAuth2 {
         }
 
         protected virtual HttpRequest GetRequest(string uri, TokenResult token) {
-            bool usesDPoP = string.Equals(token.TokenResponse?.TokenType, "DPoP", StringComparison.OrdinalIgnoreCase);
+            bool usesDPoP = !string.IsNullOrWhiteSpace(Settings.DPoPSigningKey) && string.Equals(token.TokenResponse?.TokenType, "DPoP", StringComparison.OrdinalIgnoreCase);
             string accessToken = token.AccessToken ?? "";
             string url = uri;
             bool hasAddedTokenToUrl = FixString(ref url, accessToken);

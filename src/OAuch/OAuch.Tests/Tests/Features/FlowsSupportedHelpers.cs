@@ -57,6 +57,7 @@ namespace OAuch.Compliance.Tests.Features {
                     ExtraInfo.HasIdentityTokens = response.IdentityToken != null;
                     ExtraInfo.HasAuthorizationCodes = provider is AuthorizationCodeTokenProvider;
                     ExtraInfo.HasRefreshTokens = response.RefreshToken != null;
+                    ExtraInfo.HasDPoPTokens = response.TokenResponse?.TokenType == "DPoP";
                     Result.Outcome = TestOutcomes.SpecificationFullyImplemented;
 
                     if (_authUrl != null)

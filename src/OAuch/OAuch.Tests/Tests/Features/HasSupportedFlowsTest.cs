@@ -82,20 +82,20 @@ namespace OAuch.Compliance.Tests.Features {
             return false;
         }
 
-        public TokenProvider CreateAccessTokenProvider(TestRunContext context) => CreateProvider(context, false, false, false, false);
-        public TokenProvider CreateIdentityTokenProvider(TestRunContext context) => CreateProvider(context, false, false, true, false, false);
-        public TokenProvider CreateProvider(TestRunContext context, bool mustHaveRefresh, bool mustHaveJwtTokens, bool mustHaveIdTokens, bool mustHaveCodes, bool mustHaveAccessTokens = true) {
+        public TokenProvider? CreateAccessTokenProvider(TestRunContext context) => CreateProvider(context, false, false, false, false);
+        public TokenProvider? CreateIdentityTokenProvider(TestRunContext context) => CreateProvider(context, false, false, true, false, false);
+        public TokenProvider? CreateProvider(TestRunContext context, bool mustHaveRefresh = false, bool mustHaveJwtTokens = false, bool mustHaveIdTokens = false, bool mustHaveCodes = false, bool mustHaveAccessTokens = true, bool mustHaveDPoPTokens = false) {
             InitializeFactories();
             foreach (var provider in _factories) {
-                if ((!mustHaveAccessTokens || provider.HasAccessTokens) && (!mustHaveRefresh || provider.HasRefreshTokens) && (!mustHaveJwtTokens || provider.HasJwtAccessTokens) && (!mustHaveIdTokens || provider.HasIdentityTokens) && (!mustHaveCodes || provider.HasAuthorizationCodes))
+                if ((!mustHaveAccessTokens || provider.HasAccessTokens) && (!mustHaveRefresh || provider.HasRefreshTokens) && (!mustHaveJwtTokens || provider.HasJwtAccessTokens) && (!mustHaveIdTokens || provider.HasIdentityTokens) && (!mustHaveCodes || provider.HasAuthorizationCodes) && (!mustHaveDPoPTokens || provider.HasDPoPTokens))
                     return provider.CreateProvider(context);
             }
-            throw new NotSupportedException();
+            return null;
         }
-        public TokenProvider? CreateProvider(TestRunContext context, Func<TokenProviderFactory, TokenProvider, bool> validator, bool mustHaveAccessTokens = true, bool mustHaveRefresh = false, bool mustHaveJwtTokens = false, bool mustHaveIdTokens = false, bool mustHaveCodes = false) {
+        public TokenProvider? CreateProvider(TestRunContext context, Func<TokenProviderFactory, TokenProvider, bool> validator, bool mustHaveAccessTokens = true, bool mustHaveRefresh = false, bool mustHaveJwtTokens = false, bool mustHaveIdTokens = false, bool mustHaveCodes = false, bool mustHaveDPoPTokens = false) {
             InitializeFactories();
             foreach (var factory in _factories) {
-                if ((!mustHaveAccessTokens || factory.HasAccessTokens) && (!mustHaveRefresh || factory.HasRefreshTokens) && (!mustHaveJwtTokens || factory.HasJwtAccessTokens) && (!mustHaveIdTokens || factory.HasIdentityTokens) && (!mustHaveCodes || factory.HasAuthorizationCodes)) {
+                if ((!mustHaveAccessTokens || factory.HasAccessTokens) && (!mustHaveRefresh || factory.HasRefreshTokens) && (!mustHaveJwtTokens || factory.HasJwtAccessTokens) && (!mustHaveIdTokens || factory.HasIdentityTokens) && (!mustHaveCodes || factory.HasAuthorizationCodes) && (!mustHaveDPoPTokens || factory.HasDPoPTokens)) {
                     var provider = factory.CreateProvider(context);
                     if (validator(factory, provider))
                         return provider;
