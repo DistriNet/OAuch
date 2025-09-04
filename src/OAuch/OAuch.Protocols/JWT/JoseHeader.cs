@@ -40,7 +40,10 @@ namespace OAuch.Protocols.JWT {
             get {
                 // at+JWT: https://tools.ietf.org/id/draft-bertocci-oauth-access-token-jwt-00.html
 
-                return (this.Type == null || string.Equals(this.Type, "JWT", StringComparison.OrdinalIgnoreCase) || string.Equals(this.Type, "at+JWT", StringComparison.OrdinalIgnoreCase)) // it must be a JWT
+                return (this.Type == null 
+                            || string.Equals(this.Type, "JWT", StringComparison.OrdinalIgnoreCase) 
+                            || string.Equals(this.Type, "at+JWT", StringComparison.OrdinalIgnoreCase)
+                            || string.Equals(this.Type, "dpop+JWT", StringComparison.OrdinalIgnoreCase)) // it must be a JWT
                     && (this.Algorithm?.Id ?? -1) > 0; // we must understand the algorithm used
                 /*
                     Verify that the resulting JOSE Header includes only parameters

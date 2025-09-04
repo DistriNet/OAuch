@@ -1,4 +1,5 @@
 ﻿using OAuch.Compliance.Tests.AuthEndpoint;
+using OAuch.Compliance.Tests.DPoP;
 using OAuch.Compliance.Tests.ParEndpoint;
 using OAuch.Compliance.Threats;
 using OAuch.Shared.Enumerations;
@@ -1663,6 +1664,21 @@ namespace OAuch.Compliance {
                                      Test  = Tests["OAuch.Compliance.Tests.DPoP.IsDPoPTokenRequiredTest"],
                                      RequirementLevel = RequirementLevels.Must,
                                      LocationInDocument = "7. Protected Resource Access"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.DPoP.IsSignatureRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "4.2. DPoP Proof JWT Syntax"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.DPoP.IsExplicitTypingRequiredTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "4.2. DPoP Proof JWT Syntax"
+                                 },
+                                 new TestRequirementLevel {
+                                     Test  = Tests["OAuch.Compliance.Tests.DPoP.HasRequiredClaimsTest"],
+                                     RequirementLevel = RequirementLevels.Must,
+                                     LocationInDocument = "4.2. DPoP Proof JWT Syntax"
                                  },
                              ]
                         },
