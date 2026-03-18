@@ -7,6 +7,9 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Sends an HTTP request for a specific OAuth endpoint and retries once when a DPoP nonce challenge is returned.
+    /// </summary>
     public class SendRequest : Processor<HttpRequest, HttpResponse> {
         public SendRequest(UriTypes uriType) {
             this.UriType = uriType;

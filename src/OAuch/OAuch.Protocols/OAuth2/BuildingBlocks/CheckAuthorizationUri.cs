@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Verifies that an authorization endpoint URI is configured before starting an authorization redirect.
+    /// </summary>
     public class CheckAuthorizationUri : Processor<bool, bool> {
         public override Task<bool> Process(bool value, IProvider tokenProvider, TokenResult tokenResult) {
             if (string.IsNullOrWhiteSpace(tokenProvider.SiteSettings.AuthorizationUri)) {

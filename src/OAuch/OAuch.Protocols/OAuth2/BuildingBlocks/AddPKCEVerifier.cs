@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Adds the PKCE <c>code_verifier</c> to a token request when PKCE is enabled for the authorization code flow.
+    /// </summary>
     public class AddPKCEVerifier : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public AddPKCEVerifier(PKCESupportTypes pkceUsage) {
             this.PKCEUsage = pkceUsage;

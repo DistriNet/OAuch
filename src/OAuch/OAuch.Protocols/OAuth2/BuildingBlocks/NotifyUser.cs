@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Shows the device flow verification URI to the user and prompts them to enter the returned user code.
+    /// </summary>
     public class NotifyUser : Processor<bool, bool> {
         public async override Task<bool> Process(bool value, IProvider provider, TokenResult tokenResult) {
             var tokenProvider = (TokenProvider)provider;

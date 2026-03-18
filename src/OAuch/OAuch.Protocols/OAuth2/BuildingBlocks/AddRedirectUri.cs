@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Adds the configured callback URI as the <c>redirect_uri</c> request parameter.
+    /// </summary>
     public class AddRedirectUri : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
             value["redirect_uri"] = tokenProvider.SiteSettings.CallbackUri;

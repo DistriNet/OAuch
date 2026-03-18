@@ -4,6 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Parses an HTTP response body into an OAuth server response and exposes key response metadata for later inspection.
+    /// </summary>
     public class GetServerResponseFromHttpResponse : Processor<HttpResponse, HttpServerResponse> {
         public override Task<HttpServerResponse?> Process(HttpResponse httpResponse, IProvider tokenProvider, TokenResult tokenResult) {
             var sr = ServerResponse.FromResponseBody(httpResponse);

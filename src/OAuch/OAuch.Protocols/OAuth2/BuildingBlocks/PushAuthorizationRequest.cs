@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
-    // PAR implementation
+    /// <summary>
+    /// Pushes authorization parameters to the PAR endpoint and replaces them with the resulting <c>request_uri</c> reference.
+    /// </summary>
     public class PushAuthorizationRequest : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public async override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider provider, TokenResult tokenResult) {
             var settings = provider.SiteSettings;

@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Verifies that the authorization response produced an authorization code before the token exchange continues.
+    /// </summary>
     public class CheckAuthorizationCode : Processor<bool, bool> {
         public override Task<bool> Process(bool value, IProvider tokenProvider, TokenResult tokenResult) {
             if (tokenResult.AuthorizationCode == null) {

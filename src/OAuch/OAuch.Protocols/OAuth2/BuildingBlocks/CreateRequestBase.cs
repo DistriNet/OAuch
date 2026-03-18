@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Base processor that turns a form parameter dictionary into an authenticated POST request for a selected OAuth endpoint.
+    /// </summary>
     public class CreateRequestBase : Processor<Dictionary<string, string?>, HttpRequest> {
         public CreateRequestBase(Func<SiteSettings, string> uriSelector, Action<IProvider, HttpRequest, Dictionary<string, string?>>? addClientAuthentication = null) {
             if (addClientAuthentication == null) {

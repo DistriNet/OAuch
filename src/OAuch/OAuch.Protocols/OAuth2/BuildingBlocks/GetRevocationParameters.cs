@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Creates the parameter set for a token revocation request and optionally adds a token type hint.
+    /// </summary>
     public class GetRevocationParameters : Processor<bool, Dictionary<string, string?>> {
         public string? Token { get; set; }
         public bool? IsRefresh { get; set; }

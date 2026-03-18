@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Verifies that a token endpoint URI is configured before creating or sending a token request.
+    /// </summary>
     public class CheckTokenUri : Processor<bool, bool> {
         public override Task<bool> Process(bool value, IProvider tokenProvider, TokenResult tokenResult) {
             if (string.IsNullOrWhiteSpace(tokenProvider.SiteSettings.TokenUri)) {

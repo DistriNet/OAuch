@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Adds the DPoP JWK thumbprint as the <c>dpop_jkt</c> authorization request parameter when DPoP is configured.
+    /// </summary>
     public class AddDPoPThumbprint : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
             var t = OAuthHelper.GetDPoPThumbprint(tokenProvider.SiteSettings);

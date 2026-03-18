@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Adds the configured resource owner credentials to a token request.
+    /// </summary>
     public class AddUsernamePassword : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public override Task<Dictionary<string, string?>?> Process(Dictionary<string, string?> value, IProvider tokenProvider, TokenResult tokenResult) {
             value["username"] = tokenProvider.SiteSettings.Username;

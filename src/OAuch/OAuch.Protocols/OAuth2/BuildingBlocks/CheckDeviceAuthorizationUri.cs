@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Verifies that a device authorization endpoint URI is configured before running the device flow.
+    /// </summary>
     public class CheckDeviceAuthorizationUri : Processor<bool, bool> {
         public override Task<bool> Process(bool value, IProvider tokenProvider, TokenResult tokenResult) {
             if (string.IsNullOrWhiteSpace(tokenProvider.SiteSettings.DeviceAuthorizationUri)) {

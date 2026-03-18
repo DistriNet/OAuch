@@ -50,3 +50,13 @@
 - `docs/` contains OAuth/OpenID reference documents that explain many threat and test names used in the codebase.
 - Both `src/OAuch/Dockerfile` and `src/OAuch/Dockerfile.multi` still use .NET 8 SDK/runtime images even though the solution targets `net10.0`; keep that version drift in mind before relying on container builds.
 - There are no automated test cases to run yet as part of normal validation, so for generated code the default verification step is to build the solution and confirm the build result.
+
+## Git workflow
+- Never commit directly to `main` or `master`.
+- Create a new branch for each task.
+- Prefer branch names like `ai/<task-slug>`.
+- Make local changes first; do not push automatically unless the user explicitly asks.
+- Before committing, run relevant tests, lint, and type checks.
+- Keep commits small and reviewable.
+- Do not force-push unless explicitly requested.
+- Do not open a PR until checks pass or failures are clearly explained.

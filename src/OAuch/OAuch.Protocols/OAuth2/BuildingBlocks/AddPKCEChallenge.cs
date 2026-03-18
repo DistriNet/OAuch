@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Adds the PKCE challenge parameters to an authorization request for authorization code flows.
+    /// </summary>
     public class AddPKCEChallenge : Processor<Dictionary<string, string?>, Dictionary<string, string?>> {
         public AddPKCEChallenge(PKCESupportTypes pkceUsage) {
             this.PKCEUsage = pkceUsage;

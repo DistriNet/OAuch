@@ -3,6 +3,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Verifies that a revocation endpoint URI is configured before sending a token revocation request.
+    /// </summary>
     public class CheckRevocationUri : Processor<bool, bool> {
         public override Task<bool> Process(bool value, IProvider tokenProvider, TokenResult tokenResult) {
             if (string.IsNullOrWhiteSpace(tokenProvider.SiteSettings.RevocationUri)) {

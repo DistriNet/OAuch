@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Creates the parameter set for a token claim request, including authorization code, device code, refresh token, or direct grant data.
+    /// </summary>
     public class GetClaimParameters : Processor<bool, Dictionary<string, string?>> {
         public GetClaimParameters(bool refresh = false) {
             this.Refresh = refresh;

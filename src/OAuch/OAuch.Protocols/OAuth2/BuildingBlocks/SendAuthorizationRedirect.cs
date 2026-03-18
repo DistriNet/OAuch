@@ -3,6 +3,9 @@ using OAuch.Shared.Interfaces;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Sends the user agent to the authorization endpoint and waits for the OAuth callback result.
+    /// </summary>
     public class SendAuthorizationRedirect : Processor<string, ICallbackResult?> {
         public async override Task<ICallbackResult?> Process(string authUrl, IProvider provider, TokenResult tokenResult) {
             var tokenProvider = (TokenProvider)provider;

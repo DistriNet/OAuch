@@ -5,6 +5,9 @@ using System;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Converts the browser callback result into a parsed OAuth server response and detects stalled interactive flows.
+    /// </summary>
     public class GetServerResponseFromCallback : Processor<ICallbackResult?, ServerResponse> {
         public GetServerResponseFromCallback(ResponseModes defaultMode) {
             this.DefaultMode = defaultMode;

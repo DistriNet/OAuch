@@ -3,6 +3,9 @@ using OAuch.Protocols.OAuth2.Pipeline;
 using System.Threading.Tasks;
 
 namespace OAuch.Protocols.OAuth2.BuildingBlocks {
+    /// <summary>
+    /// Repeatedly submits a device flow token request until the authorization completes, is canceled, or fails.
+    /// </summary>
     public class PollForToken : Processor<HttpRequest, HttpServerResponse> {
         public async override Task<HttpServerResponse?> Process(HttpRequest request, IProvider provider, TokenResult tokenResult) {
             var completionSource = provider.Context.Browser.RegisterCompletionSource();
