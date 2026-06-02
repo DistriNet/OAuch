@@ -9,6 +9,9 @@ the security assumptions and requirements. These documents include the OAuth thr
 Best Current Practices, and others. In addition to OAuth, OAuch also supports OpenID Connect providers.
 
 This repository contains a version of OAuch that runs in single-user mode.
+
+**Build and Run**
+
 To build and run the source code in this repository, please follow the following steps:
 
 (1) Clone or download the repository
@@ -38,4 +41,18 @@ To build and run the source code in this repository, please follow the following
   not made the changes from step (4), you will need to change this address to https://localhost/.
   You are now ready to use OAuch on your local computer!
 
-Alternatively, you can try OAuch on <https://oauch.io/> or [get it from Docker](https://oauch.io/Home/Docker).
+**Docker**
+
+The OAuch code can be built into a Docker container. This makes it possible to run OAuch in a reproducible environment without manually installing all dependencies on the host system. To build and run the container, execute these commands:
+
+    cd src/OAuch
+    docker build -t oauch .
+    docker run --name oauch -p 8443:443 -v ./db:/db oauch:latest
+    
+This starts the OAuch container and makes it available at:
+
+    https://localhost:8443
+
+**Online version**
+
+Alternatively, you can try OAuch on <https://oauch.io/>
