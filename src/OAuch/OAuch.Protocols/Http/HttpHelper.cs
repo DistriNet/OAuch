@@ -170,8 +170,11 @@ namespace OAuch.Protocols.Http {
         }
         private static async Task<HttpResponse> ReadResponse(WebRequest request, ParameterMule mule) {
             try {
-                using var response = await request.GetResponseAsync();
+                using var response = await request.GetResponseAsync().WaitAsync(TimeSpan.FromSeconds(5));
                 return await ReadResponse(response as HttpWebResponse, mule);
+            } catch (TimeoutException) {
+                request.Abort();
+                throw;
             } catch (WebException we) {
                 if (we.Response is not HttpWebResponse er)
                     throw;
