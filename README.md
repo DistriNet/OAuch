@@ -16,7 +16,7 @@ To build and run the source code in this repository, please follow the following
 
 (1) Clone or download the repository
 
-(2) Open the project in Visual Studio 2022. You can download [a free version of Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/).
+(2) Open the project in Visual Studio. You can download [a free version of Visual Studio](https://visualstudio.microsoft.com/vs/community/).
   Building the project manually (using dotnet build/msbuild) or using VS Code will also work, but might
   require more effort.
 
