@@ -1,0 +1,44 @@
+name: Publish container image
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch: # for manual trigger
+
+jobs:
+  build-and-publish:
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the code
+      uses: actions/checkout@v6
+
+    - name: Get .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Build x64 container image (without publishing)
+      if: github.ref_type != 'tag'
+      working-directory: src/OAuch
+      run: |
+        dotnet publish --arch x64
+
+    - name: Build and publish x64 and arm64 images
+      if: github.ref_type == 'tag'
+      working-directory: src/OAuch
+      env:
+          DOTNET_CONTAINER_REGISTRY_UNAME: ${{ github.actor }}
+          DOTNET_CONTAINER_REGISTRY_PWORD: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        dotnet publish -t:PublishContainer \
+          -p:RuntimeIdentifiers='"linux-x64;linux-arm64"' \
+          -p:ContainerRegistry=ghcr.io \
+          -p:ContainerRepository=${{ github.repository }} \
+          -p:ContainerImageTags='"latest;${{ github.ref_name }}"'
